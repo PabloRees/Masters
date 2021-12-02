@@ -1,8 +1,6 @@
-#from distutils.core import setup, Extension
-from setuptools import setup, Extension
+from distutils.core import setup
+#from setuptools import setup
 from Cython.Build import cythonize
-
-module = Extension('CyWord2Vec',sources=['CyWord2Vec.pyx'])
 
 setup(
     name='CyWord2Vec',
