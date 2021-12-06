@@ -1,5 +1,4 @@
 from distutils.core import setup
-#from setuptools import setup
 from Cython.Build import cythonize
 
 setup(
@@ -7,7 +6,8 @@ setup(
     version='1.0',
     author ='Pablo Rees',
     author_email='pablorees01@gmail.com',
-    ext_modules=cythonize('CyWord2Vec.pyx', compiler_directives={'language_level': '3'})
+    ext_modules=cythonize('CyWord2Vec.pyx',
+    compiler_directives={'language_level': '3'})
 )
 
 
