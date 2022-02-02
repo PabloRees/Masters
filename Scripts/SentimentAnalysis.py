@@ -50,3 +50,7 @@ df['VaderTranscriptSent'] = sentDict['VaderTranscriptSent']
 
 print(df.columns)
 print(df.loc[[0]])
+print(df.iloc[0]['BlobNoStopsSent'])
+print(df.iloc[0]['VaderTranscriptSent'])
+
+
