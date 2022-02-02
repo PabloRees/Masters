@@ -7,7 +7,6 @@ library(urca)
 library(tidyverse)
 library(ggplot2)
 
-
 MasterGSPC <- read.csv("/Users/pablo/Desktop/Masters /Github Repository/Masters/Data/GSPC.csv" , header = TRUE)
 
 #Mutate date into date format
