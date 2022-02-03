@@ -16,7 +16,7 @@ GSPC <- MasterGSPC %>% mutate(Date = as.Date(Date, format ="%Y-%m-%d" ))
 GSPC <- GSPC %>% mutate(DailyChangePercent = (Close-Open)*100/Open) %>%
   mutate(DailyChangeLog = log(Close)-log(Open)) %>%
   mutate(DailyChange = (Close-Open)) %>% 
-  mutate(NormalizedDailyChange = ((Close-Open) - mean(Close-Open))/var(Close-Open))
+  mutate(NormalizedDailyChange = ((Close-Open) - mean(Close-Open))/sd(Close-Open))
 
 GSPCafter1982 <- GSPC %>% dplyr::filter(Date > as.Date("1982-04-19"))
 
@@ -104,7 +104,7 @@ GSPCafter1982 %>% ggplot() + # creates the 'canvas'
   # rotate x axis labels
   labs(title = "Normalized Daily Change", y = "Normalized Daily Change", x = "Year")
 
-
+#function to shift the data (x) by n spaces
 shift <- function(x, n){
   c(x[-(seq(n))], rep(NA, n))
 }
@@ -120,11 +120,32 @@ DCP_27 <- shift(DailyChangeVector, 27)
 DCP_32 <- shift(DailyChangeVector, 32)
 DCP_34 <- shift(DailyChangeVector, 34)
 
+stdVol <-  (GSPCafter1982$Volume - mean(GSPCafter1982$Volume))/sd(GSPCafter1982$Volume)
+stdVol
+stdVol_1 <- shift(stdVol, 1)
+stdVol_2 <- shift(stdVol, 2)
+stdVol_3 <- shift(stdVol, 3)
 
-DailyChangeAR_df <- GSPCafter1982 %>% dplyr::select(Date , Weekday, Monthday, Month, Year) %>%
-  data.frame(DailyChangeVector, DCP_1, DCP_2, DCP_4, DCP_12, DCP_15, DCP_16, DCP_18, DCP_27, DCP_32, DCP_34)
+DailyChangeAR_df <- GSPCafter1982 %>% dplyr::select(Date, Weekday, Monthday, Month, Year) %>%
+  data.frame(DailyChangeVector, stdVol_1, stdVol_2, stdVol_3, DCP_1, DCP_2, DCP_4, DCP_12, DCP_15, DCP_16, DCP_18, DCP_27, DCP_32, DCP_34)
 
-DailyChangeAR_graph <- DailyChangeAR_df %>% dplyr::filter(Date > as.Date("2020-01-01"))
+DailyChangeAR_df %>% ggplot() + # creates the 'canvas'
+  theme_bw() + # choose on of many existing themes
+  geom_line(aes(x = Date, y = stdVol), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
+  #geom_line(aes(x = Date, y = DailyChange), size = 0.1, alpha = 0.5, color = "darkgreen")+ # similarly for points
+  scale_x_date(date_labels = "'%y", date_breaks = "year") +
+  # make x axis labels
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  # rotate x axis labels
+  labs(title = "Standardized Volume", y = "stdVol ($)", x = "Year")
+
+DailyChangeAR_df %>% ggplot() + # creates the 'canvas'
+  theme_bw() + # choose on of many existing themes
+  geom_line(aes(x = stdVol, y = DailyChangeVector), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
+  # make x axis labels
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  # rotate x axis labels
+  labs(title = "Standardized Volume vs % Daily Change", x = "stdVol ($)", y = "% Daily Change")
 
 library(fixest)
   
@@ -138,13 +159,15 @@ DailyChangeAR_highSig <- feols(DailyChangeVector ~ DCP_1 + DCP_2 +  DCP_12 + DCP
 
 summary(DailyChangeAR_highSig) 
 
+vol_reg <-  feols(DailyChangeVector ~  stdVol_1 ,data=DailyChangeAR_df)
+summary(vol_reg)
 
 dayRegression <- feols(DailyChangePercent ~ i(Weekday) + i(Monthday) + i(Month) + i(Year), data = GSPCafter1982)
 summary(dayRegression)
 
 DailyChangeAR_df <- DailyChangeAR_df %>% mutate(September = ifelse(Month == 'September',1,0), KK1 = ifelse(Year == 2001,1,0), KK2 = ifelse(Year == 2002,1,0), KK8 = ifelse(Year == 2008,1,0), KK18 = ifelse(Year == 2018,1,0)) 
 
-DailyChangeAllSigModel  <- feols(DailyChangeVector ~ DCP_1 + DCP_2 + DCP_4 + DCP_12 + DCP_15 + DCP_16 + DCP_18 + DCP_27 + DCP_32 + DCP_34  + i(Monthday) + i(September) + i(KK1) + i(KK2) +i(KK8) +i(KK18), data = DailyChangeAR_df) # Adding an explanatory continuous variable
+DailyChangeAllSigModel  <- feols(DailyChangeVector ~ stdVol_1 + DCP_1 + DCP_2 + DCP_4 + DCP_12 + DCP_15 + DCP_16 + DCP_18 + DCP_27 + DCP_32 + DCP_34  + i(Monthday) + i(September) + i(KK1) + i(KK2) +i(KK8) +i(KK18), data = DailyChangeAR_df) # Adding an explanatory continuous variable
 
 summary(DailyChangeAllSigModel)
 
