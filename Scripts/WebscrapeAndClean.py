@@ -70,6 +70,7 @@ def download_url(url):
             noStopsTranscript.append(token) #clean stopwords out of noStopsTranscript
 
     namesList.append(name)
+    print(namesList)
     transcriptsList.append(transcript)
     noStopsTranscriptsList.append((noStopsTranscript))
     datesList.append(date)
@@ -87,18 +88,13 @@ def multiThreading(transcriptUrls):
             max_workers=threads) as executor:  # multithreading - its like 17 times faster than looping
         executor.map(download_url, transcriptUrls)
 
-def WScrape_main(saveFilePath,category):
-    catsList = getBroadCategories.catsList
-
-    print(category)
-
+def WScrape(saveFilePath,category):
     URL = 'https://www.presidency.ucsb.edu' + category           #1
     page = requests.get(URL)                              #2
     soup = BeautifulSoup(page.content, 'lxml', parse_only=SoupStrainer('div', class_='tax-count'))  #3
     results = soup.find('div', class_='tax-count')        #4: these 6 lines gets the number of documents in each sub category of "presidential"
     numDocsS1 = str(results).split(' of ')[-1]            #5
     numDocs = int(numDocsS1.split('.')[0])                #6
-    print(numDocs, " transcripts to be scraped")
 
     if numDocs > 59:
         fraction = round((numDocs/60)-0.49)
@@ -107,7 +103,6 @@ def WScrape_main(saveFilePath,category):
 
     pageNum = 0
     t0 = time.time()
-    print(f'Fraction = {fraction}')
 
     for page_num in range(fraction):
         t2 = time.time()
@@ -126,13 +121,10 @@ def WScrape_main(saveFilePath,category):
 
         multiThreading(transcriptUrls)
 
-        t3 = time.time()
-        print("60 done in ",t3-t2," seconds = ", 60/(t3-t2)," every second = 1 every ", (t3-t2)/60, " seconds." )
         pageNum+=1
 
     typeList = []
-    typeList.extend(repeat(i.split('app-categories/',1)[-1],len(namesList)))
-    print(typeList)
+    typeList.extend(repeat(category.split('app-categories/',1)[-1],len(namesList)))
 
     dict = {'Type':typeList,'Name':namesList,'Date':datesList, 'Title':titlesList, 'Transcript':transcriptsList, 'No Stops Transcript':noStopsTranscriptsList}
     df = pd.DataFrame(dict)
@@ -144,7 +136,7 @@ def WScrape_main(saveFilePath,category):
 
     dataShape = str(df2.shape)
 
-    fileName = i.split('/')[-1] + dataShape
+    fileName = category.split('/')[-1] + dataShape
 
     df2.to_csv(saveFilePath + '/' + fileName + '.tsv',sep = '\t', index=False) #saving the data frame as a .tsv file
 
@@ -152,17 +144,18 @@ def WScrape_main(saveFilePath,category):
     df_partial.to_csv(saveFilePath + '/' + fileName + '_sample.tsv')
 
     t1=time.time()
-    print('\n_________________________________________________________________________________________\n')
-    print(numDocs, " transcripts in ", round(t1-t0), "seconds")
-    print('\n_________________________________________________________________________________________\n')
 
-catsList = getBroadCategories.catsList
-for i in catsList:
-    WScrape_main('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test',i)
-    print('resetting global lists')
-    namesList = []
-    datesList = []
-    titlesList = []
-    transcriptsList = []
-    noStopsTranscriptsList = []
+def run(speechDataSavePath):
+    catsList = getBroadCategories.catsList
+    print('looping')
+    for i in catsList:
+        WScrape(speechDataSavePath,i)
+        print('resetting global lists')
+        namesList.clear()
+        datesList.clear()
+        titlesList.clear()
+        transcriptsList.clear()
+        noStopsTranscriptsList.clear()
 
+
+run('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test')

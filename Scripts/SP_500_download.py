@@ -12,4 +12,4 @@ df.drop('Adj Close',axis=1,inplace=True)
 
 print(df)
 
-df.to_csv("/Users/pablo/Desktop/Masters /Github Repository/Masters/Data/GSPC.csv", sep=',')
+df.to_csv("/Users/pablo/Desktop/Masters/Github Repository/Masters/Data/GSPC.csv", sep=',')
