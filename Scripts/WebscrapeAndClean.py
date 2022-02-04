@@ -7,9 +7,13 @@ from itertools import repeat
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 nltk_stopwords = set(stopwords.words('english'))
-import lxml
+import os
 
-print('Start')
+namesList=[]
+datesList = []
+titlesList = []
+transcriptsList=[]
+noStopsTranscriptsList=[]
 
 #populates "results" with all the subcategories under "presidential", "press/media", "elections and transitions", "miscellaneous" - ignores "congressional"
 class getBroadCategories:
@@ -19,43 +23,14 @@ class getBroadCategories:
     results = soup.find_all('ul', class_= 'dropdown-menu')
     print('Broad Categories End')
 
-category = ''
+    #creates categories list from the presidency project website
+    catsList = []
+    for i in range(1,5):
+        cat = str(results[i]).split('href="')
+        for j in cat:
+            catsList.append(j.split('"')[0])
 
-#populates a list named "presidential" with extensions for all the subcategories in presidential
-class presidential:
-    presidentialS1 = str(getBroadCategories.results[1]).split('href="')
-    for i in range(1): #the script tends to break because of gaps in internet connectivity - change the range to the number of categories already saved at the file destination to skip those subcategories
-        presidentialS1.pop(0)
-
-    presidential = []
-    for i in presidentialS1:
-        presidential.append(i.split('"')[0])
-
-#populates a list named "press" with extensions for all the subcategories in press
-class press:
-    category = 'press'
-    print('Start')
-    pressS1 = str(getBroadCategories.results[2]).split('href="')
-    pressS1.pop(0)
-    press = []
-    for i in pressS1:
-        press.append(i.split('"')[0])
-
-#populates a list named "elections" with extensions for all the subcategories in elections
-class elections:
-    electionsS1 = str(getBroadCategories.results[3]).split('href="')
-    electionsS1.pop(0)
-    elections = []
-    for i in electionsS1:
-      elections.append(i.split('"')[0])
-
-#populates a list named "misc" with extensions for all the subcategories in miscellaneous
-class misc:
-    miscS1 = str(getBroadCategories.results[4]).split('href="')
-    miscS1.pop(0)
-    misc = []
-    for i in miscS1:
-        misc.append(i.split('"')[0])
+    catsList.pop(0)
 
 #downloads a speech transcription and saves the transcript, speaker, date and title to a list
 def download_url(url):
@@ -100,24 +75,10 @@ def download_url(url):
     datesList.append(date)
     titlesList.append(title)
 
-
-#opens 60 links per page and saves the links into a list, then multithreads through the list using download_url
-def multiThreading(numLinks, pageNum):
-    transcriptUrls = []
-
-    URL2 = URL + '?items_per_page=' + str(numLinks) +'&page=' + str(pageNum)
-    page = requests.get(URL2)
-    soup = BeautifulSoup(page.content, 'lxml')
-    results = soup.find_all('div', class_='field-title')
-
-    for j in results:
-        urlS1 = str(j).split('href="', 1)[-1]
-        urlS2 = urlS1.split('"', 1)[0]
-        transcriptUrls.append('https://www.presidency.ucsb.edu' + urlS2)
-
+#Multithreads through a list of URLs using download_url
+def multiThreading(transcriptUrls):
     MAX_THREADS = 30
     length = len(transcriptUrls)
-
     if length == 0: length = 1
 
     threads = min(MAX_THREADS, length)
@@ -126,13 +87,12 @@ def multiThreading(numLinks, pageNum):
             max_workers=threads) as executor:  # multithreading - its like 17 times faster than looping
         executor.map(download_url, transcriptUrls)
 
-catsList = presidential.presidential + press.press + elections.elections + misc.misc
+def WScrape_main(saveFilePath,category):
+    catsList = getBroadCategories.catsList
 
+    print(category)
 
-for i in catsList:
-    print(i)
-    t0 = time.time()
-    URL = 'https://www.presidency.ucsb.edu' + i           #1
+    URL = 'https://www.presidency.ucsb.edu' + category           #1
     page = requests.get(URL)                              #2
     soup = BeautifulSoup(page.content, 'lxml', parse_only=SoupStrainer('div', class_='tax-count'))  #3
     results = soup.find('div', class_='tax-count')        #4: these 6 lines gets the number of documents in each sub category of "presidential"
@@ -141,32 +101,38 @@ for i in catsList:
     print(numDocs, " transcripts to be scraped")
 
     if numDocs > 59:
-        fraction = round((numDocs/60)-0.5)
+        fraction = round((numDocs/60)-0.49)
     else:
         fraction = 1
-
-    namesList=[]
-    datesList = []
-    titlesList = []
-    transcriptsList=[]
-    noStopsTranscriptsList=[]
-
 
     pageNum = 0
     t0 = time.time()
     print(f'Fraction = {fraction}')
-    for p in range(fraction):
+
+    for page_num in range(fraction):
         t2 = time.time()
-        multiThreading(60, pageNum)
+
+        # opens 60 links per page and saves the links into a list
+        transcriptUrls = []
+        URL2 = URL + '?items_per_page=' + str(60) + '&page=' + str(pageNum)
+        page = requests.get(URL2)
+        soup = BeautifulSoup(page.content, 'lxml')
+        results = soup.find_all('div', class_='field-title')
+
+        for j in results:
+            urlS1 = str(j).split('href="', 1)[-1]
+            urlS2 = urlS1.split('"', 1)[0]
+            transcriptUrls.append('https://www.presidency.ucsb.edu' + urlS2)
+
+        multiThreading(transcriptUrls)
+
         t3 = time.time()
         print("60 done in ",t3-t2," seconds = ", 60/(t3-t2)," every second = 1 every ", (t3-t2)/60, " seconds." )
         pageNum+=1
-    t3 = time.time()
 
     typeList = []
     typeList.extend(repeat(i.split('app-categories/',1)[-1],len(namesList)))
     print(typeList)
-
 
     dict = {'Type':typeList,'Name':namesList,'Date':datesList, 'Title':titlesList, 'Transcript':transcriptsList, 'No Stops Transcript':noStopsTranscriptsList}
     df = pd.DataFrame(dict)
@@ -178,16 +144,25 @@ for i in catsList:
 
     dataShape = str(df2.shape)
 
-    filePath = '/Users/pablo/Desktop/Masters /Raw_speech_data/'
-
     fileName = i.split('/')[-1] + dataShape
 
-    df2.to_csv(filePath+fileName+ '.tsv',sep = '\t', index=False) #saving the data frame as a .tsv file
+    df2.to_csv(saveFilePath + '/' + fileName + '.tsv',sep = '\t', index=False) #saving the data frame as a .tsv file
 
     df_partial = df2.iloc[:10, :]
-    df_partial.to_csv(filePath + fileName + '_sample.tsv')
+    df_partial.to_csv(saveFilePath + '/' + fileName + '_sample.tsv')
 
     t1=time.time()
     print('\n_________________________________________________________________________________________\n')
     print(numDocs, " transcripts in ", round(t1-t0), "seconds")
     print('\n_________________________________________________________________________________________\n')
+
+catsList = getBroadCategories.catsList
+for i in catsList:
+    WScrape_main('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test',i)
+    print('resetting global lists')
+    namesList = []
+    datesList = []
+    titlesList = []
+    transcriptsList = []
+    noStopsTranscriptsList = []
+
