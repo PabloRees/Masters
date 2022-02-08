@@ -6,7 +6,7 @@ import json
 
 vaderSentiment = SIA()
 
-df = pd.read_csv('/Users/pablo/Desktop/Masters /Raw_speech_data/convention-speeches(60, 6).tsv',sep='\t')
+df = pd.read_csv('/Users/pablo/Desktop/Masters/Raw_speech_data/convention-speeches(60, 6).tsv',sep='\t')
 transcriptsDict = {'Transcript':df['Transcript'],'No Stops Transcript':df['No Stops Transcript']}
 
 def getSentiment(transcriptsDict):

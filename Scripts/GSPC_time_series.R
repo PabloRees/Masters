@@ -1,5 +1,19 @@
-pacman::p_load(stats, dplyr, urca, tidyverse ,ggplot2, fixest)
-pacman::p_load(fixest)
+pacman::p_load(stats, dplyr, urca, tidyverse ,ggplot2, fixest, FinTS, rugarch, tseries, dynlm, vars, nlWaldTest, lmtest, broom, PoEdata, car,sandwhich,knitr,forecast)
+
+rm(list=ls()) #Removes all items in Environment!
+library(FinTS) #for function `ArchTest()`
+library(rugarch) #for GARCH models
+library(tseries) # for `adf.test()`
+library(dynlm) #for function `dynlm()`
+library(vars) # for function `VAR()`
+library(nlWaldTest) # for the `nlWaldtest()` function
+library(lmtest) #for `coeftest()` and `bptest()`.
+library(broom) #for `glance(`) and `tidy()`
+library(PoEdata) #for PoE4 datasets
+library(car) #for `hccm()` robust standard errors
+library(sandwich)
+library(knitr) #for `kable()`
+library(forecast) 
 
 library(stats) 
 library(dplyr)
@@ -7,7 +21,7 @@ library(urca)
 library(tidyverse)
 library(ggplot2)
 
-MasterGSPC <- read.csv("/Users/pablo/Desktop/Masters /Github Repository/Masters/Data/GSPC.csv" , header = TRUE)
+MasterGSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC.csv" , header = TRUE)
 
 #Mutate date into date format
 GSPC <- MasterGSPC %>% mutate(Date = as.Date(Date, format ="%Y-%m-%d" ))
@@ -31,13 +45,13 @@ Closing <- GSPCafter1982 %>% dplyr::select(Close)
 
 plot_time_series(DailyChangePercent)
 
-DailyChangePercent
-
 change_acf <- stats::acf(
   x = DailyChangePercent,
   plot = T,
   type = "correlation"
 )
+
+change_acf
 
 change_pacf <- stats::acf(
   x = DailyChangePercent,
@@ -94,15 +108,20 @@ GSPCafter1982 %>% ggplot() + # creates the 'canvas'
   # rotate x axis labels
   labs(title = "Log(Close) - Log(Open)", y = "Log Price Change", x = "Year")
 
-GSPCafter1982 %>% ggplot() + # creates the 'canvas'
-  theme_bw() + # choose on of many existing themes
-  geom_line(aes(x = Date, y = NormalizedDailyChange), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
-  #geom_line(aes(x = Date, y = DailyChange), size = 0.1, alpha = 0.5, color = "darkgreen")+ # similarly for points
-  scale_x_date(date_labels = "'%y", date_breaks = "year") +
-  # make x axis labels
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  # rotate x axis labels
-  labs(title = "Normalized Daily Change", y = "Normalized Daily Change", x = "Year")
+
+dpcTS <- ts(GSPCafter1982$DailyChangePercent)
+hist(dpcTS, main="", breaks=50, freq=FALSE, col="darkgreen")
+
+dpcARCH_test <- FinTS::ArchTest(dpcTS, lags = 34, demean = TRUE)
+dpcARCH_test
+
+dpcGARCH_test <- garch(dpcTS)
+dpcARCH_test2 <- garch(dpcTS,c(0,1))
+summary(dpcARCH_test2)
+
+hhat <- ts(2*dpcARCH_test2$fitted.values[-1,1]^2)
+plot.ts(hhat)
+
 
 #function to shift the data (x) by n spaces
 shift <- function(x, n){
@@ -132,20 +151,13 @@ DailyChangeAR_df <- GSPCafter1982 %>% dplyr::select(Date, Weekday, Monthday, Mon
 DailyChangeAR_df %>% ggplot() + # creates the 'canvas'
   theme_bw() + # choose on of many existing themes
   geom_line(aes(x = Date, y = stdVol), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
-  #geom_line(aes(x = Date, y = DailyChange), size = 0.1, alpha = 0.5, color = "darkgreen")+ # similarly for points
+  geom_line(aes(x = Date, y = DailyChangeVector), size = 0.1, alpha = 0.5, color = "darkgreen")+ # similarly for points
   scale_x_date(date_labels = "'%y", date_breaks = "year") +
   # make x axis labels
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   # rotate x axis labels
-  labs(title = "Standardized Volume", y = "stdVol ($)", x = "Year")
+  labs(title = "Standardized Volume and % Daily Change", y = "stdVol and % Daily Change", x = "Year")
 
-DailyChangeAR_df %>% ggplot() + # creates the 'canvas'
-  theme_bw() + # choose on of many existing themes
-  geom_line(aes(x = stdVol, y = DailyChangeVector), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
-  # make x axis labels
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  # rotate x axis labels
-  labs(title = "Standardized Volume vs % Daily Change", x = "stdVol ($)", y = "% Daily Change")
 
 library(fixest)
   

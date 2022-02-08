@@ -9,7 +9,6 @@ from sklearn.manifold import TSNE
 from gensim.models import Word2Vec
 import pandas as pd
 
-
 def tsnescatterplot(model, word, list_names):
     """ Plot in seaborn the results from the t-SNE dimensionality reduction algorithm of the vectors of a query word,
     its list of most similar words, and a list of words.
@@ -43,7 +42,6 @@ def tsnescatterplot(model, word, list_names):
 
     # Finds t-SNE coordinates for 2 dimensions
     np.set_printoptions(suppress=True)
-
     Y = TSNE(n_components=2, random_state=0, perplexity=8).fit_transform(reduc) #perplexity should be chosen to be lower than the number of data points and between 5 and 50 - lower values induce dominance by local variation while larger values induce dominance by global variation
 
     # Sets everything up to plot
