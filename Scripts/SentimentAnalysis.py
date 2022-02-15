@@ -2,12 +2,11 @@ import textblob
 import pandas as pd
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
+import os
 import json
 
 vaderSentiment = SIA()
 
-df = pd.read_csv('/Users/pablo/Desktop/Masters/Raw_speech_data/convention-speeches(60, 6).tsv',sep='\t')
-transcriptsDict = {'Transcript':df['Transcript'],'No Stops Transcript':df['No Stops Transcript']}
 
 def getSentiment(transcriptsDict):
     BlobSentNoStops = []
@@ -41,12 +40,18 @@ def getSentiment(transcriptsDict):
 
     return transcriptsSentimentDict
 
-sentDict = getSentiment(transcriptsDict)
+def runSentAnal(dataFilePath,dataFilePath_save):
+    for i in os.listdir(dataFilePath):
+        df = pd.read_csv(dataFilePath + '/' + i, sep='\t')
+        transcriptsDict = {'Transcript': df['Transcript'], 'No Stops Transcript': df['No Stops Transcript']}
+        sentDict = getSentiment(transcriptsDict)
 
-df['BlobTranscriptSent'] = sentDict['BlobTranscriptSent']
-df['BlobNoStopsSent'] = sentDict['BlobNoStopsSent']
-df['VaderNoStopSent'] = sentDict['VaderNoStopSent']
-df['VaderTranscriptSent'] = sentDict['VaderTranscriptSent']
+        df['BlobTranscriptSent'] = sentDict['BlobTranscriptSent']
+        df['BlobNoStopsSent'] = sentDict['BlobNoStopsSent']
+        df['VaderNoStopSent'] = sentDict['VaderNoStopSent']
+        df['VaderTranscriptSent'] = sentDict['VaderTranscriptSent']
+
+        df.to_csv(dataFilePath_save + '/' + i, sep='\t')
 
 print(df.columns)
 print(df.loc[[0]])

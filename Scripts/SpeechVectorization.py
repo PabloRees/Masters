@@ -17,18 +17,20 @@ def vecSpeech_mean(speech):
 
 loadFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data"
 saveFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_vectors'
-for i in os.listdir(loadFilePath):#gets all the corpuses
-    if not i.startswith('.'):
-        print(f'Starting to vectorize {i}')
-        df = pd.read_csv(loadFilePath+'/'+i, sep='\t')#loads a speech type corpus into df
-        speechVecList = []
-        for speech in df['No Stops Transcript']:#gets a speech from the 'no stops transcript'
-            speechVec = vecSpeech_mean(speech)#vectorizes the speech using the above function
-            speechVecList.append(speechVec)#appends the speechVector to a list
-            print(f'{len(speechVecList)} speeches done')
-        df['SpeechVec_mean'] = speechVecList#adds the list to the speech type corpus df
-        df.to_csv(saveFilePath+'/'+i, sep='\t')
-        print(f'{i} done')
+
+def create_vectors(loadFilePath,saveFilePath):
+    for i in os.listdir(loadFilePath):#gets all the corpuses STATICALLY
+        if not i.startswith('.'):
+            print(f'Starting to vectorize {i}')
+            df = pd.read_csv(loadFilePath+'/'+i, sep='\t')#loads a speech type corpus into df
+            speechVecList = []
+            for speech in df['No Stops Transcript']:#gets a speech from the 'no stops transcript'
+                speechVec = vecSpeech_mean(speech)#vectorizes the speech using the above function
+                speechVecList.append(speechVec)#appends the speechVector to a list
+                print(f'{len(speechVecList)} speeches done')
+            df['SpeechVec_mean'] = speechVecList#adds the list to the speech type corpus df
+            df.to_csv(saveFilePath+'/'+i, sep='\t')
+            print(f'{i} done')
 
 
 

@@ -145,7 +145,7 @@ def WScrape(saveFilePath,category):
 
     t1=time.time()
 
-def run(speechDataSavePath):
+def runWSC(speechDataSavePath):
     catsList = getBroadCategories.catsList
     print('looping')
     for i in catsList:
@@ -158,4 +158,4 @@ def run(speechDataSavePath):
         noStopsTranscriptsList.clear()
 
 
-run('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test')
+runWSC('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test')
