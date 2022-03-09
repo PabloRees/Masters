@@ -13,3 +13,6 @@ def downloadSP500(saveFilePath):
 
     df.to_csv(saveFilePath, sep=',')
 
+financialDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_1.csv'
+
+downloadSP500(financialDataSavePath)

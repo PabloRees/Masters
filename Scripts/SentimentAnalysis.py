@@ -1,61 +1,31 @@
 import textblob
-import pandas as pd
-import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
-import os
-import json
 
 vaderSentiment = SIA()
 
+def getSentiment(transcriptsList):
+    blobSentList = []
+    vaderSentList = []
 
-def getSentiment(transcriptsDict):
-    BlobSentNoStops = []
-    BlobSentTranscript = []
-    vaderTranscriptSent = []
-    vaderNoStopsSent = []
+    myDict = ["'", ",", "    ", "   ", "  "]
 
-    print(f"Length = {len(transcriptsDict['Transcript'])}")
-    for i in range(len(transcriptsDict['Transcript'])):
-        print(i)
+    for i in transcriptsList:
 
-        transcriptBlob = textblob.TextBlob(transcriptsDict['Transcript'][i])
-        noStopsBlob = textblob.TextBlob(transcriptsDict['No Stops Transcript'][i])
+        blob = textblob.TextBlob(i)
 
-        BlobSentNoStops.append(transcriptBlob.sentiment)
-        BlobSentTranscript.append(noStopsBlob.sentiment)
+        blobSentList.append(blob.sentiment)
 
-        myDict = ["'",",","    ","   ","  "]
-
-        transcriptString = transcriptsDict['Transcript'][i]
-        noStopsString = transcriptsDict['No Stops Transcript'][i]
+        transcriptString = i
 
         for s in myDict:
             transcriptString = transcriptString.replace(s,' ')
-            noStopsString = noStopsString.replace(s,' ')
 
-        vaderTranscriptSent.append(vaderSentiment.polarity_scores(transcriptString))
-        vaderNoStopsSent.append(vaderSentiment.polarity_scores(noStopsString))
+        vaderSentList.append(vaderSentiment.polarity_scores(transcriptString))
 
-    transcriptsSentimentDict = {'BlobTranscriptSent':BlobSentTranscript,'BlobNoStopsSent':BlobSentTranscript,'VaderTranscriptSent':vaderTranscriptSent, 'VaderNoStopSent':vaderNoStopsSent}
+    entimentDict = {'blobSent':blobSentList,'vaderSent':vaderSentList}
 
-    return transcriptsSentimentDict
+    return entimentDict
 
-def runSentAnal(dataFilePath,dataFilePath_save):
-    for i in os.listdir(dataFilePath):
-        df = pd.read_csv(dataFilePath + '/' + i, sep='\t')
-        transcriptsDict = {'Transcript': df['Transcript'], 'No Stops Transcript': df['No Stops Transcript']}
-        sentDict = getSentiment(transcriptsDict)
 
-        df['BlobTranscriptSent'] = sentDict['BlobTranscriptSent']
-        df['BlobNoStopsSent'] = sentDict['BlobNoStopsSent']
-        df['VaderNoStopSent'] = sentDict['VaderNoStopSent']
-        df['VaderTranscriptSent'] = sentDict['VaderTranscriptSent']
-
-        df.to_csv(dataFilePath_save + '/' + i, sep='\t')
-
-print(df.columns)
-print(df.loc[[0]])
-print(df.iloc[0]['BlobNoStopsSent'])
-print(df.iloc[0]['VaderTranscriptSent'])
 
 

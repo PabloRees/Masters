@@ -1,12 +1,19 @@
 import pandas as pd
 import os
+import datetime as dt
 
 def combineSpeeches(speech_load_file_path):
     speechTypeList = os.listdir(speech_load_file_path)
-    df = pd.read_csv(speech_load_file_path + '/' + speechTypeList[0], sep='\t')
-    speechTypeList.pop(0)
+    cleanSpeechList = []
 
     for i in speechTypeList:
+        if not i.startswith('.'):
+            cleanSpeechList.append(i)
+
+    df = pd.read_csv(speech_load_file_path + '/' + cleanSpeechList[0], sep='\t')
+    speechTypeList.pop(0)
+
+    for i in cleanSpeechList:
         if not i.startswith('.'):
             print(i)
             df_to_add = pd.read_csv(speech_load_file_path + '/' +i , sep='\t')
@@ -15,13 +22,15 @@ def combineSpeeches(speech_load_file_path):
     df['Date'] = pd.to_datetime(df.Date)
     df.sort_values(by=['Date'],ignore_index=True,inplace=True)
     df.reindex
-    #df.to_csv(speech_load_file_path+'/'+'combineSortTest.tsv',sep = '\t')
 
     return df
 
 def combine_GSPC_Speeches(speechDf, GSPCDf):
+    speechDf['Date'] = speechDf['Date'].apply(lambda x: dt.datetime.strftime(x, '%Y-%m-%d'))
+    speechDf['Date'] = pd.to_datetime(speechDf['Date'])
     for i in range(len(speechDf['Date'])):
-        speechDf['Date'][i] = pd.to_datetime(speechDf['Date'][i].split('+', 1)[0])
+        print(speechDf['Date'][i])
+        #speechDf['Date'][i] = pd.to_datetime(str(speechDf['Date'][i]).split('+', 1)[0])
         if speechDf['Date'][i].hour > 16:
             speechDf['Date'][i] = speechDf['Date'][i].replace(day=df_speech_test['Date'][i].day + 1)
 

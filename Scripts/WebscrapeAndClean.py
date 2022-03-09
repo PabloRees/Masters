@@ -158,4 +158,4 @@ def runWSC(speechDataSavePath):
         noStopsTranscriptsList.clear()
 
 
-runWSC('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test')
+#runWSC('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test')

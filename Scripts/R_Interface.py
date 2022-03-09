@@ -9,4 +9,4 @@ def R_call(R_file):
     script = script.read()
     robjects.r(script)
 
-R_call('GSPC2_logdiff.R')
+#R_call('GSPC2_logdiff.R')
