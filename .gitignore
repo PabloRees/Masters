@@ -1,0 +1,13 @@
+*.csv
+*.tsv
+.jpeg
+*.jpef
+*.DS_Store
+*.png
+*.csv
+*.tsv
+*.RData
+*.Rhistory
+*.pyc
+*.so
+*.o
