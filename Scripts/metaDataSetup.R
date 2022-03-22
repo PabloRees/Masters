@@ -41,7 +41,7 @@ rm(USDX)
 output_df <- left_join(output_df,VIX)
 rm(VIX)
 
-write.csv(output_df,"/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/metadata.csv", row.names = FALSE)
+write.csv(output_df,"/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/metadata.csv", row.names = FALSE)
 
 
 

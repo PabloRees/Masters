@@ -1,24 +1,25 @@
 import os
-
-#from WebscrapeAndClean import *
+from WebscrapeAndClean import *
 import gensim.models
-
 from SentimentAnalysis import *
 from Word2Vec import *
-from SP_500_download import *
+from fin_data_downloader import *
 from R_Interface import *
 from Data_congregator import *
 
 ############# Setting up text data #############
-speechDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test'
+speechDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
 
-#runWSC(speechDataSavePath) #calls the WebScrapeAndClean process - text data
+runWSC(speechDataSavePath) #calls the WebScrapeAndClean process - text data
 
-#Word2Vec_Model = trainWord2Vec(speechDataSavePath) #creates the word2vec model - text data
+Word2Vec_Model = trainWord2Vec(speechDataSavePath) #creates the word2vec model - text data
 
 W2Vmodel = gensim.models.Word2Vec.load('Word2Vec.model')
 
-def textPrep():
+featuresFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features"
+liteFeaturesFilesPath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/'
+
+def textPrep(speechDataSavePath,featuresFilePath,liteFeaturesFilesPath):
     for i in os.listdir(speechDataSavePath):
         if not i.startswith('.'):
             print(i)
@@ -38,27 +39,41 @@ def textPrep():
 
             df_lite_name = fileName + str(df_lite.shape) + '.tsv'
             df_lite.to_csv(
-                '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/' + df_lite_name,
+                liteFeaturesFilesPath + df_lite_name,
                 sep='\t')
 
             df_name = fileName + str(df.shape) + '.tsv'
             df.to_csv(
-                "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features/" + df_name,
+                featuresFilePath + df_name,
                 sep='\t')
 
-#textPrep()
+textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
+
+combinedLiteSpeeches = combineSpeeches(liteFeaturesFilesPath)
+
+completeDataFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data'
+
+combinedLiteSpeeches.to_csv(completeDataFilePath + '/combinedLiteSpeeches.tsv', sep='\t')
 
 ############# Setting up financial data #############
-#financialDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_1.csv'
-#downloadSP500(financialDataSavePath) #downloads and saves the S&P 500 data to the financialDataSavePath
-#R_call('GSPC_timeseries.R')
+financialDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC.csv'
+downloadFinData(financialDataSavePath,'^GSPC',1927, 12, 30, 23, 59)
 
-#allSpeeches_df = combineSpeeches('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite')
+############ Download Financial Metadata ##############
+metadataFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/'
+
+downloadFinData(metadataFilePath + 'USDX.csv','DX-Y.NYB',1971, 1, 3, 23, 59)
+downloadFinData(metadataFilePath + 'BTC.csv','BTC-USD',2014, 9, 16, 23, 59)
+downloadFinData(metadataFilePath + 'VIX.csv','^VIX',1990, 1, 1, 23, 59)
+downloadFinData(metadataFilePath + 'OIL.csv','CL%3DF',2000, 8, 22, 23, 59)
+downloadFinData(metadataFilePath + 'NASDAQ_comp.csv','%5EIXIC',1971, 2, 4, 23, 59)
+downloadFinData(metadataFilePath + 'SSE_comp.csv','000001.SS',1997, 7, 1, 23, 59)
+
+######run R files - GSPC_TS , metadata_setup and combining final data
+R_call('GSPC_timeseries.R')
+R_call('metaDataSetup.R')
 R_call('combine_by_date.R')
 
-full_df = pd.read_csv('final_dataset.csv')
-
-print(full_df)
 
 #this script needs to:
 #

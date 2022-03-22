@@ -16,7 +16,7 @@ transcriptsList=[]
 noStopsTranscriptsList=[]
 
 #populates "results" with all the subcategories under "presidential", "press/media", "elections and transitions", "miscellaneous" - ignores "congressional"
-class getBroadCategories:
+def getBroadCategories():
     URL = 'https://www.presidency.ucsb.edu/documents'
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, 'lxml')
@@ -31,6 +31,7 @@ class getBroadCategories:
             catsList.append(j.split('"')[0])
 
     catsList.pop(0)
+    return(catsList)
 
 #downloads a speech transcription and saves the transcript, speaker, date and title to a list
 def download_url(url):
@@ -146,7 +147,7 @@ def WScrape(saveFilePath,category):
     t1=time.time()
 
 def runWSC(speechDataSavePath):
-    catsList = getBroadCategories.catsList
+    catsList = getBroadCategories()
     print('looping')
     for i in catsList:
         WScrape(speechDataSavePath,i)

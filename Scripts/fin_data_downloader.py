@@ -15,12 +15,6 @@ def downloadFinData(saveFilePath,ticker,year,month,date,hour,minute):
 
     df.to_csv(saveFilePath, sep=',')
 
-#downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_1.csv','^GSPC',1927, 12, 30, 23, 59)
-#downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/USDX.csv','DX-Y.NYB',1971, 1, 3, 23, 59)
-#downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/BTC.csv','BTC-USD',2014, 9, 16, 23, 59)
-#downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/VIX.csv','^VIX',1990, 1, 1, 23, 59)
-#downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/OIL.csv','CL%3DF',2000, 8, 22, 23, 59)
-#downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/NASDAQ_comp.csv','%5EIXIC',1971, 2, 4, 23, 59)
-downloadFinData('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/SSE_comp.csv','000001.SS',1997, 7, 1, 23, 59)
+
 
 

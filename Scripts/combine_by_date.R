@@ -5,8 +5,10 @@ pacman::p_load(tidyverse,lubridate)
 library(tidyverse)
 library(lubridate)
 
-GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_features.csv" , header = T) #this should load from a sql database rather
-speeches <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/convention-speeches(60, 7).tsv',sep = '\t')
+GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/GSPC_features.csv" , header = T) #this should load from a sql database rather
+speeches <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/combinedLiteSpeeches.tsv',sep = '\t')
+metadata <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/metadata.csv',header = T)
+
 
 GSPC <- GSPC %>% mutate(Date = as.Date(Date, format ="%Y-%m-%d" )) %>% arrange(Date)
 speeches <- speeches %>% filter(as.Date(Date)>first(GSPC$Date)) 
@@ -23,7 +25,8 @@ speeches <- speeches %>% mutate(Date = as.Date(Date, format = "%Y-%m-%d")) %>%
   mutate(Date = ifelse(weekdays(Date) == "Saturday", Date +2, ifelse(weekdays(Date) == "Sunday", Date +1,ifelse(as.numeric(Time) > 16,Date+1,Date)))) %>% 
   mutate(Date = as.Date(Date, format = "%Y-%m-%d", origin)) 
 
-full_df <- left_join(speeches , GSPC)
+full_df_1 <- left_join(speeches , GSPC)
+full_df <- left_join(full_df_1,metadata)
 
 as.character(nrow(full_df))
 row <- as.character(nrow(full_df))
@@ -31,8 +34,8 @@ row <- as.character(nrow(full_df))
 shape <- paste('(',row,',',as.character(ncol(full_df)),')')
 
 
-#filePath <- paste("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Full_datasets/final_dataset",shape,'.csv')
+filePath <- paste("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset.csv",shape,'.csv')
 
-write.csv(full_df,'final_dataset.csv', row.names = FALSE)
+write.csv(full_df,filePath, row.names = FALSE)
 
 

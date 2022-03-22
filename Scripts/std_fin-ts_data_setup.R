@@ -58,8 +58,6 @@ stdDataSetup <- function(fin_ts_df,volFilter = F,omit_na = T){
     fin_ts_df
 }
 
-
-  
 #get ld_1 & dr_1 function
 get_ld_dr <- function(fin_ts_df,ticker){
   
@@ -75,4 +73,18 @@ get_ld_dr <- function(fin_ts_df,ticker){
   
   fin_ts_df
   
+}
+
+
+blackSwan <- function(fin_ts_df, numSD){
+  
+  bsname <- paste('blackSwan_SD',as.character(numSD) ,sep ='')
+  
+  stdDev = sd(fin_ts_df$logDif_date_resid)
+  
+  fin_ts_df <- fin_ts_df |> mutate(blackSwan = ifelse(abs(logDif_date_resid) > numSD*stdDev,1,0))
+  
+  names(fin_ts_df)[names(fin_ts_df) == "blackSwan"] <- bsname
+  
+  fin_ts_df
 }

@@ -20,20 +20,21 @@ source('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Scripts/std_fin-t
 
 ##
 ## DATA SETUP
-GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_1.csv" , header = T) #this should load from a sql database rather
+GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC.csv" , header = T) #this should load from a sql database rather
 
 GSPC <- stdDataSetup(GSPC,volFilter = T)
 
-hist(GSPC$logDif, breaks = 1000)
-hist(GSPC$logDif_date_resid, breaks = 1000)
-
-plot(density(GSPC$logDif))
-plot(density(GSPC$logDif_date_resid))
+GSPC <- blackSwan(GSPC,3)
+GSPC <- blackSwan(GSPC,4)
+GSPC <- blackSwan(GSPC,5)
 
 start <- c(format(first(GSPC$Date),"%Y"),format(first(GSPC$Date),"%d"))
 freq <- abs(round(length(GSPC$Date)/(as.integer(format(last(GSPC$Date),"%Y")) - as.integer(format(first(GSPC$Date),"%Y")))))
 
+
 logDif <-  ts(GSPC$logDif , start=start , freq = freq)
+rm(freq,start)
+
 
 #######################################
 ##Auto Correlation and Dickey Fuller Tests
@@ -59,6 +60,7 @@ ADF1 <- ur.df(
 
 summary(ADF1) #yields 1 significant lag and a p-score less than 0,05 which suggests stationarity
 
+rm(acf, pacf, ADF1)
 
 #####################################
 ####Volume analysis
@@ -110,6 +112,8 @@ summary(Reg4_residStdVol_1) #Regression 4 shows that the residuals are also sign
 Reg5_date_residStdVol_1 <- feols(stdVol_1DateResid ~ Date, data=GSPC)
 summary(Reg5_date_residStdVol_1) #Regression 5 shows that there is no relationship between the residuals and date
 
+rm(Reg1_stdVol_1_logDif, Reg2_stdVol_1_abslogDif, Reg3_stdVol_1_Date, Reg4_residStdVol_1, Reg5_date_residStdVol_1)
+
 GSPC %>% ggplot() + # creates the 'canvas'
   theme_bw() + # choose on of many existing themes
   geom_line(aes(x = Date, y = stdVol_1DateResid), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
@@ -129,8 +133,6 @@ GSPC %>% ggplot() + # creates the 'canvas'
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   # rotate x axis labels
   labs(title = "stdVol_DateResid and logDif", y = "stdVolControlled and logDif", x = "Year")
-
-cov(abs(GSPC$logDif),GSPC$stdVol_1DateResid)
 
 ####################################
 ##ARCH  TESTS - Kevin Kotze tutorial
@@ -171,6 +173,8 @@ DlogDif_9 <- shift(DlogDif,9)
 
 DlogDif_df <- data.frame(DlogDif,DlogDif_1,DlogDif_2,DlogDif_5,DlogDif_6,DlogDif_8,DlogDif_9) #create a dataframe with all the DlogDif lags
 
+rm(res1,res2,res3,DlogDif_1,DlogDif_2,DlogDif_5,DlogDif_6,DlogDif_8,DlogDif_9)
+
 lagCheck0 <- feols(DlogDif ~ DlogDif_1 ,data = DlogDif_df)
 lagCheck1 <- feols(DlogDif ~ DlogDif_1 + DlogDif_2,data = DlogDif_df)
 lagCheck2 <- feols(DlogDif ~ DlogDif_1 + DlogDif_2 + DlogDif_5 + DlogDif_6,data = DlogDif_df)
@@ -180,6 +184,8 @@ summary(lagCheck0)
 summary(lagCheck1)
 summary(lagCheck2)
 summary(lagCheck3)
+
+rm(lagCheck0,lagCheck1, lagCheck2, lagCheck3, logDif)
 #these regressions indicate significance on the 2nd, 6th, 8th and 9th lags
 
 ArchTest(DlogDif, lags = 10, demean = TRUE) #also indicates that ARCH effects are present
@@ -231,6 +237,8 @@ plot.ts(residuals(model3.2, standardize = T))
 
 plot.ts(residuals(model3, standardize =T))
 
+rm(model1,model2,model3,model3.1,model3.2,model4,model5,model6,check1,check2,check3,check3.1,check3.2,check4,check5,check6)
+
 #####################################
 ###Positive vs negative movements
 
@@ -263,6 +271,7 @@ for (i in DlogDif)
 
 pos_neg_transform <- shift(pos_neg_transform,1)
 
+rm(negative_vec,positive_vec,i,pos_neg_ratio)
 ######################################
 ##EGARCH
 
@@ -282,15 +291,31 @@ model5
 
 check5 <- ac(residuals(model5, standardize = T))
 
+rm(x,model5,check5)
+
 #######################################
 ##Export data setup
 
-output_df <- data.frame(DlogDif,Date = GSPC$Date, logDif = GSPC$logDif, stdVol_1DateResid = GSPC$stdVol_1DateResid, DlogDif_1, DlogDif_2, DlogDif_6, ARMA06_resid_1,pos_neg_transform, absDlogDif_1 = abs(DlogDif_1))
+DlogDif_df <- subset(DlogDif_df, select = c(DlogDif,DlogDif_1,DlogDif_2))
+DlogDif_df <- DlogDif_df |> mutate(absDlogDif = abs(DlogDif),absDlogDif_1 = abs(DlogDif_1))
+
+output_df <- data.frame(Date = GSPC$Date, DlogDif_df,logDif = GSPC$logDif,
+                        logDif_date_resid = GSPC$logDif_date_resid,
+                        logDif_date_resid_1 = GSPC$logDif_date_resid_1,
+                        blackSwan_SD3_1 = shift(GSPC$blackSwan_SD3,1),
+                        blackSwan_SD4_1 = shift(GSPC$blackSwan_SD4,1),
+                        blackSwan_SD5_1 = shift(GSPC$blackSwan_SD5,1), 
+                        stdVol_1DateResid = GSPC$stdVol_1DateResid,
+                        pos_neg_transform)
   
-funreg <- feols(DlogDif~absDlogDif_1 + i(pos_neg_transform) ,data = output_df)
+rm(GSPC,DlogDif_df,DlogDif,pos_neg_transform)
+
+funreg <- feols(DlogDif~ i(blackSwan_SD5_1) + i(pos_neg_transform) ,data = output_df)
 summary(funreg)
 
+write.csv(output_df,"/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/GSPC_features.csv", row.names = FALSE)
 
-write.csv(output_df,"/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_features.csv", row.names = FALSE)
+rm(list=ls()) #Removes all items in Environment!
+graphics.off()
 
  
