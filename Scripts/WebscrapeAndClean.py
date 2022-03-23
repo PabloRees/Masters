@@ -141,8 +141,8 @@ def WScrape(saveFilePath,category):
 
     df2.to_csv(saveFilePath + '/' + fileName + '.tsv',sep = '\t', index=False) #saving the data frame as a .tsv file
 
-    df_partial = df2.iloc[:10, :]
-    df_partial.to_csv(saveFilePath + '/' + fileName + '_sample.tsv')
+    #df_partial = df2.iloc[:10, :]
+    #df_partial.to_csv(saveFilePath + '/' + fileName + '_sample.tsv')
 
     t1=time.time()
 

@@ -1,9 +1,8 @@
 import textblob
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 
-vaderSentiment = SIA()
-
 def getSentiment(transcriptsList):
+    vaderSentiment = SIA()
     blobSentList = []
     vaderSentList = []
 

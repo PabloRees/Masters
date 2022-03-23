@@ -44,9 +44,9 @@ def combine_GSPC_Speeches(speechDf, GSPCDf):
 
     return full_df
 
-df_speech_test = pd.read_csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data/convention-speeches(60, 6).tsv", sep= '\t')
-GSPC_df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC.csv',sep = ',')
-speech_load_file_path = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
+#df_speech_test = pd.read_csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data/convention-speeches(60, 6).tsv", sep= '\t')
+#GSPC_df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC.csv',sep = ',')
+#speech_load_file_path = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
 
 #combine_GSPC_Speeches(df_speech_test,GSPC_df)
 
