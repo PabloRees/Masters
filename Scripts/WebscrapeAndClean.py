@@ -29,8 +29,8 @@ def getBroadCategories():
         cat = str(results[i]).split('href="')
         for j in cat:
             catsList.append(j.split('"')[0])
-
-    catsList.pop(0)
+    for i in range(0,26):
+        catsList.pop(0)
     return(catsList)
 
 #downloads a speech transcription and saves the transcript, speaker, date and title to a list
@@ -48,7 +48,9 @@ def download_url(url):
 
     dateS1 = soup3.find('span', class_="date-display-single")
     dateS2 = str(dateS1).split('content="', 1)[-1]  # These 3 lines save the transcript dateTime title to 'date'
-    date = dateS2.split('" ', 1)[0]
+    date3 = dateS2.split('" ', 1)[0]
+    print(date3)
+    date = pd.to_datetime(date3)
 
     transcriptS1 = soup3.find('div', class_="field-docs-content")
     transcriptS2 = str(transcriptS1).split('">', 1)[-1]  # These 3 lines save the transcript to 'transcript'
@@ -71,7 +73,6 @@ def download_url(url):
             noStopsTranscript.append(token) #clean stopwords out of noStopsTranscript
 
     namesList.append(name)
-    print(namesList)
     transcriptsList.append(transcript)
     noStopsTranscriptsList.append((noStopsTranscript))
     datesList.append(date)
@@ -150,13 +151,15 @@ def runWSC(speechDataSavePath):
     catsList = getBroadCategories()
     print('looping')
     for i in catsList:
-        WScrape(speechDataSavePath,i)
-        print('resetting global lists')
-        namesList.clear()
-        datesList.clear()
-        titlesList.clear()
-        transcriptsList.clear()
-        noStopsTranscriptsList.clear()
+        if not i == '<ul class=':
+            print(i)
+            WScrape(speechDataSavePath, i)
+            print('resetting global lists')
+            namesList.clear()
+            datesList.clear()
+            titlesList.clear()
+            transcriptsList.clear()
+            noStopsTranscriptsList.clear()
 
 
 #runWSC('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_test')

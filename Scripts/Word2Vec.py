@@ -45,6 +45,7 @@ def create_vectors(speechList,model):
         speechVec = vecSpeech_mean(speech,model)  # vectorizes the speech using the above function
         speechVecList.append(speechVec)  # appends the speechVector to a list
         print(f'{len(speechVecList)} speeches done')
+
     return speechVecList
 
 
