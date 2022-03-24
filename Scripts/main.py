@@ -14,55 +14,47 @@ speechDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Dat
 
 #Word2Vec_Model = trainWord2Vec(speechDataSavePath) #creates the word2vec model - text data
 
-featuresFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features"
+featuresFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features/"
 liteFeaturesFilesPath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/'
 
-def textPrep(speechDataSaveName):
+def textPrep(speechDataSavePath,featuresFilePath,liteFeaturesFilesPath):
 
     W2Vmodel = gensim.models.Word2Vec.load('Word2Vec.model')
 
-    if not speechDataSaveName.startswith('.'):
-        print(f'text prep: {speechDataSaveName}')
+    speechDataSaveNames = os.listdir(speechDataSavePath)
 
-        t1 = time.time()
+    for i in speechDataSaveNames:
+        if not i.startswith('.'):
+            print(f'text prep: {i}')
 
-        df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data' + "/" + speechDataSaveName, sep='\t')
-        speechesVector = create_vectors(df['No Stops Transcript'],
+            t1 = time.time()
+
+            df = pd.read_csv(speechDataSavePath + "/" + i, sep='\t')
+            speechesVector = create_vectors(df['No Stops Transcript'],
                                             W2Vmodel)  # vectorizes the speeches using the word2vec model - text data
-        sentimentVector = getSentiment(df['No Stops Transcript'])  # runs sentiment analysis and saves to the file path - text data
+            sentimentVector = getSentiment(
+                df['No Stops Transcript'])  # runs sentiment analysis and saves to the file path - text data
 
-        print(f'Vectorized corpus: {speechDataSaveName} in {(time.time() - t1)/60} minutes')
+            print(f'Vectorized corpus: {i} in {(time.time() - t1) / 60} minutes')
 
-        df['SpeechVectors'] = speechesVector
-        df['vaderSent'] = sentimentVector["vaderSent"]
-        df['blobSent'] = sentimentVector['blobSent']
-        df_lite = df.drop(['No Stops Transcript', 'Transcript'], axis=1)
+            df['SpeechVectors'] = speechesVector
+            df['vaderSent'] = sentimentVector["vaderSent"]
+            df['blobSent'] = sentimentVector['blobSent']
+            df_lite = df.drop(['No Stops Transcript', 'Transcript'], axis=1)
 
-        fileName = speechDataSaveName.split('(')[0]
+            fileName = i.split('(')[0]
 
-        df_lite_name = fileName + str(df_lite.shape) + '.tsv'
-        df_lite.to_csv(
-                '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/' + df_lite_name,
+            df_lite_name = fileName + str(df_lite.shape) + '.tsv'
+            df_lite.to_csv(
+                liteFeaturesFilesPath + df_lite_name,
                 sep='\t')
 
-        df_name = fileName + str(df.shape) + '.tsv'
-        df.to_csv(
-                "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features" + df_name,
+            df_name = fileName + str(df.shape) + '.tsv'
+            df.to_csv(
+                featuresFilePath + df_name,
                 sep='\t')
 
-speechDataSaveNames = os.listdir(speechDataSavePath)
-speechDataSaveNames.pop(0)
-speechDataSaveNames.pop(0)
-
-MAX_THREADS = 16
-length = len(speechDataSaveNames)
-if length == 0: length = 1
-
-threads = min(MAX_THREADS, length)
-
-with concurrent.futures.ThreadPoolExecutor(
-            max_workers=threads) as executor:  # multithreading - its like 17 times faster than looping
-        executor.map(textPrep, speechDataSaveNames)
+textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
 
 #textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
 
