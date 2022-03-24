@@ -10,6 +10,7 @@ speeches <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Dat
 metadata <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/metadata.csv',header = T)
 
 
+metadata <- metadata %>% mutate(Date = as.Date(Date, format ="%Y-%m-%d" ))
 GSPC <- GSPC %>% mutate(Date = as.Date(Date, format ="%Y-%m-%d" )) %>% arrange(Date)
 speeches <- speeches %>% filter(as.Date(Date)>first(GSPC$Date)) 
 

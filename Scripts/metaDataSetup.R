@@ -9,7 +9,7 @@ Nasdaq <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/
 USDX <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/USDX.csv" , header = T) #this should load from a sql database rather
 VIX <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/VIX.csv" , header = T) #this should load from a sql database rather
 SSE <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/MetaData/SSE_comp.csv" , header = T) #this should load from a sql database rather
-GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC_features.csv", header = T)
+GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/GSPC_features.csv", header = T)
 
 output_df <- data.frame(Date = as.Date(GSPC$Date, format ="%Y-%m-%d" ))
 rm(GSPC)

@@ -10,9 +10,9 @@ from Data_congregator import *
 ############# Setting up text data #############
 speechDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
 
-#runWSC(speechDataSavePath) #calls the WebScrapeAndClean process - text data
+runWSC(speechDataSavePath) #calls the WebScrapeAndClean process - text data
 
-#Word2Vec_Model = trainWord2Vec(speechDataSavePath) #creates the word2vec model - text data
+Word2Vec_Model = trainWord2Vec(speechDataSavePath) #creates the word2vec model - text data
 
 featuresFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features/"
 liteFeaturesFilesPath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/'
@@ -56,12 +56,9 @@ def textPrep(speechDataSavePath,featuresFilePath,liteFeaturesFilesPath):
 
 textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
 
-#textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
-
-combinedLiteSpeeches = combineSpeeches(liteFeaturesFilesPath)
-
 completeDataFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data'
 
+combinedLiteSpeeches = combineSpeeches(liteFeaturesFilesPath)
 combinedLiteSpeeches.to_csv(completeDataFilePath + '/combinedLiteSpeeches.tsv', sep='\t')
 
 ############# Setting up financial data #############
