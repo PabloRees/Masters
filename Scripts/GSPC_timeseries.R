@@ -315,6 +315,8 @@ summary(funreg)
 
 write.csv(output_df,"/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/GSPC_features.csv", row.names = FALSE)
 
+sd(output_df$logDif)
+
 rm(list=ls()) #Removes all items in Environment!
 graphics.off()
 
