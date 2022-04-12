@@ -113,7 +113,6 @@ def TSdata_K_fold(Name,full_df,startDate,clf,XVars,YVar,binary = False,dataset =
             X_train_folds = np.array(XY_train_df[XVars])
             Y_train_folds = np.array(XY_train_df['Y_train'])
 
-
             clone_clf.fit(X_train_folds, Y_train_folds)
             y_pred = clone_clf.predict(X_train_folds)
             n_correct = sum(y_pred == Y_train_folds)
@@ -317,7 +316,7 @@ def runClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring='a
 
         return accuracy, precision, recall, confMat, binaryconfMat
 
-def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_splits=5,binary=False):
+def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_splits=5,binary=False,n_jobs=2):
     trainDf, testDf, valDf = dataSetup(full_df,startDate)
 
     if split_type=='CS':
@@ -335,10 +334,11 @@ def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_sp
         X_test = XY_test[XVars]
         Y_test = XY_test['Y_test']
 
+        print(f'Cross sectional parameter analysis:')
         print(f'Train length: {len(Y_train)} --- Test length:{len(Y_test)}')
         print(f'Train variance: {np.var(Y_train)} --- Test variance:{np.var(Y_test)}')
 
-        grid_cv = GridSearchCV(clf, param_grid, scoring="roc_auc", n_jobs=-1, cv=n_splits).fit(X_train, Y_train)
+        grid_cv = GridSearchCV(clf, param_grid, scoring="roc_auc", n_jobs=n_jobs, cv=n_splits).fit(X_train, Y_train)
 
         print("Param for GS", grid_cv.best_params_)
         print("CV score for GS", grid_cv.best_score_)
@@ -350,30 +350,30 @@ def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_sp
             full_df.drop('Unnamed: 0', axis=1, inplace=True)
 
         small_Df = full_df[~(full_df['Date'] < startDate)]
+        small_Df.dropna(inplace=True)
         small_Df.reset_index(inplace=True)
 
-        X_train = np.array(small_Df[XVars])
+        small_Df_train = small_Df.head(round(len(small_Df) * (n_splits-1/n_splits)))
+        X_train = np.array(small_Df_train[XVars])
+        Y_prepped_train = Y_cat_format(small_Df_train, YVar, binary)
+        Y_train = np.array(Y_prepped_train)
 
-        Y_prepped = Y_cat_format(small_Df, YVar, binary)
-        Y_train = np.array(Y_prepped)
+        small_Df_test = small_Df.tail(round(len(small_Df)/n_splits))
+        X_test = np.array(small_Df_test[XVars])
+        Y_prepped_test = Y_cat_format(small_Df_test, YVar, binary)
+        Y_test = np.array(Y_prepped_test)
 
         tscv = TimeSeriesSplit(n_splits=n_splits)
 
-        print(f'Train length: {len(Y_train)} --- Test length:{len(Y_test)}')
-        print(f'Train variance: {np.var(Y_train)} --- Test variance:{np.var(Y_test)}')
+        grid_cv = GridSearchCV(clf, param_grid, scoring="roc_auc", n_jobs=n_jobs, cv=tscv, error_score='raise')
 
-        grid_cv = GridSearchCV(clf, param_grid, scoring="roc_auc", n_jobs=-1, cv=tscv).fit(X_train, Y_train)
+        grid_cv.fit(X_train,Y_train)
 
+        print(f'Time series parameter analysis:')
         print("Param for GS", grid_cv.best_params_)
         print("CV score for GS", grid_cv.best_score_)
         print("Train AUC ROC Score for GS: ", roc_auc_score(Y_train, grid_cv.predict(X_train)))
         print("Test AUC ROC Score for GS: ", roc_auc_score(Y_test, grid_cv.predict(X_test)))
-
-
-
-
-
-
 
 full_df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(106774, 237).csv')
 full_df['Date'] = pd.to_datetime(full_df['Date'])
@@ -435,9 +435,9 @@ GSNNclf = MLPClassifier(random_state=42, activation='relu', solver='adam', max_i
 
 #parameters for performing grid search. Parameters must match GSclf or GSreg type.
 tree_param = {
-    "max_depth": [2, 3],
-    "min_samples_split": [2,50],
-    "min_samples_leaf": [1,10]
+    "max_depth": [2, 3, 5, 8],
+    "min_samples_split": [2,10,20,50],
+    "min_samples_leaf": [1,2,5,10]
 }
 
 NN_param = {
@@ -501,7 +501,7 @@ if MLType == 'Grid_Search':
         raise ValueError("Grid search currently requires binary input")
 
     for i in Y:
-        runGrid_search(clf=GSForrestclf, full_df=full_df, startDate=startDate, XVars=X, YVar=i, param_grid=tree_param, binary=binary, n_jobs=-1)
+        runGrid_search(clf=GSForrestclf, full_df=full_df, startDate=startDate, XVars=X, YVar=i, param_grid=tree_param,split_type='TS', binary=binary, n_jobs=-1)
 
 
 
