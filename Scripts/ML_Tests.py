@@ -353,7 +353,7 @@ def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_sp
         small_Df.dropna(inplace=True)
         small_Df.reset_index(inplace=True)
 
-        small_Df_train = small_Df.head(round(len(small_Df) * (n_splits-1/n_splits)))
+        small_Df_train = small_Df.head(round(len(small_Df) * ((n_splits-1)/n_splits)))
         X_train = np.array(small_Df_train[XVars])
         Y_prepped_train = Y_cat_format(small_Df_train, YVar, binary)
         Y_train = np.array(Y_prepped_train)
@@ -362,6 +362,8 @@ def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_sp
         X_test = np.array(small_Df_test[XVars])
         Y_prepped_test = Y_cat_format(small_Df_test, YVar, binary)
         Y_test = np.array(Y_prepped_test)
+
+        print(f'small_df = {len(small_Df)}\ntrain_df = {len(small_Df_train)}\ntest_df = {len(small_Df_test)}')
 
         tscv = TimeSeriesSplit(n_splits=n_splits)
 
