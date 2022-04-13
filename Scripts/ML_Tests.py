@@ -77,7 +77,7 @@ def dataSetup(full_df,startDate):
 
     return trainDf, testDf, valDf
 
-def TSdata_K_fold(Name,full_df,startDate,clf,XVars,YVar,binary = False,dataset = 'Train', n_splits=5):
+def runTSClassifier(Name,full_df,startDate,clf,XVars,YVar,binary = False,dataset = 'Train', n_splits=5):
 
     if dataset not in ['Train','Test']:
         raise ValueError("Incorrect dataset type selected. Options for TSdata_K_fold are only 'Train' and 'Test'  ")
@@ -200,7 +200,7 @@ def TSdata_K_fold(Name,full_df,startDate,clf,XVars,YVar,binary = False,dataset =
 
     return scores_df
 
-def runClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring='accuracy',binary=False, dataset = 'Train'):
+def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring='accuracy',binary=False, dataset = 'Train'):
 
     trainDf, testDf, valDf = dataSetup(full_df,startDate)
 
@@ -363,7 +363,7 @@ def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_sp
         Y_prepped_test = Y_cat_format(small_Df_test, YVar, binary)
         Y_test = np.array(Y_prepped_test)
 
-        print(f'small_df = {len(small_Df)}\ntrain_df = {len(small_Df_train)}\ntest_df = {len(small_Df_test)}')
+        #print(f'small_df = {len(small_Df)}\ntrain_df = {len(small_Df_train)}\ntest_df = {len(small_Df_test)}')
 
         tscv = TimeSeriesSplit(n_splits=n_splits)
 
@@ -377,135 +377,146 @@ def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_sp
         print("Train AUC ROC Score for GS: ", roc_auc_score(Y_train, grid_cv.predict(X_train)))
         print("Test AUC ROC Score for GS: ", roc_auc_score(Y_test, grid_cv.predict(X_test)))
 
-full_df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(106774, 237).csv')
-full_df['Date'] = pd.to_datetime(full_df['Date'])
-full_df.sort_values(by='Date', inplace=True)
+def runML_tests(filePath,startDate,X_control, X_meta, X_test, Y,crossVals,scoring,dataset,ML_type,clf_type=None,
+                reg_type=None,GS_clf_type=None ,binary=True,random_state=42, GS_params=None
+                ):
 
-X_auto = ['DlogDif_1', 'DlogDif_2', 'absDlogDif_1', 'blackSwan_SD3_1', 'blackSwan_SD4_1', 'blackSwan_SD5_1',
-              'stdVol_1DateResid', 'pos_neg_transform']
+    full_df = pd.read_csv(filePath)
+    full_df['Date'] = pd.to_datetime(full_df['Date'])
+    full_df.sort_values(by='Date', inplace=True)
 
-vars = []
-for i in range(0, 199):
-    vars.append(f'V_{i}')
-vader = ['VaderNeg', 'VaderNeu', 'VaderPos', 'VaderComp']
-blob = ['blobPol', 'blobSubj']
+    if ML_type == 'CS_Classifier' or 'TS_Classifier':
+        clf_types = ['clf_SGD','clf_MLP','clf_NN','clf_KNN','clf_logreg','clf_tree','clf_forrest']
+        if not clf_type in clf_types:
+            raise ValueError(f"Classifier ML_type chosen but non-classifier model chosen. Please choose from:\n{clf_types}")
 
-X_NLP = vars + vader + blob #all sets seem to have predictive value
+        if clf_type == 'clf_SGD':
+            clf = SGDClassifier(random_state=random_state, shuffle=False, loss='log', max_iter=10000)
+        else:
+            if clf_type == 'clf_MLP':
+                clf = MLPClassifier(max_iter=1000, shuffle=False, learning_rate_init=0.01, learning_rate='adaptive',
+                                    random_state=random_state)
+            else:
 
-meta_dr_1 = ['Nasdaq_dr_1','Oil_dr_1','SSE_dr_1',
-              'USDX_dr_1','VIX_dr_1'] #'BTC_dr_1',
+                if clf_type == 'clf_NN':
+                    inputVars = len(X_control + X_meta + X_test)
+                    if inputVars / 5 < 8:
+                        L_1 = 8
+                    else:
+                        L_1 = round(inputVars / 8)
 
-meta_ld_1= ['Nasdaq_ld_1','Oil_ld_1', 'SSE_ld_1',
-              'USDX_ld_1', 'VIX_ld_1']#'BTC_ld_1', #BTC seems to be a strong predictor although it may just be shrinking the dataset and causing over fitting
+                    if binary:
+                        L_3 = 1
+                    else:
+                        L_3 = 7
+                    clf = MLPClassifier(hidden_layer_sizes=(L_1, 8, L_3), activation='relu', solver='adam',
+                                        max_iter=1000,
+                                        random_state=random_state)
+                else:
+                    if clf_type == 'clf_KNN':
+                        clf = KNeighborsClassifier(weights='distance', algorithm='auto', n_jobs=-1)
+                    else:
+                        if clf_type == 'clf_logreg':
+                            clf = LogisticRegression(solver='lbfgs', penalty='l2', max_iter=10000,
+                                                     random_state=random_state)
+                        else:
+                            if clf_type == 'clf_tree':
+                                clf = DecisionTreeClassifier(random_state=random_state)
+                            else:
+                                if clf_type == 'clf_forrest':
+                                    clf = RandomForestClassifier(n_estimators=100, random_state=random_state,
+                                                                 max_samples=None, max_depth=5)
 
-X_meta = meta_ld_1 #lr performs better for the validation and train sets, they perform the same for the test set
+    if ML_type == 'CS_Gridsearch' or 'TS_Gridsearch':
+        GS_clf_types = ['GSforrest', 'GSNN', 'GStree']
 
-Y = ['logDif_date_resid'] #options: 'DlogDif', 'logDif', 'logDif_date_resid'
-X = X_auto + X_meta + X_NLP #Options: any combination of X_auto, X_meta and X_NLP
-binary = True
+        if GS_params==None:
+            raise ValueError(f'CS_Gridsearch ML_type chosen. Please parse GS_params as a dictionary of matching parameters.'
+                             f'\nSee sklearn documentation for parameter options')
 
-inputVars = len(X)
-if inputVars/5 < 8:
-    L_1 = 8
-else:
-    L_1 = round(inputVars/8)
+        if GS_clf_type not in GS_clf_types:
+            raise ValueError(f'CS_Gridsearch ML_type chosen. Please parse a classifier type. '
+                             f'Options: {GS_clf_types}')
 
-if binary:
-    L_3 = 1
-else: L_3 = 7
+        if GS_clf_type == 'GS_forrest':
+            GS_clf = RandomForestClassifier(random_state=random_state)
+        else:
+            if GS_clf_types == 'GS_NN' or 'GS_MLP':
+                GS_clf = MLPClassifier(random_state=random_state)
+            else:
+                if GS_clf_type == 'GS_tree':
+                    GS_clf = DecisionTreeClassifier(random_state=random_state)
 
-sgd_clf = SGDClassifier(random_state=42, shuffle=False,loss='log',max_iter=10000)
-mlp_clf = MLPClassifier(max_iter=1000, shuffle=False,learning_rate_init=0.01, learning_rate='adaptive',random_state=42)
-NN_clf = MLPClassifier(hidden_layer_sizes= (L_1,8,L_3), activation='relu', solver='adam', max_iter=1000, random_state=42)
-knn_clf = KNeighborsClassifier(weights='distance', algorithm='auto',n_jobs=-1)
-logreg_clf = LogisticRegression(solver = 'lbfgs',penalty='l2',max_iter=10000,random_state=42)
-tree_clf = DecisionTreeClassifier(random_state=42)
-forrest_clf = RandomForestClassifier(n_estimators=100, random_state=42, max_samples=None, max_depth=5)
-#stack_clf = StackingClassifier(random_state=42)
+    if ML_type == 'CS_Classifier':
+        for i in Y:
+            Y_control_scores = runCSClassifier('Auto', clf, full_df, startDate, X_control, i, crossVals=crossVals,
+                                            scoring=scoring,
+                                            binary=binary, dataset=dataset)
+            print(
+                f'____________Auto_____________:\n Accuracy: {Y_control_scores[0]}\n Precision: {Y_control_scores[1]}\n Recall: {Y_control_scores[2]}\n Confusion Matrix:\n{Y_control_scores[3]}\n Binary Confusion Matrix:\n{Y_control_scores[4]}\n\n')
 
+            Y_test_scores = runCSClassifier('NLP', clf, full_df, startDate, X_test, i, crossVals=crossVals,
+                                           scoring=scoring,
+                                           binary=binary, dataset=dataset)
+            print(
+                f'____________NLP_____________:\n Accuracy: {Y_test_scores[0]}\n Precision: {Y_test_scores[1]}\n Recall: {Y_test_scores[2]}\n Confusion Matrix:\n{Y_test_scores[3]}\nBinary Confusion Matrix:\n{Y_test_scores[4]}\n\n')
 
-startDate = '2010-01-01'
-crossVals = 5
-scoring = 'accuracy' #'accuracy'
-dataset = 'Test' #Options: Train, Test, Validation
-clf = forrest_clf #options: sgd_clf, mlp_clf,NN_clf
-reg = ''
-MLType = 'Grid_Search' #Options: 'CS_Classifier', 'Regression', 'TS_Classifier', 'Grid_Search'
+            Y_meta_scores = runCSClassifier('Meta', clf, full_df, startDate, X_meta, i, crossVals=crossVals,
+                                            scoring=scoring,
+                                            binary=binary, dataset=dataset)
+            print(
+                f'____________Meta_____________:\n Accuracy: {Y_meta_scores[0]}\n Precision: {Y_meta_scores[1]}\n Recall: {Y_meta_scores[2]}\n Confusion Matrix:\n{Y_meta_scores[3]}\nBinary Confusion Matrix:\n{Y_meta_scores[4]}\n\n')
 
-GSForrestclf = RandomForestClassifier(random_state=42)
-GSNNclf = MLPClassifier(random_state=42, activation='relu', solver='adam', max_iter=1000)
+            Y_controltest_scores = runCSClassifier('Auto-NLP', clf, full_df, startDate, X_control + X_test, i,
+                                               crossVals=crossVals,
+                                               scoring=scoring, binary=binary, dataset=dataset)
+            print(
+                f'____________AutoNLP_____________:\n Accuracy: {Y_controltest_scores[0]}\n Precision: {Y_controltest_scores[1]}\n Recall: {Y_controltest_scores[2]}\n Confusion Matrix:\n{Y_controltest_scores[3]}\nBinary Confusion Matrix:\n{Y_controltest_scores[4]}\n\n')
 
-#parameters for performing grid search. Parameters must match GSclf or GSreg type.
-tree_param = {
-    "max_depth": [2, 3, 5, 8],
-    "min_samples_split": [2,10,20,50],
-    "min_samples_leaf": [1,2,5,10]
-}
+            Y_controlmeta_scores = runCSClassifier('Auto-Meta', clf, full_df, startDate, X_control + X_meta, i,
+                                                crossVals=crossVals,
+                                                scoring=scoring, binary=binary, dataset=dataset)
+            print(
+                f'____________AutoMeta_____________:\n Accuracy: {Y_controlmeta_scores[0]}\n Precision: {Y_controlmeta_scores[1]}\n Recall: {Y_controlmeta_scores[2]}\n Confusion Matrix:\n{Y_controlmeta_scores[3]}\nBinary Confusion Matrix:\n{Y_controlmeta_scores[4]}\n\n')
 
-NN_param = {
-    "hidden_layer_sizes": [(8,7,6),(600,600),(4,4,4,4,4,4)],
-    "max_iter": [10000,9000,11000]
-}
+            Y_all_scores = runCSClassifier('All', clf, full_df, startDate, X_control + X_test + X_meta, i,
+                                           crossVals=crossVals,
+                                           scoring=scoring, binary=binary, dataset=dataset)
+            print(
+                f'____________All_____________:\n Accuracy: {Y_all_scores[0]}\n Precision: {Y_all_scores[1]}\n Recall: {Y_all_scores[2]}\n Confusion Matrix:\n{Y_all_scores[3]}\nBinary Confusion Matrix:\n{Y_all_scores[4]}\n\n')
 
+    if ML_type == 'TS_Classifier':
+        for i in Y:
+            scores = runTSClassifier('AutoMeta', full_df, startDate, clf, X_control+ X_meta + X_test, i, binary=binary, dataset=dataset,
+                                     n_splits=crossVals)
 
-Y_auto_scores = []
-Y_NLP_scores = []
-Y_meta_scores = []
-Y_autoNLP_scores = []
-Y_autometa_scores = []
-Y_all_scores = []
+            for i in scores.columns:
+                print(f'{i}:')
+                for j in range(len(scores)):
+                    print(f'{scores[i][j]}\n')
+                print('\n')
 
-if MLType == 'CS_Classifier':
-    for i in Y:
-        Y_auto_scores = runClassifier('Auto', clf, full_df, startDate, X_auto, i, crossVals=crossVals, scoring=scoring,
-                             binary=binary, dataset=dataset)
-        print(f'____________Auto_____________:\n Accuracy: {Y_auto_scores[0]}\n Precision: {Y_auto_scores[1]}\n Recall: {Y_auto_scores[2]}\n Confusion Matrix:\n{Y_auto_scores[3]}\n Binary Confusion Matrix:\n{Y_auto_scores[4]}\n\n')
+    if ML_type == 'CS_Gridsearch':
 
-        Y_NLP_scores = runClassifier('NLP', clf, full_df, startDate, X_NLP, i, crossVals=crossVals, scoring=scoring,
-                            binary=binary, dataset=dataset)
-        print(f'____________NLP_____________:\n Accuracy: {Y_NLP_scores[0]}\n Precision: {Y_NLP_scores[1]}\n Recall: {Y_NLP_scores[2]}\n Confusion Matrix:\n{Y_NLP_scores[3]}\nBinary Confusion Matrix:\n{Y_NLP_scores[4]}\n\n')
+        if not binary == True:
+            raise ValueError("Grid search currently requires binary input")
 
-        Y_meta_scores = runClassifier('Meta', clf, full_df, startDate, X_meta, i, crossVals=crossVals, scoring=scoring,
-                             binary=binary, dataset=dataset)
-        print(f'____________Meta_____________:\n Accuracy: {Y_meta_scores[0]}\n Precision: {Y_meta_scores[1]}\n Recall: {Y_meta_scores[2]}\n Confusion Matrix:\n{Y_meta_scores[3]}\nBinary Confusion Matrix:\n{Y_meta_scores[4]}\n\n')
+        for i in Y:
+            runGrid_search(clf=GS_clf, full_df=full_df, startDate=startDate, XVars=X_control+X_meta+X_test, YVar=i, param_grid=GS_params,
+                           split_type='CS', binary=binary, n_jobs=-1)
 
-        Y_autoNLP_scores = runClassifier('Auto-NLP', clf, full_df, startDate, X_auto + X_NLP, i, crossVals=crossVals,
-                                scoring=scoring, binary=binary, dataset=dataset)
-        print(f'____________AutoNLP_____________:\n Accuracy: {Y_autoNLP_scores[0]}\n Precision: {Y_autoNLP_scores[1]}\n Recall: {Y_autoNLP_scores[2]}\n Confusion Matrix:\n{Y_autoNLP_scores[3]}\nBinary Confusion Matrix:\n{Y_autoNLP_scores[4]}\n\n')
+    if ML_type == 'TS_Gridsearch':
 
-        Y_autometa_scores = runClassifier('Auto-Meta', clf, full_df, startDate, X_auto + X_meta, i, crossVals=crossVals,
-                                 scoring=scoring, binary=binary, dataset=dataset)
-        print(f'____________AutoMeta_____________:\n Accuracy: {Y_autometa_scores[0]}\n Precision: {Y_autometa_scores[1]}\n Recall: {Y_autometa_scores[2]}\n Confusion Matrix:\n{Y_autometa_scores[3]}\nBinary Confusion Matrix:\n{Y_autometa_scores[4]}\n\n')
+        if not binary == True:
+            raise ValueError("Grid search currently requires binary input")
 
-        Y_all_scores = runClassifier('All', clf, full_df, startDate, X_auto + X_NLP + X_meta, i, crossVals=crossVals,
-                            scoring=scoring, binary=binary, dataset=dataset)
-        print(          f'____________All_____________:\n Accuracy: {Y_all_scores[0]}\n Precision: {Y_all_scores[1]}\n Recall: {Y_all_scores[2]}\n Confusion Matrix:\n{Y_all_scores[3]}\nBinary Confusion Matrix:\n{Y_all_scores[4]}\n\n')
+        for i in Y:
+            runGrid_search(clf=GS_clf, full_df=full_df, startDate=startDate, XVars=X_control+X_meta+X_test, YVar=i, param_grid=GS_params,
+                           split_type='TS', binary=binary, n_jobs=-1)
 
-if MLType == 'TS_Classifier':
-    for i in Y:
-        scores = TSdata_K_fold('AutoMeta', full_df, startDate, clf, X, i,binary=binary,dataset=dataset, n_splits = crossVals)
+    if ML_type == 'CS_Regressor':
+        print()
 
-        for i in scores.columns:
-            print(f'{i}:')
-            for j in range(len(scores)):
-                print(f'{scores[i][j]}\n')
-            print('\n')
-
-if MLType == 'CS_Regressor':
-    print()
-
-if MLType == 'TS_Regressor':
-    print()
-
-if MLType == 'Grid_Search':
-
-    if not binary == True:
-        raise ValueError("Grid search currently requires binary input")
-
-    for i in Y:
-        runGrid_search(clf=GSForrestclf, full_df=full_df, startDate=startDate, XVars=X, YVar=i, param_grid=tree_param,split_type='TS', binary=binary, n_jobs=-1)
-
-
-
-
+    if ML_type == 'TS_Regressor':
+        print()
 
