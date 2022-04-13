@@ -382,8 +382,15 @@ def runML_tests(filePath,startDate,X_control, X_meta, X_test, Y,crossVals,scorin
                 ):
 
     full_df = pd.read_csv(filePath)
-    full_df['Date'] = pd.to_datetime(full_df['Date'])
-    full_df.sort_values(by='Date', inplace=True)
+    if 'date' in full_df.columns:
+        full_df['date'] = pd.to_datetime(full_df['Date'])
+        full_df.sort_values(by='date', inplace=True)
+    else:
+        if 'Date' in full_df.columns:
+            full_df['Date'] = pd.to_datetime(full_df['Date'])
+            full_df.sort_values(by='Date', inplace=True)
+        else: raise ValueError(f'Dataframe at {filePath} must contain a "Date" or "date" column')
+
 
     if ML_type == 'CS_Classifier' or 'TS_Classifier':
         clf_types = ['clf_SGD','clf_MLP','clf_NN','clf_KNN','clf_logreg','clf_tree','clf_forrest']
@@ -448,6 +455,9 @@ def runML_tests(filePath,startDate,X_control, X_meta, X_test, Y,crossVals,scorin
                     GS_clf = DecisionTreeClassifier(random_state=random_state)
 
     if ML_type == 'CS_Classifier':
+
+        #create an obeject (class??) that can return various scores, matrices and graphs. Return that object.
+
         for i in Y:
             Y_control_scores = runCSClassifier('Auto', clf, full_df, startDate, X_control, i, crossVals=crossVals,
                                             scoring=scoring,
