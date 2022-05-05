@@ -1,8 +1,8 @@
 import pandas as pd
 
-def transposeVectors(full_df):
+def transposeWordVectors(full_df,columnName):
     vectorsList = []
-    for i in full_df['SpeechVectors']:
+    for i in full_df[columnName]:
         vector = i.replace('[ ', '')
         vector = vector.replace('[', '')
         vector = vector.replace('\n', '')
@@ -23,7 +23,7 @@ def transposeVectors(full_df):
 
     vec_df = pd.DataFrame(vectorsList, columns=vecNames)
 
-    full_df.drop('SpeechVectors',inplace=True, axis = 1)
+    full_df.drop(columnName,inplace=True, axis = 1)
     full_df.drop('X',inplace=True, axis = 1)
     full_df.drop('Unnamed..0',inplace=True, axis = 1)
 
@@ -71,6 +71,39 @@ def transposeSentiments(full_df):
     df_all_cols = pd.concat([full_df, sent_df], axis=1)
 
     return df_all_cols
+
+def transposeDocVectors(full_df,columnName):
+
+    vectorsList = []
+    for vector in full_df[columnName]:
+        fVector = []
+        for j in vector:
+            if not j == '':
+                fVector.append(float(j))
+
+        vectorsList.append(fVector)
+
+    vecNames = []
+    for i in range(0, 200):
+        vecNames.append('DV_' + str(i))
+
+    vec_df = pd.DataFrame(vectorsList, columns=vecNames)
+
+    full_df.drop(columnName,inplace=True, axis = 1)
+    full_df.drop('X',inplace=True, axis = 1)
+
+
+    df_all_cols = pd.concat([full_df, vec_df], axis=1)
+
+    return df_all_cols
+
+
+
+
+
+
+
+
 
 
 

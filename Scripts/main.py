@@ -8,6 +8,30 @@ from R_Interface import *
 from Data_congregator import *
 from Transpose import *
 
+############# Setting up text data #############
+def setUpTextData():
+    speechDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
+
+    runWSC(speechDataSavePath)  # calls the WebScrapeAndClean process - text data
+
+    Word2Vec_Model = trainWord2Vec(speechDataSavePath)  # creates the word2vec model - text data
+
+    featuresFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features/"
+    liteFeaturesFilesPath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/'
+    heavyFeaturesFilesPath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
+
+    textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
+
+    completeDataFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data'
+
+    combinedLiteSpeeches = combineSpeeches(liteFeaturesFilesPath)
+    combinedLiteSpeeches.to_csv(completeDataFilePath + '/combinedLiteSpeeches.tsv', sep='\t')
+
+    combinedHeavySpeeches = combineSpeeches(heavyFeaturesFilesPath)
+    combinedHeavySpeeches.to_csv(completeDataFilePath + '/combinedHeavySpeeches.tsv', sep='\t')
+
+
+############# Setting up NLP data #############
 def textPrep(speechDataSavePath,featuresFilePath,liteFeaturesFilesPath):
 
     W2Vmodel = gensim.models.Word2Vec.load('Word2Vec.model')
@@ -44,24 +68,6 @@ def textPrep(speechDataSavePath,featuresFilePath,liteFeaturesFilesPath):
             df.to_csv(
                 featuresFilePath + df_name,
                 sep='\t')
-
-############# Setting up text data #############
-def setUpTextData():
-    speechDataSavePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data'
-
-    runWSC(speechDataSavePath)  # calls the WebScrapeAndClean process - text data
-
-    Word2Vec_Model = trainWord2Vec(speechDataSavePath)  # creates the word2vec model - text data
-
-    featuresFilePath = "/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_with_features/"
-    liteFeaturesFilesPath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/'
-
-    textPrep(speechDataSavePath, featuresFilePath, liteFeaturesFilesPath)
-
-    completeDataFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data'
-
-    combinedLiteSpeeches = combineSpeeches(liteFeaturesFilesPath)
-    combinedLiteSpeeches.to_csv(completeDataFilePath + '/combinedLiteSpeeches.tsv', sep='\t')
 
 ############# Setting up financial data and metadata #############
 def setUpFinancialData():

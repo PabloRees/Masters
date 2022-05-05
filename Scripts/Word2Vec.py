@@ -37,7 +37,6 @@ def trainWord2Vec(dataFramesFilePath):
 
 #vectorizes the speeches using the mean of each of the vectors of each of the words in a speech
 def vecSpeech_mean(speech,model):
-    #vectorList = [model.wv[word] for word in speech if word in model.wv.index_to_key] #could multithread this line because the order of the word vectors dont matter to the average
 
     vectorList.clear()
     speech = speech.replace(", '.'","")

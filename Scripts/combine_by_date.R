@@ -35,7 +35,7 @@ row <- as.character(nrow(full_df))
 shape <- paste('(',row,',',as.character(ncol(full_df)),')')
 
 
-filePath <- paste("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset.csv",shape,'.csv')
+filePath <- paste("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset",shape,'.csv')
 
 write.csv(full_df,filePath, row.names = FALSE)
 

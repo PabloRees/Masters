@@ -4,12 +4,25 @@ from sklearn.base import clone
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.neural_network import MLPClassifier, MLPRegressor
-from sklearn.model_selection import cross_val_score, cross_val_predict, TimeSeriesSplit, GridSearchCV
+from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict, TimeSeriesSplit, GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier,StackingClassifier
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, precision_recall_curve, roc_curve, roc_auc_score
 pd.options.mode.chained_assignment = None
 from matplotlib import pyplot as plt
+plt.style.use('seaborn')
+
+
+class scoreHolder:
+    def __init__(self,accuracy,precision,recall,confusionMatrix,binaryConfusionMatrix ,roc_curve, best_params, binary):
+        self.accuracy = accuracy
+        self.precision = precision
+        self.recall = recall
+        self.confusionMatrix = confusionMatrix
+        self.binaryConfusionMatrix = binaryConfusionMatrix
+        self.roc_curve = roc_curve
+        self.best_params = best_params
+        self.binary = binary
 
 def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
     plt.plot(thresholds, precisions[:-1], "b--", label="Precision")
@@ -26,7 +39,6 @@ def plot_roc_curve(fpr, tpr,Name, label=None ):
 
 def Y_cat_format(df,YVar,binary = False):
     Y_mean = np.mean(df[YVar])
-    Y_sd = np.std(df[YVar])
 
     if binary:
         Y_binary = []
@@ -37,6 +49,7 @@ def Y_cat_format(df,YVar,binary = False):
         return Y_binary
 
     else:
+        Y_sd = np.std(df[YVar])
         Y = []
         for i in df[YVar]:
             if i > Y_mean + 2 * Y_sd:
@@ -69,11 +82,10 @@ def dataSetup(full_df,startDate):
 
     small_Df = full_df[~(full_df['Date'] < startDate)]
     small_Df.reset_index(inplace=True)
+    small_Df.sort_values(by='Date')
 
-    testDf = full_df.sample(frac=0.15, random_state=25)
-    df = full_df.drop(testDf.index)
-    valDf = df.sample(frac=0.1, random_state=25)
-    trainDf = df.drop(valDf.index)
+    trainDf, testDf = train_test_split(small_Df,train_size=0.7,random_state=42)
+    testDf, valDf = train_test_split(testDf,train_size=0.5,random_state=42) #shuffling is fine because YVar is stationary
 
     return trainDf, testDf, valDf
 
@@ -202,6 +214,9 @@ def runTSClassifier(Name,full_df,startDate,clf,XVars,YVar,binary = False,dataset
 
 def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring='accuracy',binary=False, dataset = 'Train'):
 
+
+    #might need to implement SKF here
+
     trainDf, testDf, valDf = dataSetup(full_df,startDate)
 
     Y_train = Y_cat_format(trainDf, YVar, binary)
@@ -215,6 +230,7 @@ def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring=
 
     if dataset == 'Train':
 
+        # might need to implement SKF here
         accuracy = cross_val_score(clf, X_train, Y_train, cv=crossVals, scoring=scoring)
 
         y_train_predict = cross_val_predict(clf, X_train, Y_train, cv=crossVals)
@@ -233,7 +249,8 @@ def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring=
             plot_roc_curve(fpr, tpr, Name)
             plt.show()
 
-            return accuracy, precision, recall, confMat, 'NA'
+            scoresObject = scoreHolder(accuracy=accuracy, precision=precision, recall=recall, confusionMatrix=confMat, binaryConfusionMatrix='NA',binary=binary)
+
 
         else:
             binaryconfMat = np.array([[np.sum(confMat[0:4, 0:4]), np.sum(confMat[0:4, 4:8])],
@@ -241,7 +258,8 @@ def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring=
             precision = confMat[0,0]/(confMat[0,0] + confMat[1,0] )
             recall = confMat[0,0]/(confMat[0,0]+confMat[0,1])
 
-        return accuracy, precision, recall, confMat, binaryconfMat
+            scoresObject = scoreHolder(accuracy=accuracy, precision=precision, recall=recall, confusionMatrix=confMat,
+                                   binaryConfusionMatrix=binaryconfMat, binary=binary)
 
     if dataset == 'Test':
         Y_test = Y_cat_format(testDf, YVar, binary)
@@ -271,7 +289,7 @@ def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring=
             plot_roc_curve(fpr, tpr, Name)
             plt.show()
 
-            return np.max(accuracy), precision, recall, confMat, 'NA'
+            scoresObject = scoreHolder(accuracy=accuracy, precision=precision, recall=recall, confusionMatrix=confMat, binaryConfusionMatrix='NA',binary=binary)
 
         else:
             binaryconfMat = np.array([[np.sum(confMat[0:4, 0:4]), np.sum(confMat[0:4, 4:8])],
@@ -279,7 +297,8 @@ def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring=
             precision = confMat[0,0]/(confMat[0,0] + confMat[1,0] )
             recall = confMat[0,0]/(confMat[0,0]+confMat[0,1])
 
-        return accuracy, precision, recall, confMat, binaryconfMat
+            scoresObject = scoreHolder(accuracy=accuracy, precision=precision, recall=recall, confusionMatrix=confMat,
+                                   binaryConfusionMatrix=binaryconfMat, binary=binary)
 
     if dataset == 'Validation':
         Y_val = Y_cat_format(valDf, YVar, binary)
@@ -307,16 +326,18 @@ def runCSClassifier(Name,clf, full_df, startDate,XVars,YVar,crossVals=3,scoring=
             plot_roc_curve(fpr, tpr, Name)
             plt.show()
 
-            return np.max(accuracy), precision, recall, confMat, 'NA'
+            scoresObject = scoreHolder(accuracy=accuracy, precision=precision, recall=recall, confusionMatrix=confMat, binaryConfusionMatrix='NA',binary=binary)
 
         else:
             binaryconfMat = np.array([[np.sum(confMat[0:4,0:4]),np.sum(confMat[0:4,4:8])],[np.sum(confMat[4:8,0:4]),np.sum(confMat[4:8,4:8])]])
             precision = confMat[0,0]/(confMat[0,0] + confMat[1,0] )
             recall = confMat[0,0]/(confMat[0,0]+confMat[0,1])
+            scoresObject = scoreHolder(accuracy=accuracy, precision=precision, recall=recall, confusionMatrix=confMat,
+                                   binaryConfusionMatrix=binaryconfMat, binary=binary)
 
-        return accuracy, precision, recall, confMat, binaryconfMat
+    return scoresObject
 
-def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_splits=5,binary=False,n_jobs=2):
+def runGrid_search(clf, full_df, startDate,XVars,YVar,param_grid,split_type,n_splits=5,binary=False,n_jobs=-1):
     trainDf, testDf, valDf = dataSetup(full_df,startDate)
 
     if split_type=='CS':
@@ -456,8 +477,6 @@ def runML_tests(filePath,startDate,X_control, X_meta, X_test, Y,crossVals,scorin
 
     if ML_type == 'CS_Classifier':
 
-        #create an obeject (class??) that can return various scores, matrices and graphs. Return that object.
-
         for i in Y:
             Y_control_scores = runCSClassifier('Auto', clf, full_df, startDate, X_control, i, crossVals=crossVals,
                                             scoring=scoring,
@@ -529,4 +548,7 @@ def runML_tests(filePath,startDate,X_control, X_meta, X_test, Y,crossVals,scorin
 
     if ML_type == 'TS_Regressor':
         print()
+
+
+
 
