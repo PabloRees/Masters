@@ -1,9 +1,5 @@
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
-
-#heavySpeeches = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/heavy_final_dataset( 101566 , 21 ) .csv')
-#mainSpeeches = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(106774, 237).csv')
 
 def sanityCheck(heavySpeeches,mainSpeeches):
     npHeavy = heavySpeeches['Date'].to_numpy()
@@ -26,7 +22,9 @@ def sanityCheck(heavySpeeches,mainSpeeches):
 
 def makeSpeechTags(df):
     tagList = []
+    len1 = len(df)
     df.drop_duplicates(inplace=True)
+    print(f'MakeSpeechTags dropped {len(df) - len1} duplicates')
     for i in range(len(df)):
 
         type = df['Type'].iloc[i]
@@ -43,10 +41,21 @@ def makeSpeechTags(df):
 
 def duplicateCheck(df):
 
+    strToListDict = {"'","[","]"}
     tooShort = 0
     wordTagList = []
-    for i in df['No.Stops.Transcript']:
-        list = i.split("'",1)[-1][:-1].split(",")
+
+    for i in df.columns:
+        if 'No' in str(i):
+            if 'Stops' in str(i):
+                if 'Transcript' in str(i):
+                    colName = str(i)
+
+    for i in df[colName]:
+        speech = i.replace("[","").replace("]","").replace("'","")
+
+        list = speech.split(',') #i.split("'",1)[-1][:-1].split(",")
+
         if len(list) <50:
             tooShort +=1
             wordTagList.append('tooShort')
@@ -71,20 +80,23 @@ def duplicateCheck(df):
     print(f'There were {tooShort} speeches shorter than 50 words')
     print(f'Num duplicates = {len(wordTagList) - len(tagCount)}')
 
+    len1 = len(df)
+    df.drop_duplicates(subset='firstFifty',inplace = True)
+    print(f'{len1 - len(df)} duplicates dropped on firstFifty tag')
+
     return df
 
 def tagHeavySpeeches(df):
+    len1 = len(df)
+    print(f"Original length = {len1}")
     df.drop_duplicates(inplace=True)
+    print(f'First duplicate drop amount = {len1 - len(df)}')
+
     df = duplicateCheck(df)
     df = makeSpeechTags(df)
 
-    columns = ['firstFifty','SpeechTags']
-    for i in range(200):
-        columns.append(f'DV_{i}')
+    return df
 
-    taggedDocVecs = df[columns]
-
-    taggedDocVecs.to_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/taggedDocVecs.csv')
 
 def joiner():
     taggedDvs = pd.read_csv(
@@ -121,7 +133,3 @@ def joiner():
     print(taggedMain.shape)
 
     return fullDf
-
-finalDf = joiner()
-finalDf.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_tagged_dataset{finalDf.shape}.csv')
-

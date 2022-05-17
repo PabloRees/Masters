@@ -6,7 +6,7 @@ library(tidyverse)
 library(lubridate)
 
 GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/GSPC_features.csv" , header = T) #this should load from a sql database rather
-speeches <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/combinedLiteSpeeches.tsv',sep = '\t')
+speeches <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Speech_data_lite/Tagged_Raw_Speeches_lite_(84155, 12).tsv',sep = '\t')
 metadata <- read.csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/metadata.csv',header = T)
 
 

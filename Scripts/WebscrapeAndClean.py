@@ -128,13 +128,13 @@ def WScrape(saveFilePath,category):
     typeList = []
     typeList.extend(repeat(category.split('app-categories/',1)[-1],len(namesList)))
 
-    dict = {'Type':typeList,'Name':namesList,'Date':datesList, 'Title':titlesList, 'Transcript':transcriptsList, 'No Stops Transcript':noStopsTranscriptsList}
+    dict = {'Type':typeList,'Name':namesList,'Date':datesList, 'Title':titlesList, 'Transcript':transcriptsList, 'No_Stops_Transcript':noStopsTranscriptsList}
     df = pd.DataFrame(dict)
 
     df['Date'] = pd.to_datetime(df['Date'])
     df.sort_values(by='Date', inplace=True, ascending=False)
 
-    df2 = df[['Type','Name','Date','Title','Transcript','No Stops Transcript']].copy()
+    df2 = df[['Type','Name','Date','Title','Transcript','No_Stops_Transcript']].copy()
 
     dataShape = str(df2.shape)
 

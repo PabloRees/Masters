@@ -4,6 +4,8 @@ from gensim.models import Word2Vec
 import pandas as pd
 import numpy as np
 import concurrent.futures
+import multiprocessing
+
 
 vectorList = []
 ##Isolated run requirements
@@ -23,8 +25,15 @@ class MySentences(object):
         for fname in os.listdir(self.dirname): #reference: https://rare-technologies.com/word2vec-tutorial/
             if not fname.startswith("."):
                 print(fname+"____________")
-                df = pd.read_csv(self.dirname + "/"+ fname,sep="\t", converters={'No Stops Transcript': pd.eval})
-                for speech in df['No Stops Transcript']:
+
+                if '.csv' in fname:
+                    seperator = ','
+                elif '.tsv' in fname:
+                    seperator = "\t"
+
+                df = pd.read_csv(self.dirname + "/"+ fname,sep=seperator, converters={'No_Stops_Transcript': pd.eval})
+                print(df.columns)
+                for speech in df['No_Stops_Transcript']:
                     speechStr = ' '.join(speech)
                     sentenceList = speechStr.split(" . ")
                     for k in sentenceList:
@@ -32,7 +41,8 @@ class MySentences(object):
 
 def trainWord2Vec(dataFramesFilePath):
     sentences = MySentences(dataFramesFilePath)
-    model = Word2Vec(sentences, min_count=5, vector_size=200, workers= 4, sg=1, compute_loss=True) #builds the Word2Vec model, min_count refers to the min number of times a word appears in the corpus. Vector_size refers to the size of the output vector, alpha refers to the size of the gradient descent step
+    cores = multiprocessing.cpu_count()
+    model = Word2Vec(sentences, min_count=5, vector_size=200, workers= cores, sg=1, compute_loss=True) #builds the Word2Vec model, min_count refers to the min number of times a word appears in the corpus. Vector_size refers to the size of the output vector, alpha refers to the size of the gradient descent step
     return model
 
 #vectorizes the speeches using the mean of each of the vectors of each of the words in a speech
@@ -60,9 +70,9 @@ def vecSpeech_mean(speech,model):
     speechVec = np.mean(vectorList, axis=0)
     return speechVec
 
-def create_vectors(speechList,model):
+def create_word_vectors(speechList,model):
     speechVecList = []
-    for speech in speechList:  # gets a speech from the 'no stops transcript'
+    for speech in speechList:  # gets a speech from the 'No_Stops_Transcript'
         speechVec = vecSpeech_mean(speech,model)  # vectorizes the speech using the above function
         speechVecList.append(speechVec)  # appends the speechVector to a list
 

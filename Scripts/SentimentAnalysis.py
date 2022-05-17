@@ -21,9 +21,9 @@ def getSentiment(transcriptsList):
 
         vaderSentList.append(vaderSentiment.polarity_scores(transcriptString))
 
-    entimentDict = {'blobSent':blobSentList,'vaderSent':vaderSentList}
+    sentimentDict = {'blobSent':blobSentList,'vaderSent':vaderSentList}
 
-    return entimentDict
+    return sentimentDict
 
 
 

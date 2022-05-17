@@ -24,7 +24,7 @@ def create_vectors(loadFilePath,saveFilePath):
             print(f'Starting to vectorize {i}')
             df = pd.read_csv(loadFilePath+'/'+i, sep='\t')#loads a speech type corpus into df
             speechVecList = []
-            for speech in df['No Stops Transcript']:#gets a speech from the 'no stops transcript'
+            for speech in df['No_Stops_Transcript']:#gets a speech from the 'No_Stops_Transcript'
                 speechVec = vecSpeech_mean(speech)#vectorizes the speech using the above function
                 speechVecList.append(speechVec)#appends the speechVector to a list
                 print(f'{len(speechVecList)} speeches done')

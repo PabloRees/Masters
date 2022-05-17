@@ -13,24 +13,28 @@ class MySpeeches(object):
     def __iter__(self):
         charDict = ["(", ")"]
 
-        tag = 0
         for fname in os.listdir(self.dirname): #reference: https://rare-technologies.com/word2vec-tutorial/
             if not fname.startswith("."):
                 print(fname+"____________")
-                df = pd.read_csv(self.dirname + "/"+ fname,sep="\t", converters={'No Stops Transcript': pd.eval})
 
-                for i in range(len(df['No Stops Transcript'])):
-                    yield gensim.models.doc2vec.TaggedDocument(df['No Stops Transcript'].iloc[i], [f"{tag}/{i}/{df['Name'].iloc[i]}/{df['Type'].iloc[i]}]"])
-                    tag+=1 #this line will run after the iterator has been called
+                if '.csv' in fname:
+                    seperator = ','
+                elif '.tsv' in fname:
+                    seperator = "\t"
 
-def trainDoc2Vec(dataFramesFilePath):
+                df = pd.read_csv(self.dirname + "/"+ fname,sep= seperator, converters={'No_Stops_Transcript': pd.eval})
+
+                for i in range(len(df['No_Stops_Transcript'])):
+                    yield gensim.models.doc2vec.TaggedDocument(df['No_Stops_Transcript'].iloc[i], [f"{i}_{df['Date'].iloc[i]}_{df['Name'].iloc[i]}_{df['Type'].iloc[i]}]"])
+
+def trainDoc2Vec(dataFramesFilePath,vecSize):
     print('running trainDoc2Vec')
     cores = multiprocessing.cpu_count()
     assert gensim.models.doc2vec.FAST_VERSION > -1, "This will be painfully slow otherwise"
 
     speeches = MySpeeches(dataFramesFilePath)
 
-    doc2VecModel = Doc2Vec(dm=0, vector_size=200, negative=5, hs=0, min_count=2, sample=0,
+    doc2VecModel = Doc2Vec(dm=0, vector_size=vecSize, negative=5, hs=0, min_count=2, sample=0,
                 epochs=20, workers=cores)
 
     doc2VecModel.build_vocab(speeches)
@@ -39,17 +43,25 @@ def trainDoc2Vec(dataFramesFilePath):
     print('Model trained')
 
     print(type(doc2VecModel))
+    doc2VecModel.save(f'Doc2Vec_{vecSize}.model')
 
     return doc2VecModel
 
-def create_Doc_vectors(speechList,model= gensim.models.Doc2Vec.load('Doc2Vec.model')):
+def create_Doc_vectors(df,model):
 
     docVecList=[]
-    for document in speechList:  # gets a speech from the 'no stops transcript'
-        if document in model.vocab:
-            docVec = model.dv[document]
-            docVecList.append(docVec)  # appends the speechVector to a list
+    count = 0
+    for i in range(len(df)):
+        tag = f"{i}_{df['Date'].iloc[i]}_{df['Name'].iloc[i]}_{df['Type'].iloc[i]}]"
 
+
+        if tag in model.docvecs.index_to_key:
+            #print(f"{i} of {len(df)}")
+            docVec = model.dv[tag]
+            docVecList.append(docVec)  # appends the speechVector to a list
+            count+=1
+
+    print(f'{count} of {len(df)} tags matched')
     return docVecList
 
 filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/heavy_final_dataset( 101566 , 21 ) .csv'
@@ -57,7 +69,7 @@ def getVecs(filePath=filePath,model = gensim.models.Doc2Vec.load('Doc2Vec.model'
 
     df = pd.read_csv(filePath)
     docVecs = []
-    for i in range(len(df['No.Stops.Transcript'])):
+    for i in range(len(df['No_Stops_Transcript'])):
         docVecs.append(model.__getitem__(i))
 
     df['DocVecs'] = docVecs
@@ -66,7 +78,6 @@ def getVecs(filePath=filePath,model = gensim.models.Doc2Vec.load('Doc2Vec.model'
 
     full_df.to_csv(filePath)
 
-getVecs()
 
 
 
