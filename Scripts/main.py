@@ -130,8 +130,8 @@ def setUpFinancialData():
 
 ######run R files - GSPC_TS , metadata_setup and combining final data
 def runR_files():
-    #R_call('GSPC_timeseries.R')
-    #R_call('metaDataSetup.R')
+    R_call('GSPC_timeseries.R')
+    R_call('metaDataSetup.R')
     R_call('combine_by_date.R')
 
 ###### Transpose vectorized speech variables and sentiment vectors

@@ -1,7 +1,7 @@
 import pandas
 import pandas as pd
 from sklearn.linear_model import ElasticNet, Lasso, Ridge
-from ML_Tests import dataSetup
+from ML_Tests import dataSetup, setupXYvars
 from dataclasses import dataclass
 import numpy as np
 from matplotlib import pyplot as plt
@@ -92,7 +92,6 @@ class Shrinkage_Methods:
         if show_coefficients:
             for i in results_df.columns:
                 print(f'\n{i}:{results_df.loc[0][i]}')
-
 
 
 

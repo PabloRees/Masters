@@ -1,53 +1,7 @@
 import pandas as pd
 
-from ML_Tests import runML_tests, dataSetup
+from ML_Tests import runML_tests, dataSetup, setupXYvars
 from Feature_selection import Shrinkage_Methods
-
-def setupXYvars(vecList):
-    X_control = ['DlogDif_1', 'DlogDif_2', 'absDlogDif_1', 'blackSwan_SD3_1', 'blackSwan_SD4_1', 'blackSwan_SD5_1',
-              'stdVol_1DateResid', 'pos_neg_transform']
-
-    WVec = []
-    DocVec200 = []
-    DocVec20 = []
-    vader = []
-    blob = []
-
-    if 'WV' in vecList:
-
-        for i in range(0, 200):
-            WVec.append(f'WV_{i}')
-
-    if 'DV_200_' in vecList:
-        for i in range(0, 200):
-            DocVec200.append(f'DV_200_{i}')
-
-    if 'DV_20_' in vecList:
-
-        for i in range(0,20):
-            DocVec20.append((f'DV_20_{i}'))
-
-    if 'vader' in vecList:
-        vader = ['VaderNeg', 'VaderNeu', 'VaderPos', 'VaderComp']
-
-    if 'blob' in vecList:
-        blob = ['blobPol', 'blobSubj']
-
-    X_test = WVec +DocVec200 + DocVec20+ vader + blob  # all sets seem to have predictive value
-
-    meta_dr_1 = ['Nasdaq_dr_1', 'Oil_dr_1', 'SSE_dr_1',
-                 'USDX_dr_1', 'VIX_dr_1']  # 'BTC_dr_1',
-
-    meta_ld_1 = ['Nasdaq_ld_1', 'Oil_ld_1', 'SSE_ld_1',
-                 'USDX_ld_1',
-                 'VIX_ld_1']  # 'BTC_ld_1', #BTC seems to be a strong predictor although it may just be shrinking the dataset and causing over fitting
-
-    X_meta = meta_ld_1  # lr performs better for the validation and train sets, they perform the same for the test set
-
-    Y = 'logDif_date_resid'  # options: 'DlogDif', 'logDif', 'logDif_date_resid'
-    X = X_control + X_meta + X_test  # Options: any combination of X_auto, X_meta and X_NLP
-
-    return X_control, X_meta, X_test, Y
 
 def setupSingleRun():
     filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(73827, 458).csv'
@@ -86,6 +40,7 @@ filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete
 df = pd.read_csv(filePath)
 print(f'There are {len(df)} entries in the df and {len(df["Date"].unique())} unique dates in the df for a ratio of {len(df["Date"].unique())/len(df)}')
 
+
 #test = Shrinkage_Methods(data=df,X_variables=X_test,Y_variable=Y,num_features=12)
 #print('\nLasso')
 #Lasso = test.run_Lasso()
@@ -106,13 +61,13 @@ Datasets = {'Auto': X_control , 'Meta': X_meta , 'NLP': X_test ,
             'AutoMeta': X_control + X_meta , 'AutoNLP': X_control+X_test , 'MetaNLP':X_meta+X_test ,
             'All': X_control + X_meta + X_test,'PossibleBest':possibleBestVars}
 
-Clf_Types = ['CS_Classifier', 'TS_Classifier']
+Clf_Types = ['CS_Classifier','TS_Classifier']
 
 Reg_Types = ['CS_Regressor','TS_Regressor']
 
 StartDates = ['1998-01-01','2000-01-01', '2010-01-01'] #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
 
-Binary = [True, False]
+Binary = [False] #True,
 
 Remove_duplicates = [True, False]
 
@@ -207,7 +162,7 @@ def runClfLoops():
     clfScores_df = pd.DataFrame(listDict)
 
     # noinspection PyTypeChecker
-    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Classification_results{clfScores_df.shape}.csv')
+    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Classification_results_resetYCats{clfScores_df.shape}.csv')
 
 def runRegLoops():
     dateList = []
@@ -288,8 +243,8 @@ def checkScore(score):
     except: finalScore = score
     return finalScore
 
-#runClfLoops()
-runRegLoops()
+runClfLoops()
+#runRegLoops()
 
 
 

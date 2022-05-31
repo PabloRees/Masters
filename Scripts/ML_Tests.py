@@ -33,6 +33,52 @@ class regressionScoreHolder:
         self.MSE = MSE
         self.MAE = MAE
 
+def setupXYvars(vecList):
+    X_control = ['DlogDif_1', 'DlogDif_2', 'absDlogDif_1', 'blackSwan_SD3_1', 'blackSwan_SD4_1', 'blackSwan_SD5_1',
+              'stdVol_1DateResid', 'pos_neg_transform']
+
+    WVec = []
+    DocVec200 = []
+    DocVec20 = []
+    vader = []
+    blob = []
+
+    if 'WV' in vecList:
+
+        for i in range(0, 200):
+            WVec.append(f'WV_{i}')
+
+    if 'DV_200_' in vecList:
+        for i in range(0, 200):
+            DocVec200.append(f'DV_200_{i}')
+
+    if 'DV_20_' in vecList:
+
+        for i in range(0,20):
+            DocVec20.append((f'DV_20_{i}'))
+
+    if 'vader' in vecList:
+        vader = ['VaderNeg', 'VaderNeu', 'VaderPos', 'VaderComp']
+
+    if 'blob' in vecList:
+        blob = ['blobPol', 'blobSubj']
+
+    X_test = WVec +DocVec200 + DocVec20+ vader + blob  # all sets seem to have predictive value
+
+    meta_dr_1 = ['Nasdaq_dr_1', 'Oil_dr_1', 'SSE_dr_1',
+                 'USDX_dr_1', 'VIX_dr_1']  # 'BTC_dr_1',
+
+    meta_ld_1 = ['Nasdaq_ld_1', 'Oil_ld_1', 'SSE_ld_1',
+                 'USDX_ld_1',
+                 'VIX_ld_1']  # 'BTC_ld_1', #BTC seems to be a strong predictor although it may just be shrinking the dataset and causing over fitting
+
+    X_meta = meta_ld_1  # lr performs better for the validation and train sets, they perform the same for the test set
+
+    Y = 'logDif_date_resid'  # options: 'DlogDif', 'logDif', 'logDif_date_resid'
+    X = X_control + X_meta + X_test  # Options: any combination of X_auto, X_meta and X_NLP
+
+    return X_control, X_meta, X_test, Y
+
 def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
     plt.plot(thresholds, precisions[:-1], "b--", label="Precision")
     plt.plot(thresholds, recalls[:-1], "g-", label="Recall")
@@ -77,17 +123,18 @@ def Y_cat_format(df,YVar,binary:bool):
             elif i > Y_mean + 0.5 * Y_sd:
                 Y.append(6)
 
-            elif i < -(Y_mean + 2 * Y_sd):
-                Y.append(1)
-
-            elif i < -(Y_mean + Y_sd):
-                Y.append(2)
-
-            elif i < -(Y_mean + 0.5 * Y_sd):
-                Y.append(3)
-
             elif i > Y_mean:
                 Y.append(5)
+
+            elif i < (Y_mean - 2 * Y_sd):
+                Y.append(1)
+
+            elif i < (Y_mean - Y_sd):
+                Y.append(2)
+
+            elif i < (Y_mean - 0.5 * Y_sd):
+                Y.append(3)
+
             else:
                 Y.append(4)
 
@@ -204,11 +251,11 @@ def setGridsearch(GS_params, GS_clf_type, random_state =42):
 
     if GS_clf_type == 'GS_forrest':
         GS_clf = RandomForestClassifier(random_state=random_state)
-    else:
-        if GS_clf_types == 'GS_NN' or 'GS_MLP':
+
+    elif GS_clf_types == 'GS_NN' or 'GS_MLP':
             GS_clf = MLPClassifier(random_state=random_state)
-        else:
-            if GS_clf_type == 'GS_tree':
+
+    elif GS_clf_type == 'GS_tree':
                 GS_clf = DecisionTreeClassifier(random_state=random_state)
 
     return GS_clf
@@ -333,6 +380,7 @@ class TSClassifier:
         trainBinaryConfMat = []
 
         for train_index, test_index in self.tscv.split(self.small_Df):
+            #This section clones the classifier, sets up the time series training folds and fits and tests the training folds
             clone_clf = clone(clf)
             X_train_folds = self.X_train[train_index]
             Y_train_folds = self.Y_train[train_index]
@@ -350,6 +398,7 @@ class TSClassifier:
             trainConfMat.append(confMat_current)
 
             if self.binary:
+                #makes score calculations based on a binary prediction set
                 n_correct = sum(y_pred == Y_train_folds)
                 trainAccuracy.append(n_correct / len(y_pred))
                 trainPrecision.append(precision_score(Y_train_folds, y_pred))
@@ -360,7 +409,8 @@ class TSClassifier:
 
                 train_roc_curve = plot_roc_curve(Y_train_folds, y_pred, 'Train')
 
-            else:
+            else: # binary == False
+                #makes binary score calculations based on a non-binary prediction set
                 binaryconfMat_current = np.array(
                     [[np.sum(confMat_current[0:4, 0:4]), np.sum(confMat_current[0:4, 4:8])],
                      [np.sum(confMat_current[4:8, 0:4]), np.sum(confMat_current[4:8, 4:8])]])
@@ -422,12 +472,12 @@ class TSClassifier:
 
                 test_roc_curve = plot_roc_curve(Y_test_folds, y_pred, 'Test')
 
-            else:
+            else: # binary == False
                 binaryconfMat_current = np.array(
                     [[np.sum(confMat_current[0:4, 0:4]), np.sum(confMat_current[0:4, 4:8])],
                      [np.sum(confMat_current[4:8, 0:4]), np.sum(confMat_current[4:8, 4:8])]])
 
-                trainAccuracy.append((binaryconfMat_current[0, 0] + binaryconfMat_current[1,1]) /
+                testAccuracy.append((binaryconfMat_current[0, 0] + binaryconfMat_current[1,1]) /
                                      (binaryconfMat_current[0, 0] + binaryconfMat_current[0, 1] +
                                       binaryconfMat_current[1, 0] + binaryconfMat_current[1, 1]))
 
