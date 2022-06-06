@@ -61,19 +61,37 @@ Datasets = {'Auto': X_control , 'Meta': X_meta , 'NLP': X_test ,
             'AutoMeta': X_control + X_meta , 'AutoNLP': X_control+X_test , 'MetaNLP':X_meta+X_test ,
             'All': X_control + X_meta + X_test,'PossibleBest':possibleBestVars}
 
-Clf_Types = ['CS_Classifier','TS_Classifier']
+vader = ['VaderNeg', 'VaderNeu', 'VaderPos', 'VaderComp']
+
+blob = ['blobPol', 'blobSubj']
+
+WV = []
+for i in range(0, 200):
+    WV.append(f'WV_{i}')
+
+DV_200 = []
+for i in range(0, 200):
+    DV_200.append(f'DV_200_{i}')
+
+DV_20 = []
+for i in range(0, 20):
+    DV_20.append(f'DV_20_{i}')
+
+NLPDatasets = {'Vader':vader, 'Blob':blob, 'WV':WV, 'DV_200':DV_200, 'DV_20':DV_20}
+
+Clf_Types = ['CS_Classifier'] #,'TS_Classifier'
 
 Reg_Types = ['CS_Regressor','TS_Regressor']
 
-StartDates = ['1998-01-01','2000-01-01', '2010-01-01'] #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
+StartDates = ['2000-01-01']#'1998-01-01','2000-01-01',  #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
 
-Binary = [False] #True,
+Binary = [True] #True,False
 
-Remove_duplicates = [True, False]
+Remove_duplicates = [False] #, False
 
 reg_algos = ['reg_GradientBoosting','reg_NN', 'reg_MLR','reg_SGD']
 
-clf_algos = ['clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD' ]
+clf_algos = ['clf_GradientBoosting','clf_NN','clf_KNN'] #,'clf_logreg','clf_SGD'
 
 def runClfLoops():
     dateList = []
@@ -102,7 +120,7 @@ def runClfLoops():
 
                     for algo in clf_algos:
 
-                        for X in Datasets:
+                        for X in NLPDatasets:
 
                             print(f"{date}\n"
                                   f"duplicates removed: {rd}\n"
@@ -111,7 +129,7 @@ def runClfLoops():
                                   f"Classification algo: {algo}\n"
                                   f"Dataset: {X}")
 
-                            trainScores, testScores, valScores = runML_tests(full_df=df, XVars=Datasets[X], YVar=Y ,
+                            trainScores, testScores, valScores = runML_tests(full_df=df, XVars=NLPDatasets[X], YVar=Y ,
                                         remove_duplicate_dates=rd,
                                         crossVals=5, scoring='accuracy', clf_type=algo, ML_type=Clf_Type,
                                         binary=binary,startDate=date)
@@ -162,7 +180,7 @@ def runClfLoops():
     clfScores_df = pd.DataFrame(listDict)
 
     # noinspection PyTypeChecker
-    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Classification_results_resetYCats{clfScores_df.shape}.csv')
+    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/NLP_Classification_results{clfScores_df.shape}.csv')
 
 def runRegLoops():
     dateList = []

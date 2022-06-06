@@ -49,8 +49,9 @@ def download_url(url):
     dateS1 = soup3.find('span', class_="date-display-single")
     dateS2 = str(dateS1).split('content="', 1)[-1]  # These 3 lines save the transcript dateTime title to 'date'
     date3 = dateS2.split('" ', 1)[0]
-    print(date3)
-    date = pd.to_datetime(date3)
+    date4 = date3.split("+",1)[0]
+    print(date4)
+    date = pd.to_datetime(date4)
 
     transcriptS1 = soup3.find('div', class_="field-docs-content")
     transcriptS2 = str(transcriptS1).split('">', 1)[-1]  # These 3 lines save the transcript to 'transcript'

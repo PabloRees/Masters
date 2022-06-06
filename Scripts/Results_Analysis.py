@@ -144,9 +144,11 @@ XMetaNLP = ['Meta','MetaNLP']
 XAll = ['Auto','Meta','NLP','AutoMeta','AutoNLP','MetaNLP','All','PossibleBest']
 
 clf_algo = ['clf_GradientBoosting','clf_NN'] #'clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'
-reg_algo = ['reg_GradientBoosting','reg_NN','reg_SGD'] #'reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD'
+reg_algo = ['reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD'] #'reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD'
 
 clf_score = ['Test_acc']
+
+Dates = ['2010-01-01']
 #'Train_acc','Train_prec','Train_recall','Test_acc','Test_prec','Test_recall','Val_acc','Val_prec','Val_recall'
 reg_score = []
 
@@ -157,20 +159,32 @@ for i in clfResults.columns: print(i)
                # hue = 'XVars',
                # style='variable',size=None )
 
-#plotScorevsXVARLine(clfResults,x='XVars',y='value',XVars=XBase, ML_Type=['CS_Classifier'],
-                    #Duplicates_removed=[True],Algo = clf_algo,Dates=['2010-01-01'],Binary=[True],
-                    #scoreType=['Test_acc'],
-                #hue = 'Algo',
-                #style='Binary',size=None )
+plotScorevsXVARLine(clfResults,x='Dates',y='value',XVars=['NLP'], ML_Type=['TS_Classifier'],
+                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[False,True],
+                    scoreType=clf_score,
+                hue = 'Algo',
+                style='Binary',size=None )
 
-plotScorevsXVARScatter(clfResults,x='XVars',y='value',XVars=XAll, ML_Type=['TS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=['2010-01-01'],Binary=[True],
+plotScorevsXVARScatter(clfResults,x='XVars',y='value',XVars=XAll, ML_Type=['CS_Classifier'],
+                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[False,True],
                     scoreType=clf_score,
                     hue = 'Algo',
-                    style='variable',size=None )
+                    style='Dates',size=None )
 
-plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XAll, ML_Type=['TS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=['2010-01-01'],Binary=[True],
+plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XBase, ML_Type=['CS_Classifier'],
+                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[True],
+                    scoreType=clf_score,
+                    hue = 'Algo'
+                    ,size=None )
+
+plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XAuto, ML_Type=['CS_Classifier'],
+                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[True],
+                    scoreType=clf_score,
+                    hue = 'Algo'
+                    ,size=None )
+
+plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XMeta, ML_Type=['CS_Classifier'],
+                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[True],
                     scoreType=clf_score,
                     hue = 'Algo'
                     ,size=None )

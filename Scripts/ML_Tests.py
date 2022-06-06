@@ -179,12 +179,12 @@ def setClassifier(ML_type,clf_type,XVars,binary, random_state=42):
             L_1 = round(inputVars / 8)
 
         if binary:
-            L_3 = 1
+            L_3 = 2
         else:
             L_3 = 7
 
         clf = MLPClassifier(hidden_layer_sizes=(L_1, 8, L_3), activation='relu', solver='sgd',
-                            max_iter=1000, random_state=random_state)
+                            max_iter=10000, random_state=random_state)
 
     elif clf_type == 'clf_KNN':
         clf = KNeighborsClassifier(weights='distance', algorithm='auto', n_jobs=-1)
@@ -200,8 +200,8 @@ def setClassifier(ML_type,clf_type,XVars,binary, random_state=42):
                                      max_samples=None, max_depth=5)
 
     else : #clf_type == 'clf_GradientBoosting'
-        clf = GradientBoostingClassifier(random_state=random_state,learning_rate=0.1,
-                                        min_samples_split=0.05,min_samples_leaf=0.02,max_depth=5)
+        clf = GradientBoostingClassifier(random_state=random_state,learning_rate=0.01,
+                                        min_samples_split=0.025,min_samples_leaf=0.01,max_depth=8)
 
     return clf
 

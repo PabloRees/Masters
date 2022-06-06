@@ -97,10 +97,8 @@ def tagHeavySpeeches(df):
 
     return df
 
+def joiner(taggedDvs):
 
-def joiner():
-    taggedDvs = pd.read_csv(
-        '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/taggedDocVecs.csv')
     taggedDvs.drop(labels='Unnamed: 0', axis=1, inplace=True)
 
     taggedMain = pd.read_csv(

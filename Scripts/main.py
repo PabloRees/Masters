@@ -36,8 +36,8 @@ def setUpTextData():
     #taggedSpeeches.to_csv(taggededSpeechesSavePath)
 
     #Word2Vec_Model = trainWord2Vec('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches')  # creates the word2vec model - text data
-    #Doc2Vec_Model_200 = trainDoc2Vec('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches',200)
-    #Doc2Vec_Model_20 = trainDoc2Vec('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches',20)
+    #Doc2Vec_Model_200 = trainDoc2Vec('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches',200,False)
+    #Doc2Vec_Model_20 = trainDoc2Vec('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches',20,False)
 
     #print(f'Gensim models trained')
 
@@ -84,7 +84,7 @@ def textPrep(speechDataSavePath,featuresFilePath,liteFeaturesFilesPath,
 
             print(f"starting w2v")
             wordVec200 = create_word_vectors(df['No_Stops_Transcript'],
-                                            W2Vmodel)  # vectorizes the speeches using the word2vec model - text data
+                        W2Vmodel)  # vectorizes the speeches using the word2vec model - text data
 
 
 
