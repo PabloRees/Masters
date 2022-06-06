@@ -13,7 +13,7 @@ class MySpeeches(object):
             dirname = dirname.split('/')[:-1]
             dirname = ''.join([f'{item}/'for item in dirname])
 
-        print(dirname)
+        print(f'dirname = {dirname}')
 
         self.dirname = dirname
         self.combine_sameday_speeches = combine_sameday_speeches
@@ -41,12 +41,13 @@ class MySpeeches(object):
                     for i in range(len(df['No_Stops_Transcript'])):
                         yield gensim.models.doc2vec.TaggedDocument(df['No_Stops_Transcript'].iloc[i], [f"{i}_{df['Date'].iloc[i]}_{df['Name'].iloc[i]}_{df['Type'].iloc[i]}"])
 
-def trainDoc2Vec(dataFramesFilePath,vecSize,model_type,combine_sameday_speeches:bool):
+def trainDoc2Vec(filePath,vecSize,model_type,combine_sameday_speeches:bool):
     print(f'running trainDoc2Vec for {model_type} model')
     cores = multiprocessing.cpu_count()
     assert gensim.models.doc2vec.FAST_VERSION > -1, "This will be painfully slow otherwise"
+    print(filePath)
 
-    speeches = MySpeeches(dataFramesFilePath,combine_sameday_speeches)
+    speeches = MySpeeches(filePath,combine_sameday_speeches)
 
     if not model_type in ['PV_DBOW','PV_DM']:
         raise ValueError('Model type must be PV_DBOW or PV_DM')

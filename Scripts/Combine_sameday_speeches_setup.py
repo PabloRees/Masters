@@ -95,13 +95,12 @@ filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_
 df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches(84155, 8).csv')
 
 for i in df.columns:
-    print(i)
     if 'Unnamed' in i:
         df.drop(labels=[i],axis=1,inplace=True)
     if 'No' in i:
         if 'Stops' in i:
             if 'Transcript' in i:
-                df.rename(columns={i,'No_Stops_Transcript'})
+                df.rename(columns={str(i):'No_Stops_Transcript'},inplace=True)
 
 #df.to_csv(filePath)
 df['Date'] = df['Date'].apply(convertDay)
