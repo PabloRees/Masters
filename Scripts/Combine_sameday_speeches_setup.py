@@ -88,8 +88,61 @@ def interpolateDVs(df):
 
     return df
 
-#df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches_final.csv')
 
+def transpose(df, column, label, vecLen):
+    colNames = []
+    for j in range(0, vecLen):
+        colNames.append(f'{label}_{j}')
+
+    nanRow = []
+    for i in range(0,20):
+        nanRow.append(np.nan)
+
+    vecList = [nanRow]
+
+    for i in range(1, len(df[column])):
+        vec = df[column].iloc[i]
+        vec = vec.replace('[', '').replace(']', '')
+        vec = vec.lstrip().rstrip()
+        vec = vec.replace('   ', ' ').replace('  ', ' ').replace('\n', '').replace('    ', ' ').replace('   ',
+                                                                                                        ' ').replace(
+            '  ', ' ')
+        vec = vec.split(' ')
+
+        floatVec = []
+        for k in vec: floatVec.append(float(k))
+
+        if not len(floatVec) == vecLen:
+            print(i)
+            print(df[column].iloc[i])
+            print(floatVec)
+        else:
+            vecList.append(floatVec)
+
+    vec_df = pd.DataFrame(data=vecList,columns=colNames)
+
+    print(vec_df.head())
+
+    df.drop(column, inplace=True, axis=1)
+
+    df_all_cols = pd.concat([df, vec_df], axis=1)
+
+    return df_all_cols
+
+
+finalFilePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches_final.csv'
+
+df = pd.read_csv(finalFilePath)
+
+#print(type(df['combined_PVDM_DV_20'].iloc[1]))
+#print(df['combined_PVDBOW_DV_20'].iloc[-1])
+
+df = transpose(df,'combined_PVDM_DV_20','PVDM',20)
+df = transpose(df,'combined_PVDBOW_DV_20','PVDBOW',20)
+
+df.to_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches_final_transposed.csv')
+
+exit()
 filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches2.csv'
 
 df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Tagged_Raw_Speeches(84155, 8).csv')

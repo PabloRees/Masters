@@ -57,6 +57,17 @@ def setupXYvars(vecList):
         for i in range(0,20):
             DocVec20.append((f'DV_20_{i}'))
 
+    if 'PVDM' in vecList:
+
+        for i in range(0,20):
+            DocVec20.append((f'PVDM_{i}'))
+
+    if 'PVDBOW' in vecList:
+
+        for i in range(0,20):
+            DocVec20.append((f'PVDBOW_{i}'))
+
+
     if 'vader' in vecList:
         vader = ['VaderNeg', 'VaderNeu', 'VaderPos', 'VaderComp']
 

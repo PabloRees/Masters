@@ -72,10 +72,10 @@ def transposeSentiments(full_df):
 
     return df_all_cols
 
-def transposeDocVectors(full_df,columnName,vecLen):
-
+def transposeDocVectors(full_df,columnName,vecLen,label):
 
     vectorsList = []
+
     for i in full_df[columnName]:
         vector = i.replace('[ ', '')
         vector = vector.replace('[', '')
@@ -95,7 +95,7 @@ def transposeDocVectors(full_df,columnName,vecLen):
 
     vecNames = []
     for i in range(0, vecLen):
-        vecNames.append(f'DV_{str(vecLen)}_{str(i)}')
+        vecNames.append(f'{label}_{str(vecLen)}_{str(i)}')
 
     vec_df = pd.DataFrame(vectorsList, columns=vecNames)
 

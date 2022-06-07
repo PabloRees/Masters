@@ -35,25 +35,18 @@ def setupSingleRun():
     # GS_clf = GStree_clf  # empty classifiers for grid search. Options: GSForrest_clf, GSNN_clf, GStree_clf
 
 
-filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(73827, 458).csv'
+filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches_final_transposed.csv'
 
 df = pd.read_csv(filePath)
 print(f'There are {len(df)} entries in the df and {len(df["Date"].unique())} unique dates in the df for a ratio of {len(df["Date"].unique())/len(df)}')
 
-
-#test = Shrinkage_Methods(data=df,X_variables=X_test,Y_variable=Y,num_features=12)
-#print('\nLasso')
-#Lasso = test.run_Lasso()
-#print('\nElasticNet')
-#ElasticNet = test.run_ElasticNet()
-#print('\nRidge')
-#Ridge = test.run_Ridge()
-#trainDf,testDf,valDf = dataSetup(df,startDate='1990-01-01',remove_duplicate_dates=False)
-#GS = Shrinkage_Methods(data=trainDf,X_variables=possibleBestVars,Y_variable=Y,num_features=12)
-#GS.Elastic_Gridsearch(minAlpha=0,maxAlpha=10,l1_ratio=0.3,show_coefficients=True) #for lasso l1_ratio = 1, for ridge l1_ratio =0.011
+for i in df.columns:
+    if 'Unnamed' in i:
+        df.drop(columns=i,inplace=True)
 
 
-X_control, X_meta, X_test, Y = setupXYvars(['DV_20_','vader','blob']) #options: ['WV','DV_200_', 'DV_20_','vader',blob']
+
+X_control, X_meta, X_test, Y = setupXYvars(['PVDBOW','PVDM']) #options: ['WV','DV_200_', 'DV_20_','vader',blob']
 
 possibleBestVars = ['DlogDif_1', 'DlogDif_2', 'pos_neg_transform','Nasdaq_ld_1', 'Oil_ld_1','VIX_ld_1','DV_20_6','DV_20_8','DV_20_13','DV_20_15']
 
@@ -77,21 +70,33 @@ DV_20 = []
 for i in range(0, 20):
     DV_20.append(f'DV_20_{i}')
 
+PVDM=['Days_since_last_speech']
+for i in range(0,20):
+    PVDM.append((f'PVDM_{i}'))
+
+PVDBOW=['Days_since_last_speech']
+for i in range(0,20):
+    PVDBOW.append((f'PVDBOW_{i}'))
+
 NLPDatasets = {'Vader':vader, 'Blob':blob, 'WV':WV, 'DV_200':DV_200, 'DV_20':DV_20}
 
-Clf_Types = ['CS_Classifier'] #,'TS_Classifier'
+combine_sameday_datasets = {'Auto':X_control,'AutoBoth':X_control+PVDM+PVDBOW,'AutoPVDM':X_control+PVDM,'AutoPVDBOW':X_control+PVDBOW
+                            ,'PVDM':PVDM, 'PVDBOW':PVDBOW,
+                            'BothSameDaySets':PVDM+PVDBOW }
+
+Clf_Types = ['CS_Classifier','TS_Classifier'] #
 
 Reg_Types = ['CS_Regressor','TS_Regressor']
 
-StartDates = ['2000-01-01']#'1998-01-01','2000-01-01',  #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
+StartDates = ['1950-01-01','2010-01-01']#'1998-01-01','2000-01-01',  #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
 
-Binary = [True] #True,False
+Binary = [True,False] #True,False
 
-Remove_duplicates = [False] #, False
+Remove_duplicates = [False] #True, False
 
 reg_algos = ['reg_GradientBoosting','reg_NN', 'reg_MLR','reg_SGD']
 
-clf_algos = ['clf_GradientBoosting','clf_NN','clf_KNN'] #,'clf_logreg','clf_SGD'
+clf_algos = ['clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'] #,'clf_KNN'
 
 def runClfLoops():
     dateList = []
@@ -120,7 +125,7 @@ def runClfLoops():
 
                     for algo in clf_algos:
 
-                        for X in NLPDatasets:
+                        for X in combine_sameday_datasets:
 
                             print(f"{date}\n"
                                   f"duplicates removed: {rd}\n"
@@ -129,7 +134,7 @@ def runClfLoops():
                                   f"Classification algo: {algo}\n"
                                   f"Dataset: {X}")
 
-                            trainScores, testScores, valScores = runML_tests(full_df=df, XVars=NLPDatasets[X], YVar=Y ,
+                            trainScores, testScores, valScores = runML_tests(full_df=df, XVars=combine_sameday_datasets[X], YVar=Y ,
                                         remove_duplicate_dates=rd,
                                         crossVals=5, scoring='accuracy', clf_type=algo, ML_type=Clf_Type,
                                         binary=binary,startDate=date)
@@ -180,7 +185,7 @@ def runClfLoops():
     clfScores_df = pd.DataFrame(listDict)
 
     # noinspection PyTypeChecker
-    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/NLP_Classification_results{clfScores_df.shape}.csv')
+    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Classification_results{clfScores_df.shape}.csv')
 
 def runRegLoops():
     dateList = []
@@ -203,7 +208,7 @@ def runRegLoops():
 
                 for algo in reg_algos:
 
-                    for X in Datasets:
+                    for X in combine_sameday_datasets:
 
                         print(f"{date}\n"
                                 f"duplicates removed: {rd}\n"
@@ -211,7 +216,7 @@ def runRegLoops():
                                 f"Classification algo: {algo}\n"
                                 f"Dataset: {X}")
 
-                        trainScores, testScores, valScores = runML_tests(full_df=df, XVars=Datasets[X], YVar=Y ,
+                        trainScores, testScores, valScores = runML_tests(full_df=df, XVars=combine_sameday_datasets[X], YVar=Y ,
                                     remove_duplicate_dates=rd,
                                     crossVals=5, scoring='accuracy', reg_type=algo, ML_type=Reg_Type,
                                     startDate=date,binary=False)
@@ -254,7 +259,7 @@ def runRegLoops():
     regScores_df = pd.DataFrame(listDict)
 
     # noinspection PyTypeChecker
-    regScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Regression_results{regScores_df.shape}.csv')
+    regScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Regression_results{regScores_df.shape}.csv')
 
 def checkScore(score):
     try: finalScore = max(score)
@@ -262,7 +267,7 @@ def checkScore(score):
     return finalScore
 
 runClfLoops()
-#runRegLoops()
+runRegLoops()
 
 
 
