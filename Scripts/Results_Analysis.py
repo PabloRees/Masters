@@ -3,6 +3,9 @@ import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 from ML_Tests import Y_cat_format, setupXYvars
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 
 def setupReg(regResults):
@@ -50,16 +53,16 @@ def stdvsMeanMAE(data,results,scoreType, YVar, XVars, Algo, ML_Type, startDate:s
                                                 , startDate='2010-01-01')
 
 
-regResults = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Regression_results(384, 11).csv')
-clfResults = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Classification_results(768, 15).csv')
+regResults = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Regression_results(112, 11).csv')
+clfResults = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Classification_results(224, 15).csv')
 data = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(73827, 458).csv')
 
-X_control, X_meta, X_test, Y = setupXYvars(['DV_20_','vader','blob'])
+X_control, X_meta, X_test, Y = setupXYvars(['PVDBOW'])
 
-data = data[['Date',Y]+X_control + X_meta + X_test ]
+#data = data[['Date',Y]+X_control + X_meta + X_test ]
 
 
-print(max(data['Date']))
+#print(max(data['Date']))
 
 regResults['ML_Type'] = regResults['Reg_type']
 regResults.drop('Reg_type',axis=1,inplace=True)
@@ -113,7 +116,6 @@ def plotScorevsXVARScatter(Results,x,y,XVars, ML_Type, scoreType,Duplicates_remo
     plt.legend(bbox_to_anchor=(0.95, 1), loc='upper left', borderaxespad=0)
     plt.show()
 
-
 def plotScorevsXVARBar(Results, x, y, XVars, ML_Type, scoreType, Duplicates_removed, Dates, Algo, Binary,
                            hue, size):
     Results = (Results.loc[Results['variable'].isin(scoreType)]
@@ -135,6 +137,41 @@ def plotScorevsXVARBar(Results, x, y, XVars, ML_Type, scoreType, Duplicates_remo
     plt.legend(bbox_to_anchor=(0.95, 1), loc='upper left', borderaxespad=0)
     plt.show()
 
+def checkBest(Results,numResults,XVars, ML_Type, scoreType,Duplicates_removed,Dates,Algo,Binary):
+
+    if 'MSE' in scoreType[0] or 'MAE' in scoreType[0]: ascending = True
+    else: ascending = False
+
+    Results = (Results.loc[Results['variable'].isin(scoreType)]
+        .loc[Results['ML_Type'].isin(ML_Type)]
+        .loc[Results['Duplicates_removed'].isin(Duplicates_removed)]
+        .loc[Results['XVars'].isin(XVars)]
+        .loc[Results['Algo'].isin(Algo)]
+        .loc[Results['Dates'].isin(Dates)])
+
+
+    if False in Binary or True in Binary:
+
+        Results = Results.loc[Results['Binary'].isin(Binary)]
+        Results.sort_values(by='value', ascending=ascending, inplace=True)
+        numResults = min(numResults, len(Results))
+        for i in range(numResults):
+            print(f"{i}: {Results['value'].iloc[i]} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
+                  f"Binary = {Results['Binary'].iloc[i]}: {Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]}\n")
+
+    else:
+        Results.sort_values(by='value', ascending=ascending, inplace=True)
+        numResults = min(numResults, len(Results))
+        for i in range(numResults):
+            print(f"{i}: {Results['value'].iloc[i]} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
+                  f"{Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]}\n")
+
+
+
+
+
+
+
 XAuto = ['Auto','AutoMeta','AutoNLP','All','PossibleBest']
 XMeta = ['Meta','AutoMeta', 'MetaNLP', 'PossibleBest']
 XNLP = ['NLP', 'AutoNLP', 'MetaNLP', 'All', 'PossibleBest']
@@ -143,48 +180,58 @@ XAutoNLP = ['Auto','AutoNLP']
 XMetaNLP = ['Meta','MetaNLP']
 XAll = ['Auto','Meta','NLP','AutoMeta','AutoNLP','MetaNLP','All','PossibleBest']
 
-clf_algo = ['clf_GradientBoosting','clf_NN'] #'clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'
-reg_algo = ['reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD'] #'reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD'
+XCombine_sameday = ['Auto', 'AutoBoth', 'AutoPVDM', 'AutoPVDBOW', 'PVDM', 'PVDBOW', 'BothSameDaySets']
 
-clf_score = ['Test_acc']
+clf_algo = ['clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'] #'clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'
+reg_algo = ['reg_GradientBoosting','reg_NN','reg_SGD','reg_MLR'] #'reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD','reg_MLR',
 
-Dates = ['2010-01-01']
-#'Train_acc','Train_prec','Train_recall','Test_acc','Test_prec','Test_recall','Val_acc','Val_prec','Val_recall'
-reg_score = []
+clf_score = ['Test_acc'] #'Train_acc','Train_prec','Train_recall','Test_acc','Test_prec','Test_recall','Val_acc','Val_prec','Val_recall'
 
-for i in clfResults.columns: print(i)
+Dates = ['1950-01-01','2010-01-01']
 
-#plotScorevsXVARLine(regResults,x='Dates',y='value', scoreType=['Test_MSE','Train_MSE'],XVars=XBase, ML_Type=['CS_Regressor'],Duplicates_removed=[True],
-                  #  Algo = reg_algo,Dates=['2010-01-01'], Binary=[None],
-               # hue = 'XVars',
-               # style='variable',size=None )
+reg_score = ['Test_MAE']
 
-plotScorevsXVARLine(clfResults,x='Dates',y='value',XVars=['NLP'], ML_Type=['TS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[False,True],
-                    scoreType=clf_score,
-                hue = 'Algo',
-                style='Binary',size=None )
+#for i in regResults.columns:
+    #print(f'{i}:{regResults[i].unique()}\n')
 
-plotScorevsXVARScatter(clfResults,x='XVars',y='value',XVars=XAll, ML_Type=['CS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[False,True],
-                    scoreType=clf_score,
-                    hue = 'Algo',
-                    style='Dates',size=None )
 
-plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XBase, ML_Type=['CS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[True],
-                    scoreType=clf_score,
-                    hue = 'Algo'
-                    ,size=None )
+def makeGraphs():
+    # plotScorevsXVARLine(regResults,x='Dates',y='value', scoreType=['Test_MSE','Train_MSE'],XVars=XBase, ML_Type=['CS_Regressor'],Duplicates_removed=[True],
+    #  Algo = reg_algo,Dates=['2010-01-01'], Binary=[None],
+    # hue = 'XVars',
+    # style='variable',size=None )
 
-plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XAuto, ML_Type=['CS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[True],
-                    scoreType=clf_score,
-                    hue = 'Algo'
-                    ,size=None )
+    plotScorevsXVARLine(clfResults, x='Dates', y='value', XVars=XCombine_sameday, ML_Type=['CS_Classifier'],
+                        Duplicates_removed=[True], Algo=clf_algo, Dates=Dates, Binary=[True],
+                        scoreType=clf_score,
+                        hue='Algo',
+                        style='Binary', size=None)
 
-plotScorevsXVARBar(clfResults,x='XVars',y='value',XVars=XMeta, ML_Type=['CS_Classifier'],
-                    Duplicates_removed=[True],Algo = clf_algo,Dates=Dates,Binary=[True],
-                    scoreType=clf_score,
-                    hue = 'Algo'
-                    ,size=None )
+    plotScorevsXVARScatter(clfResults, x='XVars', y='value', XVars=XCombine_sameday, ML_Type=['CS_Classifier'],
+                           Duplicates_removed=[False], Algo=clf_algo, Dates=Dates, Binary=[True],
+                           scoreType=clf_score,
+                           hue='Algo',
+                           style='Dates', size=None)
+
+    plotScorevsXVARBar(clfResults, x='XVars', y='value', XVars=XCombine_sameday, ML_Type=['CS_Classifier'],
+                       Duplicates_removed=[False], Algo=clf_algo, Dates=Dates, Binary=[True],
+                       scoreType=clf_score,
+                       hue='Algo'
+                       , size=None)
+
+    plotScorevsXVARBar(clfResults, x='XVars', y='value', XVars=XCombine_sameday, ML_Type=['CS_Classifier'],
+                       Duplicates_removed=[False], Algo=clf_algo, Dates=Dates, Binary=[True],
+                       scoreType=clf_score,
+                       hue='Algo'
+                       , size=None)
+
+    plotScorevsXVARBar(clfResults, x='XVars', y='value', XVars=XCombine_sameday, ML_Type=['CS_Classifier'],
+                       Duplicates_removed=[False], Algo=clf_algo, Dates=Dates, Binary=[True],
+                       scoreType=clf_score,
+                       hue='Algo'
+                       , size=None)
+
+checkBest(regResults,10,XVars=XCombine_sameday,ML_Type = ['CS_Regressor'],
+         scoreType=reg_score,Duplicates_removed=[False],Dates=['1950-01-01'],Algo=reg_algo,Binary=[None])
+
+

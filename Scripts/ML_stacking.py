@@ -82,21 +82,23 @@ NLPDatasets = {'Vader':vader, 'Blob':blob, 'WV':WV, 'DV_200':DV_200, 'DV_20':DV_
 
 combine_sameday_datasets = {'Auto':X_control,'AutoBoth':X_control+PVDM+PVDBOW,'AutoPVDM':X_control+PVDM,'AutoPVDBOW':X_control+PVDBOW
                             ,'PVDM':PVDM, 'PVDBOW':PVDBOW,
-                            'BothSameDaySets':PVDM+PVDBOW }
+                            'BothSameDaySets':PVDM+PVDBOW}
 
-Clf_Types = ['CS_Classifier','TS_Classifier'] #
+XVars = {'Auto':X_control ,'AutoPVDBOW':X_control+PVDBOW, 'PVDBOW':PVDBOW} #,'AutoPVDBOW':X_control+PVDBOW
 
-Reg_Types = ['CS_Regressor','TS_Regressor']
+Clf_Types = ['TS_Classifier'] #'CS_Classifier',
 
-StartDates = ['1950-01-01','2010-01-01']#'1998-01-01','2000-01-01',  #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
+Reg_Types = ['CS_Regressor'] #,'TS_Regressor'
 
-Binary = [True,False] #True,False
+StartDates = ['1950-01-01']#'1998-01-01','2000-01-01',  #'1990-01-01' - Some meta data does not date back far enough to begin before 1998
+
+Binary = [True] #True,False
 
 Remove_duplicates = [False] #True, False
 
-reg_algos = ['reg_GradientBoosting','reg_NN', 'reg_MLR','reg_SGD']
+reg_algos = ['reg_NN', 'reg_SGD']#'reg_GradientBoosting','reg_MLR','reg_SGD'
 
-clf_algos = ['clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'] #,'clf_KNN'
+clf_algos = ['clf_logreg','clf_SGD'] #,'clf_KNN',,'clf_GradientBoosting','clf_NN'
 
 def runClfLoops():
     dateList = []
@@ -125,7 +127,7 @@ def runClfLoops():
 
                     for algo in clf_algos:
 
-                        for X in combine_sameday_datasets:
+                        for X in XVars:
 
                             print(f"{date}\n"
                                   f"duplicates removed: {rd}\n"
@@ -134,10 +136,10 @@ def runClfLoops():
                                   f"Classification algo: {algo}\n"
                                   f"Dataset: {X}")
 
-                            trainScores, testScores, valScores = runML_tests(full_df=df, XVars=combine_sameday_datasets[X], YVar=Y ,
+                            trainScores, testScores, valScores = runML_tests(full_df=df, XVars=XVars[X], YVar=Y ,
                                         remove_duplicate_dates=rd,
                                         crossVals=5, scoring='accuracy', clf_type=algo, ML_type=Clf_Type,
-                                        binary=binary,startDate=date)
+                                        binary=binary,return_prediction=False,startDate=date)
 
                             trainScoreAcc = checkScore(trainScores.accuracy)
                             trainScorePrec = checkScore(trainScores.precision)
@@ -185,7 +187,7 @@ def runClfLoops():
     clfScores_df = pd.DataFrame(listDict)
 
     # noinspection PyTypeChecker
-    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Classification_results{clfScores_df.shape}.csv')
+    clfScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Sameday_1950_binary_3{clfScores_df.shape}.csv')
 
 def runRegLoops():
     dateList = []
@@ -208,7 +210,7 @@ def runRegLoops():
 
                 for algo in reg_algos:
 
-                    for X in combine_sameday_datasets:
+                    for X in XVars:
 
                         print(f"{date}\n"
                                 f"duplicates removed: {rd}\n"
@@ -216,10 +218,10 @@ def runRegLoops():
                                 f"Classification algo: {algo}\n"
                                 f"Dataset: {X}")
 
-                        trainScores, testScores, valScores = runML_tests(full_df=df, XVars=combine_sameday_datasets[X], YVar=Y ,
+                        trainScores, testScores, valScores = runML_tests(full_df=df, XVars=XVars[X], YVar=Y ,
                                     remove_duplicate_dates=rd,
                                     crossVals=5, scoring='accuracy', reg_type=algo, ML_type=Reg_Type,
-                                    startDate=date,binary=False)
+                                    startDate=date,return_prediction=False,binary=False)
 
                         trainMSE = checkScore(trainScores.MSE)
                         trainMAE = checkScore(trainScores.MAE)
@@ -259,15 +261,16 @@ def runRegLoops():
     regScores_df = pd.DataFrame(listDict)
 
     # noinspection PyTypeChecker
-    regScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Regression_results{regScores_df.shape}.csv')
+    regScores_df.to_csv(f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_CS_Regression_2{regScores_df.shape}.csv')
 
 def checkScore(score):
-    try: finalScore = max(score)
-    except: finalScore = score
+    try: finalScore = round(max(score),3)
+    except:
+        try: finalScore = round(score,3)
+        except: finalScore = score
+
     return finalScore
 
-runClfLoops()
-runRegLoops()
 
 
 

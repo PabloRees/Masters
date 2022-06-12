@@ -13,6 +13,8 @@ pd.options.mode.chained_assignment = None
 from matplotlib import pyplot as plt
 plt.style.use('seaborn')
 from dataclasses import dataclass
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 @dataclass
 class classificationScoreHolder:
@@ -119,6 +121,8 @@ def Y_cat_format(df,YVar,binary:bool):
             if i >Y_mean:
                 Y_binary.append(1)
             else:Y_binary.append(0)
+
+        #print(f'The mean of Y is {np.mean(Y_binary)}')
         return Y_binary
 
     else:
@@ -149,6 +153,7 @@ def Y_cat_format(df,YVar,binary:bool):
             else:
                 Y.append(4)
 
+        #print(f'The mean of Y is {np.mean(Y)}')
         return Y
 
 def dataSetup(full_df,startDate,remove_duplicate_dates=False):
@@ -176,33 +181,43 @@ def setClassifier(ML_type,clf_type,XVars,binary, random_state=42):
     if not clf_type in clf_types:
         raise ValueError(f"Classifier ML_type chosen but non-classifier model chosen. Please choose from:\n{clf_types}")
 
+
+
     if clf_type == 'clf_SGD':
-        clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', max_iter=10000)
+        clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', max_iter=10000, fit_intercept=False,
+                            learning_rate='adaptive', eta0=0.001, n_iter_no_change=100)
+
+
+    elif clf_type == 'clf_logreg':
+        clf = LogisticRegression(solver='saga', penalty='elasticnet', max_iter=10000,l1_ratio=0.3,
+                                 random_state=random_state,fit_intercept=False)
+
+
 
     elif clf_type == 'clf_MLP':
-        clf = MLPClassifier(max_iter=1000, shuffle=True, learning_rate_init=0.01, learning_rate='adaptive',
+        clf = MLPClassifier(max_iter=10000, shuffle=True, learning_rate_init=0.0001, learning_rate='adaptive',
                             random_state=random_state)
     elif clf_type == 'clf_NN':
         inputVars = len(XVars)
         if inputVars / 5 < 8:
-            L_1 = 8
+            L_1 = 2*inputVars
+            L_2 = inputVars
         else:
-            L_1 = round(inputVars / 8)
+            L_1 = 2*inputVars
+            L_2 = inputVars
 
         if binary:
-            L_3 = 2
+            L_3 = round(inputVars/2)
         else:
             L_3 = 7
 
-        clf = MLPClassifier(hidden_layer_sizes=(L_1, 8, L_3), activation='relu', solver='sgd',
-                            max_iter=10000, random_state=random_state)
+        clf = MLPClassifier(hidden_layer_sizes=(L_1,L_2,L_3), activation='relu', solver='adam', alpha=0.001,
+                            max_iter=10000, random_state=random_state,early_stopping=True,learning_rate='adaptive',
+                            n_iter_no_change=100)
 
     elif clf_type == 'clf_KNN':
         clf = KNeighborsClassifier(weights='distance', algorithm='auto', n_jobs=-1)
 
-    elif clf_type == 'clf_logreg':
-        clf = LogisticRegression(solver='lbfgs', penalty='l2', max_iter=10000,
-                                 random_state=random_state)
     elif clf_type == 'clf_tree':
         clf = DecisionTreeClassifier(random_state=random_state)
 
@@ -211,8 +226,8 @@ def setClassifier(ML_type,clf_type,XVars,binary, random_state=42):
                                      max_samples=None, max_depth=5)
 
     else : #clf_type == 'clf_GradientBoosting'
-        clf = GradientBoostingClassifier(random_state=random_state,learning_rate=0.01,
-                                        min_samples_split=0.025,min_samples_leaf=0.01,max_depth=8)
+        clf = GradientBoostingClassifier(random_state=random_state,learning_rate=0.01,loss='exponential',
+                                        min_samples_split=0.001,min_samples_leaf=0.001,max_depth=16)
 
     return clf
 
@@ -233,17 +248,23 @@ def setRegressor(ML_type,reg_type,XVars,random_state=42):
     elif reg_type == 'reg_NN':
 
         inputVars = len(XVars)
+
         if inputVars / 5 < 8:
-            L_1 = 8
+
+            L_1 = inputVars
+
         else:
-            L_1 = round(inputVars / 8)
 
+            L_1 = inputVars
 
-        reg = MLPRegressor(hidden_layer_sizes=(L_1, 8, 1), activation='relu', solver='sgd',
-                            max_iter=10000, random_state=random_state)
+        L_2 = round(inputVars/2)
+        L_3 = 8
+
+        reg = MLPRegressor(hidden_layer_sizes=(L_1, L_2,L_3 ), activation='relu', solver='adam',
+                   max_iter=10000, random_state=random_state)
 
     else : #reg_type == 'reg_SGD'
-        reg = SGDRegressor(random_state=random_state, shuffle=True, loss='squared_error', max_iter=10000,
+        reg = SGDRegressor(random_state=random_state, shuffle=False, loss='squared_error', max_iter=10000,
                            fit_intercept=False)
 
     return reg
@@ -390,9 +411,10 @@ class TSClassifier:
         trainConfMat = []
         trainBinaryConfMat = []
 
+        #print(f'The mean of all the Ys is {np.mean(self.Y_train)}')
+
         for train_index, test_index in self.tscv.split(self.small_Df):
             #This section clones the classifier, sets up the time series training folds and fits and tests the training folds
-            clone_clf = clone(clf)
             X_train_folds = self.X_train[train_index]
             Y_train_folds = self.Y_train[train_index]
 
@@ -402,6 +424,7 @@ class TSClassifier:
             X_train_folds = np.array(XY_train_df[self.XVars])
             Y_train_folds = np.array(XY_train_df['Y_train'])
 
+            clone_clf = clone(clf)
             clone_clf.fit(X_train_folds, Y_train_folds)
             y_pred = clone_clf.predict(X_train_folds)
 
@@ -585,6 +608,8 @@ class CSRegressor:
 
         trainDf, testDf, valDf = dataSetup(full_df, startDate, remove_duplicate_dates=remove_duplicate_dates)
 
+        self.Y = trainDf[YVar].append(testDf[YVar].append(valDf[YVar]))
+
         Y_train = trainDf[YVar]
         XY_train = trainDf[XVars]
         XY_train['Y_train'] = Y_train
@@ -621,15 +646,22 @@ class CSRegressor:
 
         scores = regressionScoreHolder(MSE=MSE, MAE=MAE)
 
-        return scores
+        return scores, Y_pred
 
-    def testCSRegressor(self, crossVals=3 ):
+    def testCSRegressor(self,return_prediction:bool, crossVals=3 ):
 
-        trainScores = self.getCSRegressorScores(self.X_train,self.Y_train,crossVals=crossVals)
-        testScores = self.getCSRegressorScores(self.X_test,self.Y_test,crossVals=crossVals)
-        valScores = self.getCSRegressorScores(self.X_val,self.Y_val,crossVals=crossVals)
+        #print(np.std(self.Y_test))
 
-        return trainScores, testScores, valScores
+        trainScores, trainPred = self.getCSRegressorScores(self.X_train,self.Y_train,crossVals=crossVals)
+        testScores, testPred = self.getCSRegressorScores(self.X_test,self.Y_test,crossVals=crossVals)
+        valScores, valPred = self.getCSRegressorScores(self.X_val,self.Y_val,crossVals=crossVals)
+
+        if return_prediction:
+
+
+            return trainPred, testPred, valPred,self.X_train,self.Y_train,self.X_test,self.Y_test,self.X_val,self.Y_val
+        else:
+            return trainScores, testScores, valScores
 
 class TSRegressor:
 
@@ -651,7 +683,7 @@ class TSRegressor:
         self.Y_train = np.array(small_Df[YVar])
         self.tscv = TimeSeriesSplit(n_splits=n_splits)
 
-    def testTSRegressor(self,reg):
+    def testTSRegressor(self,reg, return_prediction):
 
         trainMSE = []
         trainMAE = []
@@ -694,9 +726,10 @@ class TSRegressor:
         testScores = regressionScoreHolder(testMSE,testMAE)
         valScores = regressionScoreHolder(None, None)
 
+
         return trainScores, testScores, valScores
 
-def runML_tests(full_df,startDate,XVars, YVar,crossVals,scoring,ML_type,remove_duplicate_dates, binary, n_splits = 5, clf_type=None,
+def runML_tests(full_df,startDate,XVars, YVar,crossVals,scoring,ML_type,remove_duplicate_dates, binary,return_prediction, n_splits = 5, clf_type=None,
                 reg_type=None,GS_clf_type=None ,random_state=42, GS_params=None
                 ):
 
@@ -756,15 +789,29 @@ def runML_tests(full_df,startDate,XVars, YVar,crossVals,scoring,ML_type,remove_d
             regressor = CSRegressor(full_df=full_df, startDate=startDate, YVar=YVar, XVars=XVars, reg=reg,
                                     remove_duplicate_dates=remove_duplicate_dates)
 
-            train_scores,test_scores,val_scores = regressor.testCSRegressor(crossVals=crossVals)
+            if return_prediction:
+                print(f'return prediction = {return_prediction}')
+                train_pred, test_pred, val_pred,X_train,Y_train,X_test,Y_test,X_val,Y_val =\
+                    regressor.testCSRegressor(crossVals=crossVals,return_prediction=return_prediction)
+
+            else:
+                train_scores, test_scores, val_scores = regressor.testCSRegressor(crossVals=crossVals,
+                                                                                  return_prediction=return_prediction)
 
         else: #ML_type == 'TS_Regressor'
             regressor = TSRegressor(full_df=full_df, startDate=startDate, XVars=XVars, YVar=YVar,
                                       remove_duplicate_dates=remove_duplicate_dates, n_splits=n_splits)
 
-            train_scores, test_scores, val_scores = regressor.testTSRegressor(reg=reg)
+            if return_prediction:
+                train_pred, test_pred, val_pred = regressor.testTSRegressor(reg=reg, return_prediction=return_prediction)
+            else:
+                train_scores, test_scores, val_scores = regressor.testTSRegressor(reg=reg, return_prediction=return_prediction)
 
-        return train_scores, test_scores, val_scores
+        if return_prediction:
+            return  train_pred, test_pred, val_pred,X_train,Y_train,X_test,Y_test,X_val,Y_val
+
+        else:
+            return train_scores, test_scores, val_scores
 
 
 
