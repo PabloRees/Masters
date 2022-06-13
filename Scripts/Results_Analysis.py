@@ -52,12 +52,17 @@ def stdvsMeanMAE(data,results,scoreType, YVar, XVars, Algo, ML_Type, startDate:s
                                                 YVar='logDif_date_resid'
                                                 , startDate='2010-01-01')
 
+speechCentredReg = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Regression_results(384, 11).csv'
+speechCentredClf = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Classification_results(768, 15).csv'
 
-regResults = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Regression_results(112, 11).csv')
-clfResults = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Classification_results(224, 15).csv')
+dateCentredReg = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Regression_results(112, 11).csv'
+dateCentredClf = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Results/Combine_sameday_Classification_results(224, 15).csv'
+
+regResults = pd.read_csv(dateCentredReg)
+clfResults = pd.read_csv(dateCentredClf)
 data = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(73827, 458).csv')
 
-X_control, X_meta, X_test, Y = setupXYvars(['PVDBOW'])
+X_control, X_meta, X_test, Y = setupXYvars(['PVDBOW','PVDM'])
 
 #data = data[['Date',Y]+X_control + X_meta + X_test ]
 
@@ -157,20 +162,16 @@ def checkBest(Results,numResults,XVars, ML_Type, scoreType,Duplicates_removed,Da
         numResults = min(numResults, len(Results))
         for i in range(numResults):
             print(f"{i}: {Results['value'].iloc[i]} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
-                  f"Binary = {Results['Binary'].iloc[i]}: {Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]}\n")
+                  f"Binary = {Results['Binary'].iloc[i]}: {Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]} : "
+                  f"Duplicates removed {Results['Duplicates_removed'].iloc[i]}\n")
 
     else:
         Results.sort_values(by='value', ascending=ascending, inplace=True)
         numResults = min(numResults, len(Results))
         for i in range(numResults):
             print(f"{i}: {Results['value'].iloc[i]} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
-                  f"{Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]}\n")
-
-
-
-
-
-
+                  f"{Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]}: "
+                  f"Duplicates removed {Results['Duplicates_removed'].iloc[i]}\n")
 
 XAuto = ['Auto','AutoMeta','AutoNLP','All','PossibleBest']
 XMeta = ['Meta','AutoMeta', 'MetaNLP', 'PossibleBest']
@@ -185,11 +186,11 @@ XCombine_sameday = ['Auto', 'AutoBoth', 'AutoPVDM', 'AutoPVDBOW', 'PVDM', 'PVDBO
 clf_algo = ['clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'] #'clf_GradientBoosting','clf_NN','clf_logreg','clf_SGD'
 reg_algo = ['reg_GradientBoosting','reg_NN','reg_SGD','reg_MLR'] #'reg_GradientBoosting','reg_NN','reg_MLR','reg_SGD','reg_MLR',
 
-clf_score = ['Test_acc'] #'Train_acc','Train_prec','Train_recall','Test_acc','Test_prec','Test_recall','Val_acc','Val_prec','Val_recall'
+clf_score = ['Train_acc'] #'Train_acc','Train_prec','Train_recall','Test_acc','Test_prec','Test_recall','Val_acc','Val_prec','Val_recall'
 
-Dates = ['1950-01-01','2010-01-01']
+Dates = ['1950-01-01'] #,'1998-01-01','2000-01-01'
 
-reg_score = ['Test_MAE']
+reg_score = ['Train_MAE']
 
 #for i in regResults.columns:
     #print(f'{i}:{regResults[i].unique()}\n')
@@ -231,7 +232,9 @@ def makeGraphs():
                        hue='Algo'
                        , size=None)
 
-checkBest(regResults,10,XVars=XCombine_sameday,ML_Type = ['CS_Regressor'],
-         scoreType=reg_score,Duplicates_removed=[False],Dates=['1950-01-01'],Algo=reg_algo,Binary=[None])
+for i in regResults.columns: print(i)
+
+checkBest(clfResults,10,XVars=XCombine_sameday,ML_Type = ['TS_Classifier','CS_Classifier'],
+         scoreType=clf_score,Duplicates_removed=[False],Dates=Dates,Algo=clf_algo,Binary=[True])
 
 
