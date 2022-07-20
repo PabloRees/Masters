@@ -1,4 +1,3 @@
-import pandas
 import pandas as pd
 from sklearn.linear_model import ElasticNet, Lasso, Ridge
 from ML_Tests import dataSetup, setupXYvars

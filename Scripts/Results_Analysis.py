@@ -161,7 +161,7 @@ def checkBest(Results,numResults,XVars, ML_Type, scoreType,Duplicates_removed,Da
         Results.sort_values(by='value', ascending=ascending, inplace=True)
         numResults = min(numResults, len(Results))
         for i in range(numResults):
-            print(f"{i}: {Results['value'].iloc[i]} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
+            print(f"{i}: {Results['variable'].iloc[i]} : {round(Results['value'].iloc[i],2)} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
                   f"Binary = {Results['Binary'].iloc[i]}: {Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]} : "
                   f"Duplicates removed {Results['Duplicates_removed'].iloc[i]}\n")
 
@@ -169,7 +169,7 @@ def checkBest(Results,numResults,XVars, ML_Type, scoreType,Duplicates_removed,Da
         Results.sort_values(by='value', ascending=ascending, inplace=True)
         numResults = min(numResults, len(Results))
         for i in range(numResults):
-            print(f"{i}: {Results['value'].iloc[i]} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
+            print(f"{i}: {Results['variable'].iloc[i]} : {round(Results['value'].iloc[i],3)} : {Results['XVars'].iloc[i]} : {Results['Algo'].iloc[i]} : "
                   f"{Results['ML_Type'].iloc[i]} : {Results['Dates'].iloc[i]}: "
                   f"Duplicates removed {Results['Duplicates_removed'].iloc[i]}\n")
 
@@ -188,9 +188,9 @@ reg_algo = ['reg_GradientBoosting','reg_NN','reg_SGD','reg_MLR'] #'reg_GradientB
 
 clf_score = ['Train_acc'] #'Train_acc','Train_prec','Train_recall','Test_acc','Test_prec','Test_recall','Val_acc','Val_prec','Val_recall'
 
-Dates = ['1950-01-01'] #,'1998-01-01','2000-01-01'
+Dates = ['1950-01-01','2000-01-01'] #,'1998-01-01','2000-01-01'
 
-reg_score = ['Train_MAE']
+reg_score = ['Test_MAE']
 
 #for i in regResults.columns:
     #print(f'{i}:{regResults[i].unique()}\n')
@@ -234,7 +234,7 @@ def makeGraphs():
 
 for i in regResults.columns: print(i)
 
-checkBest(clfResults,10,XVars=XCombine_sameday,ML_Type = ['TS_Classifier','CS_Classifier'],
-         scoreType=clf_score,Duplicates_removed=[False],Dates=Dates,Algo=clf_algo,Binary=[True])
+checkBest(regResults,10,XVars=XCombine_sameday,ML_Type = ['CS_Regressor'],
+         scoreType=reg_score,Duplicates_removed=[False],Dates=['1950-01-01'],Algo=reg_algo,Binary=[None])
 
 

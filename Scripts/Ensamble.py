@@ -1,5 +1,5 @@
 import pandas as pd
-from ML_Tests import runML_tests, setupXYvars
+from ML_Tests import runML_tests, setupXYvars, Y_cat_format
 from ML_stacking import checkScore
 import numpy as np
 
@@ -169,6 +169,19 @@ def setup():
         '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches_final_boosted.csv')
 
     return df
+
+df = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset ( 73827 , 39 ) .csv')
+
+df['Date'] = pd.to_datetime(df['Date'])
+print(df.columns)
+
+df2 = df.loc[(df["Date"] > pd.to_datetime('2009-12-31'))]
+
+binary = Y_cat_format(df2,'logDif_date_resid',True)
+
+print(np.mean(binary))
+
+exit()
 
 PVDM = ['Days_since_last_speech']
 for i in range(0, 20):
