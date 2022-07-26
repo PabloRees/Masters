@@ -102,14 +102,41 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width 
 # warning and message = FALSE implies ugly messages and warnings are removed from your pdf.
 # These should be picked up when you execute the command chunks (code sections below) in your rmd, not printed in your paper!
 
-# Lets load in example data, and see how this can be stored and later called from your 'data' folder.
-if(!require("tidyverse")) install.packages("tidyverse")
-library(tidyverse)
-Example_data <- Texevier::Ex_Dat
+rm(list=ls()) #Removes all items in Environment!
+graphics.off()
 
-# Notice that as you are working in a .Rproj file (I am assuming you are) - the relative paths of your directories start at your specified root.
-# This means that when working in a .Rproj file, you never need to use getwd() - it is assumed as your base root automatically.
-write_rds(Example_data, path = "data/Example_data.rds")
+pacman::p_load(stats, dplyr, urca, tidyverse ,ggplot2, fixest, FinTS, fGarch, tsm)
+pacman::p_load_gh("r-lib/devtools", "KevinKotze/tsm")
+
+library(devtools)
+library(stats)
+library(dplyr)
+library(urca)
+library(tidyverse)
+library(ggplot2)
+library(fixest)
+library(FinTS)
+library(fGarch)
+library(tsm)
+library(tseries) 
+
+source('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Scripts/std_fin-ts_data_setup.R')
+source('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Scripts/GSPC_timeseries_functions.R')
+
+GSPC <- read.csv("/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/GSPC.csv" , header = T) #this should load from a sql database rather
+
+GSPC <- stdDataSetup(GSPC,volFilter = T)
+
+GSPC <- blackSwan(GSPC,3)
+GSPC <- blackSwan(GSPC,4)
+GSPC <- blackSwan(GSPC,5)
+
+start <- c(format(first(GSPC$Date),"%Y"),format(first(GSPC$Date),"%d"))
+freq <- abs(round(length(GSPC$Date)/(as.integer(format(last(GSPC$Date),"%Y")) - as.integer(format(first(GSPC$Date),"%Y")))))
+
+
+logDif <-  ts(GSPC$logDif , start=start , freq = freq)
+rm(freq,start)
 
 ```
 
@@ -326,13 +353,44 @@ A second round of time series analysis was performed on all the data after Jan 1
 
 The extended dataset required a different dependent variable because open and closing prices were only differentiated between after April 20th 1982. Thus, the inter-day percentage change in closing price constituted the dependent variable in the second round of analysis. Figure 4 depicts the Daily Percentage Change (DPC) in the S&P 500 from 1950 until present – the persistence of volatility is again apparent. Figure 5 illustrates the correlation between the DPC and standardized volume which justifies the extension of the dataset. 
 
-!!!!!!!!!!! FIGURES 4 and 5 - should be plotted directly !!!!!!!!!!!
+```{r GSPC_figure_4,  warning =  FALSE, fig.align = 'center', fig.cap = "S and P 500 Daily Percentage Change 1950 – Present \\label{Figure4}", fig.ext = 'png', fig.height = 3, fig.width = 6}
+
+figuresList <- volumeAnalysis(GSPC)
+figuresList[[1]]
+
+```
+
+```{r GSPC_figure_5,  warning =  FALSE, fig.align = 'center', fig.cap = "Standardized volume (red) and absolute logDiff (green) \\label{Figure5}", fig.ext = 'png', fig.height = 3, fig.width = 6}
+
+figuresList[[2]]
+
+```
 
 #### Volume 
 
 Regressing the DPC on the first lag of standardized volume yielded insignificant results. However, regressing absolute DPC (pseudo-volatility) on the first lag of standardized volume (stdVol_1) yielded a coefficient of 0,148 significant above the 99,9th percentile. Figure 6 shows this relationship. Figure 6 also shows that standardized volume (stdVol) trends upwards over time. Further, regressing stdVol_1 on Date (regression 6) yields a positive coefficient significant above the 99,9th percentile and an adjusted R2 of 0,6. This shows that a large percentage of the variation in stdVol is explained by variation in Date. Thus to avoid implicitly including a Date proxy^[The goal of this project is to create a model that can predict future S&P 500 returns. Thus, to include a proxy for date (in this case in the date trending stdVol) would cause data contamination since dates do not hold any information relevant to the S&P 500 returns besides price or volatility trends. ] as a predictor of S&P 500 returns the included volume variable must be adjusted to be stationary over time. The residuals from regression 6 make up the variation in stdVol that cannot be explained by the variation in Date – thus they are a Date neutral measure of stdVol. Figure 7 shows the difference between stdVol and stdVol controlled for variance due to Date (stdVolControlled). Regressing the residuals of regression 6 on Date (regression 7) shows no significant relationship between the two while regressing absolute DPC on the residuals from regression 6 (regression 8) yields a coefficient of 0,164 significant above the 99,9th percentile. Figure 8 shows the relationship between absolute DPC and stdVolControlled. Thus these residuals (rather than stdVol) should be included as a variable in the final prediction data.
 
-!!!!!!!!!!! FIGURES 6, 7 and 8 - should be plotted directly !!!!!!!!!!!
+```{r GSPC_figure_6,  warning =  FALSE, fig.align = 'center', fig.cap = "Absolute logDiff and stdVol \\label{Figure6}", fig.ext = 'png', fig.height = 3, fig.width = 6}
+
+figuresList[[3]]
+
+```
+
+
+
+```{r GSPC_figure_7,  warning =  FALSE, fig.align = 'center', fig.cap = "DateResid of StdVol (Red) and stdVol (Green) \\label{Figure7}", fig.ext = 'png', fig.height = 3, fig.width = 6}
+
+figuresList[[4]]
+
+```
+
+
+```{r GSPC_figure_8,  warning =  FALSE, fig.align = 'center', fig.cap = "stdVolControlled and absolute LogDiff \\label{Figure8}", fig.ext = 'png', fig.height = 3, fig.width = 6}
+
+figuresList[[5]]
+
+```
+
 
 #### ARCH and GARCH testing \label{ARCHandGARCH}
 
@@ -340,12 +398,48 @@ The LJung-Box test is a standard inference test in time series analysis. It test
 
 Running a 10-Lag LJung Box test on the DPC yields a p-value of 0.0002 which indicates that the null hypothesis should be rejected and that the series is not a white noise series. I.e. ARCH effects are present in the series. Running autocorrelation and partial-autocorrelation tests on the absolute DPC indicates that there is a degree of persistence of volatility [@kotze2021volatility]. This can be seen in Figure 9. A t-test indicates that the mean of the population is significantly different from zero (0.036). Thus, demeaning the equation constitutes the construction of a mean equation (essentially the demeaned DPC) represented in the series – a demeaned daily percentage change(DDPC) [@kotze2020univariate]. A 10 lag Ljung-Box test again indicates the presence of ARCH effects specifically in the 1st,2nd, 5th, 6th, 8th, and 9th lags. However, running a multiple linear regression (OLS) of DDPC on its lags reveals only the 2nd, 6th, 8th and 9th lags as significant above the 95th percentile. 
 
-!!!!!!!!!!! FIGURE 9 - should be plotted directly !!!!!!!!!!!
+```{r runARCHsection, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.pos="H", fig.pos = 'H')
+
+
+ARCH_figures <- ARCHTests(logDif)
+
+```
+
+```{r ARCH_figure_9,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of absolute LogDiff \\label{Figure9}", fig.ext = 'png', fig.height = 3, fig.width = 6}
+
+ac(abs(logDif))
+
+```
 
 Seven possible models were checked for performance considering the above results. Model 1 is an ARIMA(0,0,1) , model 2 is an ARIMA(1,0,0), model 3 is an ARMA(1,0) GARCH(1,1),  model 4 is a GARCH(1,1), model 5 is an EGARCH(1,1), model 6 is an ARMA(1,0) ARCH(1,0) and model 7 is an ARCH(1,0). The inclusion of an EGARCH model is motivated by its use in Nelson (1991), Blazsek & Mendoza (2016) and Tiwari, Raheem & Kang (2019) in their time series analyses of the S&P 500. Table 4 compares the coefficients from the 5 ARCH model variations (models 3, 4 and 5). Figure 10, 11 and 12, 13 and 14 show the results of autocorrelation and partial-autocorrelation functions of the residuals of the 5 ARCH variation models. Notably, all three of the models that do not contain an ARMA(1,0) component (models 4,5 and 7) yield a significant first residual indicating that inclusion of the ARMA(1,0) component is important. Further, model 6 – the non-generalized ARCH model –has intermittent significant residuals indicating that volatility is clustered and persistent. Persistent volatility is one of the oversights of the ARCH model that is addressed in the GARCH model . As can be seen, Model 3 (Figure 10) yields the least significant residuals and as such has been selected as the model that best fits this time series. The model linearly predicts the dependent variable using the first lag of the dependent variable, the first residual of an ARMA(6,0) model and the first lag of variance in the time series. As such the 1st , 2nd and 6th lags of DDPC and the first lag of variance of DPC will be included in the final dataset [@kotze2020univariate]. Additionally, as illustrated in Aras (2021) the inclusion of the GARCH model prediction can be beneficial to ML model training, thus the predictions of model 3 will also be included in the dataset.
 
+```{r ARCH_figure_10,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 3 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
 
-!!!!!!!!!!! TABLE 4 and FIGURES 10, 11, 12, 13 and 14 - should be plotted directly !!!!!!!!!!!
+ac(ARCH_figures[[1]])
+
+```
+
+```{r ARCH_figure_11,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 4 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+
+ac(ARCH_figures[[2]])
+
+```
+
+```{r ARCH_figure_12,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 5 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+
+ac(ARCH_figures[[3]])
+
+```
+
+```{r ARCH_figure_13,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 6 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+
+ac(ARCH_figures[[4]])
+
+```
+
+
+!!!!!!!!!!! TABLE 4 - should be plotted directly !!!!!!!!!!!
 
 #### Additional autoregressive variables \label{addAuto}
 

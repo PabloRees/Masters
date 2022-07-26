@@ -1197,7 +1197,23 @@ Figure 4 depicts the Daily Percentage Change (DPC) in the S\&P 500 from
 Figure 5 illustrates the correlation between the DPC and standardized
 volume which justifies the extension of the dataset.
 
-!!!!!!!!!!! FIGURES 4 and 5 - should be plotted directly !!!!!!!!!!!
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1} 
+
+}
+
+\caption{S and P 500 Daily Percentage Change 1950 – Present \label{Figure4}}\label{fig:GSPC_figure_4}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1} 
+
+}
+
+\caption{Standardized volume (red) and absolute logDiff (green) \label{Figure5}}\label{fig:GSPC_figure_5}
+\end{figure}
 
 \hypertarget{volume}{%
 \paragraph{Volume}\label{volume}}
@@ -1230,7 +1246,32 @@ relationship between absolute DPC and stdVolControlled. Thus these
 residuals (rather than stdVol) should be included as a variable in the
 final prediction data.
 
-!!!!!!!!!!! FIGURES 6, 7 and 8 - should be plotted directly !!!!!!!!!!!
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_6-1} 
+
+}
+
+\caption{Absolute logDiff and stdVol \label{Figure6}}\label{fig:GSPC_figure_6}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_7-1} 
+
+}
+
+\caption{DateResid of StdVol (Red) and stdVol (Green) \label{Figure7}}\label{fig:GSPC_figure_7}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_8-1} 
+
+}
+
+\caption{stdVolControlled and absolute LogDiff \label{Figure8}}\label{fig:GSPC_figure_8}
+\end{figure}
 
 \hypertarget{arch-and-garch-testing}{%
 \paragraph{\texorpdfstring{ARCH and GARCH testing
@@ -1271,7 +1312,14 @@ in the 1st,2nd, 5th, 6th, 8th, and 9th lags. However, running a multiple
 linear regression (OLS) of DDPC on its lags reveals only the 2nd, 6th,
 8th and 9th lags as significant above the 95th percentile.
 
-!!!!!!!!!!! FIGURE 9 - should be plotted directly !!!!!!!!!!!
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/ARCH_figure_9-1} 
+
+}
+
+\caption{Autocorrelation and partial-autocorrelation functions of absolute LogDiff \label{Figure9}}\label{fig:ARCH_figure_9}
+\end{figure}
 
 Seven possible models were checked for performance considering the above
 results. Model 1 is an ARIMA(0,0,1) , model 2 is an ARIMA(1,0,0), model
@@ -1301,8 +1349,43 @@ the final dataset (\protect\hyperlink{ref-kotze2020univariate}{Kotzé,
 GARCH model prediction can be beneficial to ML model training, thus the
 predictions of model 3 will also be included in the dataset.
 
-!!!!!!!!!!! TABLE 4 and FIGURES 10, 11, 12, 13 and 14 - should be
-plotted directly !!!!!!!!!!!
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/ARCH_figure_10-1} 
+
+}
+
+\caption{Autocorrelation and partial-autocorrelation functions of model 3 residuals \label{Figure9}}\label{fig:ARCH_figure_10}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/ARCH_figure_11-1} 
+
+}
+
+\caption{Autocorrelation and partial-autocorrelation functions of model 4 residuals \label{Figure9}}\label{fig:ARCH_figure_11}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/ARCH_figure_12-1} 
+
+}
+
+\caption{Autocorrelation and partial-autocorrelation functions of model 5 residuals \label{Figure9}}\label{fig:ARCH_figure_12}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/ARCH_figure_13-1} 
+
+}
+
+\caption{Autocorrelation and partial-autocorrelation functions of model 6 residuals \label{Figure9}}\label{fig:ARCH_figure_13}
+\end{figure}
+
+!!!!!!!!!!! TABLE 4 - should be plotted directly !!!!!!!!!!!
 
 \hypertarget{additional-autoregressive-variables}{%
 \paragraph{\texorpdfstring{Additional autoregressive variables

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.7.18)  22 JUL 2022 13:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.7.26)  26 JUL 2022 12:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -420,7 +420,7 @@ Package hyperref Warning: Option `bookmarks' has already been used,
 
 Package hyperref Info: Option `colorlinks' set `true' on input line 87.
 (/Users/pablo/Library/TinyTeX/texmf-dist/tex/latex/siunitx/siunitx.sty
-Package: siunitx 2022-06-22 v3.1.4 A comprehensive (SI) units package
+Package: siunitx 2022-07-23 v3.1.5 A comprehensive (SI) units package
 \l__siunitx_angle_tmp_dim=\dimen172
 \l__siunitx_angle_marker_box=\box69
 \l__siunitx_angle_unit_box=\box70
@@ -589,6 +589,18 @@ File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
 
 LaTeX Warning: Label `novelty' multiply defined.
 
+
+LaTeX Warning: Label `Figure9' multiply defined.
+
+
+LaTeX Warning: Label `Figure9' multiply defined.
+
+
+LaTeX Warning: Label `Figure9' multiply defined.
+
+
+LaTeX Warning: Label `Figure9' multiply defined.
+
 )
 \openout1 = `Thesis_WriteUp.aux'.
 
@@ -734,55 +746,111 @@ File: Images/Doc2Vec_distributed_bow.png Graphic file (type png)
 <use Images/Doc2Vec_distributed_bow.png>
 Package pdftex.def Info: Images/Doc2Vec_distributed_bow.png  used on input line 1097.
 (pdftex.def)             Requested size: 427.48695pt x 431.42892pt.
-[20 <./Images/Doc2Vec_distributed_memory.png>] [21 <./Images/Doc2Vec_distributed_bow.png>] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31]
-<Thesis_WriteUp_files/figure-latex/Figure1-1.png, id=644, 433.62pt x 216.81pt>
+[20 <./Images/Doc2Vec_distributed_memory.png>] [21 <./Images/Doc2Vec_distributed_bow.png>] [22]
+<Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1.png, id=562, 433.62pt x 216.81pt>
+File: Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1.png  used on input line 1202.
+(pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+<Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1.png, id=563, 433.62pt x 216.81pt>
+File: Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1.png  used on input line 1211.
+(pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+[23 <./Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1.png>]
+<Thesis_WriteUp_files/figure-latex/GSPC_figure_6-1.png, id=576, 433.62pt x 216.81pt>
+File: Thesis_WriteUp_files/figure-latex/GSPC_figure_6-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/GSPC_figure_6-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/GSPC_figure_6-1.png  used on input line 1251.
+(pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+[24 <./Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1.png>]
+<Thesis_WriteUp_files/figure-latex/GSPC_figure_7-1.png, id=593, 433.62pt x 216.81pt>
+File: Thesis_WriteUp_files/figure-latex/GSPC_figure_7-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/GSPC_figure_7-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/GSPC_figure_7-1.png  used on input line 1260.
+(pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+<Thesis_WriteUp_files/figure-latex/GSPC_figure_8-1.png, id=594, 433.62pt x 216.81pt>
+File: Thesis_WriteUp_files/figure-latex/GSPC_figure_8-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/GSPC_figure_8-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/GSPC_figure_8-1.png  used on input line 1269.
+(pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+[25 <./Thesis_WriteUp_files/figure-latex/GSPC_figure_6-1.png> <./Thesis_WriteUp_files/figure-latex/GSPC_figure_7-1.png>]
+<Thesis_WriteUp_files/figure-latex/ARCH_figure_9-1.png, id=619, 433.62pt x 216.81pt>
+File: Thesis_WriteUp_files/figure-latex/ARCH_figure_9-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/ARCH_figure_9-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/ARCH_figure_9-1.png  used on input line 1317.
+(pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
+[26 <./Thesis_WriteUp_files/figure-latex/GSPC_figure_8-1.png>]
+<Thesis_WriteUp_files/figure-latex/ARCH_figure_10-1.png, id=638, 433.62pt x 252.945pt>
+File: Thesis_WriteUp_files/figure-latex/ARCH_figure_10-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/ARCH_figure_10-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/ARCH_figure_10-1.png  used on input line 1354.
+(pdftex.def)             Requested size: 433.61894pt x 252.94438pt.
+[27 <./Thesis_WriteUp_files/figure-latex/ARCH_figure_9-1.png>]
+<Thesis_WriteUp_files/figure-latex/ARCH_figure_11-1.png, id=649, 433.62pt x 252.945pt>
+File: Thesis_WriteUp_files/figure-latex/ARCH_figure_11-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/ARCH_figure_11-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/ARCH_figure_11-1.png  used on input line 1363.
+(pdftex.def)             Requested size: 433.61894pt x 252.94438pt.
+<Thesis_WriteUp_files/figure-latex/ARCH_figure_12-1.png, id=650, 433.62pt x 252.945pt>
+File: Thesis_WriteUp_files/figure-latex/ARCH_figure_12-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/ARCH_figure_12-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/ARCH_figure_12-1.png  used on input line 1372.
+(pdftex.def)             Requested size: 433.61894pt x 252.94438pt.
+[28 <./Thesis_WriteUp_files/figure-latex/ARCH_figure_10-1.png> <./Thesis_WriteUp_files/figure-latex/ARCH_figure_11-1.png>]
+<Thesis_WriteUp_files/figure-latex/ARCH_figure_13-1.png, id=667, 433.62pt x 252.945pt>
+File: Thesis_WriteUp_files/figure-latex/ARCH_figure_13-1.png Graphic file (type png)
+<use Thesis_WriteUp_files/figure-latex/ARCH_figure_13-1.png>
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/ARCH_figure_13-1.png  used on input line 1381.
+(pdftex.def)             Requested size: 433.61894pt x 252.94438pt.
+[29 <./Thesis_WriteUp_files/figure-latex/ARCH_figure_12-1.png> <./Thesis_WriteUp_files/figure-latex/ARCH_figure_13-1.png>] [30] [31] [32] [33] [34] [35] [36]
+<Thesis_WriteUp_files/figure-latex/Figure1-1.png, id=738, 433.62pt x 216.81pt>
 File: Thesis_WriteUp_files/figure-latex/Figure1-1.png Graphic file (type png)
 <use Thesis_WriteUp_files/figure-latex/Figure1-1.png>
-Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/Figure1-1.png  used on input line 1705.
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/Figure1-1.png  used on input line 1788.
 (pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
-[32 <./Thesis_WriteUp_files/figure-latex/Figure1-1.png>]
-<Thesis_WriteUp_files/figure-latex/Figure2-1.png, id=657, 433.62pt x 216.81pt>
+<Thesis_WriteUp_files/figure-latex/Figure2-1.png, id=739, 433.62pt x 216.81pt>
 File: Thesis_WriteUp_files/figure-latex/Figure2-1.png Graphic file (type png)
 <use Thesis_WriteUp_files/figure-latex/Figure2-1.png>
-Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/Figure2-1.png  used on input line 1719.
+Package pdftex.def Info: Thesis_WriteUp_files/figure-latex/Figure2-1.png  used on input line 1802.
 (pdftex.def)             Requested size: 433.61894pt x 216.80946pt.
-[33 <./Thesis_WriteUp_files/figure-latex/Figure2-1.png>] [34]
+[37 <./Thesis_WriteUp_files/figure-latex/Figure1-1.png>] [38 <./Thesis_WriteUp_files/figure-latex/Figure2-1.png>] [39]
 pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1881 \end{longtable}
-                       [35] [36]
+l.1964 \end{longtable}
+                       [40] [41]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <14> on input line 2014.
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2035.
+(Font)              <14> on input line 2097.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2118.
 (/Users/pablo/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [37] [38] [39] [40]
-Underfull \hbox (badness 10000) in paragraph at lines 2241--2244
+) [42] [43] [44] [45]
+Underfull \hbox (badness 10000) in paragraph at lines 2324--2327
 \T1/lmr/m/n/10.95 201325635200 & period2 = 1641340800 & interval = 1d & ^^\lter = history & frequency = 1d & includeAdj %
  []
 
 No file Thesis_WriteUp.bbl.
-[41] (./Thesis_WriteUp.aux)
+[46] (./Thesis_WriteUp.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Thesis_WriteUp.out' has not changed.
-(rerunfilecheck)             Checksum: C290CE26333D06CD5FE3D77556876C30;8539.
+(rerunfilecheck)             Checksum: 2F397DB016095D58BB6145D53645F7A2;8539.
  ) 
 Here is how much of TeX's memory you used:
- 17939 strings out of 479983
- 333558 string characters out of 5887212
- 626921 words of memory out of 5000000
- 35610 multiletter control sequences out of 15000+600000
+ 18080 strings out of 479983
+ 340015 string characters out of 5887212
+ 628399 words of memory out of 5000000
+ 35726 multiletter control sequences out of 15000+600000
  559408 words of font info for 93 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  72i,17n,77p,557b,1030s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/pablo/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/pablo/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/pablo/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/pablo/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/pablo/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/Users/pablo/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri7.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/pablo/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb>
-Output written on Thesis_WriteUp.pdf (41 pages, 1013241 bytes).
+Output written on Thesis_WriteUp.pdf (46 pages, 1650773 bytes).
 PDF statistics:
- 885 PDF objects out of 1000 (max. 8388607)
- 781 compressed objects within 8 object streams
- 211 named destinations out of 1000 (max. 500000)
- 415 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 985 PDF objects out of 1000 (max. 8388607)
+ 855 compressed objects within 9 object streams
+ 226 named destinations out of 1000 (max. 500000)
+ 465 words of extra memory for PDF output out of 10000 (max. 10000000)
 
