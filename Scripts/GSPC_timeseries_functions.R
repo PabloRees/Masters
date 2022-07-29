@@ -1,4 +1,4 @@
-
+source('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Scripts/std_fin-ts_data_setup.R')
 
 #Volume analysis
 volumeAnalysis <- function(GSPC){
@@ -87,8 +87,6 @@ volumeAnalysis <- function(GSPC){
     figureList
 }
 
-
-
 ARCHTests <- function(logDif){
 
     #res1 - looking for serial dependence i.e. significant lags
@@ -165,13 +163,6 @@ ARCHTests <- function(logDif){
     summary(model3.1)
     check3.1 <- ac(residuals(model3.1, standardize = T))
 
-    model3.2 <- garchFit(DlogDif ~ arma(2,0) + garch(1,1), data = DlogDif, trace = F) #indicates an AR(2) model might be appropriate, AIC is 2.395102
-    model3.2
-    summary(model3.2)
-    check3.2 <- ac(residuals(model3.2, standardize = T))
-    #need to include ar1, ar2 and variance1 of DlogDif in final data - this performs slightly better than model3
-
-
     model4 <- garchFit(DlogDif ~ garch(1, 1), data = DlogDif, cond.dist = "std",  #AIC is 2.36 and suggests a standard AR(1)
                        trace = F) # the high significance of lag 1 indicates that the AR(1) was better
     summary(model4)
@@ -189,15 +180,135 @@ ARCHTests <- function(logDif){
     mod6resid <- residuals(model6, standardize = T)
     check6 <- ac(mod6resid)
 
+    model8 <- garchFit(DlogDif ~ arma(2,0) + garch(1,1), data = DlogDif, trace = F) #indicates an AR(2) model might be appropriate, AIC is 2.395102
+    model8
+    summary(model8)
+    mod8resid <- residuals(model8, standardize = T)
+
+    check8 <- ac(residuals(model8, standardize = T))
+    #need to include ar1, ar2 and variance1 of DlogDif in final data - this performs slightly better than model3
+
     par(mfrow = c(1, 1))
-    plot.ts(residuals(model3.2, standardize = T))
+    plot.ts(residuals(model8, standardize = T))
 
     plot.ts(residuals(model3, standardize =T))
 
-    returnList <-  list(mod3resid , mod4resid , mod5resid , mod6resid)
+    ##EGARCH
 
-    rm(model1,model2,model3,model3.1,model3.2,model4,model5,model6,check1,check2,check3,check3.1,check3.2,check4,check5,check6)
+    pacman::p_load(rugarch, FinTS, zoo, e1071)
+    library(rugarch)
+    library(FinTS)
+    library(zoo)
+    library(e1071)
+
+    x <-  ugarchspec(variance.model =
+                         list(model="eGARCH", garchOrder=c(1,1)),mean.model =
+                         list(armaOrder=c(0,0)))
+
+    model7 <- ugarchfit(spec = x, data = DlogDif)
+    model7
+    mod7resid <- residuals(model7, standardize = T)
+    check7 <- ac(mod7resid)
+
+    returnList <-  list(mod3resid , mod4resid , mod5resid , mod6resid, mod7resid, mod8resid, model3, model4, model5, model6, model7, model8,DlogDif_df)
+
+    rm(model1,model2,model3,model3.1,model8,model4,model5,model6,check1,check2,check3,check3.1,check8,check4,check5,check6,x,model7,check7)
 
     returnList
 
+}
+
+catTSAnal <- function(GSPC){
+
+
+    GSPC <- GSPC %>% mutate(Weekday = weekdays(as.Date(Date))) %>%
+        mutate(Month = months(as.Date(Date))) %>%
+        mutate(Year = format(as.Date(Date),"%Y")) %>%
+        mutate(Monthday = format(as.Date(Date),"%d"))
+
+    logDif1 <- GSPC %>% dplyr::select(logDif)
+
+
+    change_pacf <- stats::acf(
+        x = logDif1,
+        plot = F,
+        type = "partial") # we want the PACF option
+
+    change_pacf
+
+    logDifVector <- logDif1%>% pull(logDif)
+
+    change_ADF1 <- ur.df(
+        y= logDifVector, #vector
+        type = "trend",
+        lags = 3,
+        selectlags = "AIC")
+
+    summary(change_ADF1) #yields 1 significant lag and a p-score less than 0,05 which suggests stationarity
+
+
+    LD_1 <- shift(logDifVector, 1)
+    LD_2 <- shift(logDifVector, 2)
+    LD_6 <- shift(logDifVector, 6)
+    LD_8 <- shift(logDifVector, 8)
+    LD_9 <- shift(logDifVector, 9)
+    LD_12 <- shift(logDifVector, 12)
+    LD_15 <- shift(logDifVector, 15)
+    LD_16 <- shift(logDifVector, 16)
+    LD_18 <- shift(logDifVector, 18)
+    LD_26 <- shift(logDifVector, 26)
+    LD_27 <- shift(logDifVector, 27)
+    LD_29 <- shift(logDifVector, 29)
+    LD_34 <- shift(logDifVector, 34)
+
+
+    stdVol <-  (GSPC$Volume - mean(GSPC$Volume))/sd(GSPC$Volume)
+    stdVol
+    stdVol_1 <- shift(stdVol, 1)
+    stdVol_2 <- shift(stdVol, 2)
+    stdVol_3 <- shift(stdVol, 3)
+
+    logDifAR_df <- GSPC %>% dplyr::select(Date, Weekday, Monthday, Month, Year) %>%
+        data.frame(logDifVector, stdVol_1, stdVol_2, stdVol_3, LD_1, LD_2, LD_6, LD_8, LD_9, LD_12, LD_15, LD_16, LD_18, LD_26,LD_27,LD_29, LD_34)
+
+    library(fixest)
+
+
+    #         regression (dependent ~ independent + independent, data = dataframe)
+    logDifAR_full <- feols(logDifVector ~ LD_2 + LD_6 + LD_8 + LD_12 + LD_15 + LD_16 + LD_18 + LD_26 + LD_27 + LD_29 + LD_34, data = logDifAR_df) # Adding an explanatory continuous variable
+
+    summary(logDifAR_full)
+
+    #         dropping LD's with * or ** significance - Adj R2 got worse
+    DailyChangeAR_highSig <- feols(logDifVector ~   LD_12 + LD_15 + LD_16 + LD_26  + LD_34, data = logDifAR_df) # Adding an explanatory continuous variable
+
+    summary(DailyChangeAR_highSig)
+
+    vol_reg <-  feols(logDifVector ~  stdVol_1 ,data=logDifAR_df)
+    summary(vol_reg)
+
+    dayRegression <- feols(logDif ~ i(Weekday) + i(Monthday) + i(Month) + i(Year), data = GSPC)
+    summary(dayRegression)
+
+    logDifAR_df <- logDifAR_df %>% mutate(September = ifelse(Month == 'September',1,0), Monday = ifelse(Weekday == 'Monday',1,0))
+
+    logDifAllSigModel  <- feols(logDifVector ~ stdVol_1  + LD_2 + LD_6 + LD_8 + LD_12 + LD_15 + LD_16 + LD_18 + LD_26 + LD_27 + LD_29 + LD_34  + i(September) + i(Monday) , data = logDifAR_df) # Adding an explanatory continuous variable
+
+    summary(logDifAllSigModel)
+
+    septMond_reg <- feols(logDifVector ~ i(September) + i(Monday), data = logDifAR_df)
+
+    returnList <-  list(logDifAR_full,DailyChangeAR_highSig,vol_reg,dayRegression,logDifAllSigModel,septMond_reg)
+
+}
+
+plotPACF <- function(GSPC){
+
+    logDif <- GSPC %>% dplyr::select(logDif)
+
+
+    change_pacf <- stats::acf(
+        x = logDif,
+        plot = T,
+        type = "partial") # we want the PACF option
 }

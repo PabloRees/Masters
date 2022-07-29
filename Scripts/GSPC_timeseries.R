@@ -71,7 +71,7 @@ volumeAnalysis(GSPC)
 ####################################
 ##ARCH  TESTS - Kevin Kotze tutorial
 
-ARCHTests(logDif)
+DlogDif_df <- ARCHTests(logDif)[13]
 
 #####################################
 ###Positive vs negative movements
@@ -79,8 +79,10 @@ ARCHTests(logDif)
 positive_vec <- vector()
 negative_vec <- vector()
 
-for (i in DlogDif)
-{
+DlogDif <- logDif-mean(logDif)
+
+
+for (i in DlogDif){
   if (i >0){
     positive_vec <- c(positive_vec, i)}
 
@@ -94,8 +96,7 @@ pos_neg_ratio
 
 pos_neg_transform <- vector()
 
-for (i in DlogDif)
-{
+for (i in DlogDif){
   if (i >0){
     pos_neg_transform <- c(pos_neg_transform, 1)}
 
@@ -107,25 +108,7 @@ pos_neg_transform <- shift(pos_neg_transform,1)
 
 rm(negative_vec,positive_vec,i,pos_neg_ratio)
 ######################################
-##EGARCH
 
-pacman::p_load(rugarch, FinTS, zoo, e1071)
-library(rugarch)
-library(FinTS)
-library(zoo)
-library(e1071)
-
-x <-  ugarchspec(variance.model =
-                   list(model="eGARCH", garchOrder=c(1,1)),mean.model =
-                   list(armaOrder=c(0,0)))
-
-model5 <- ugarchfit(spec = x, data = DlogDif)
-
-model5
-
-check5 <- ac(residuals(model5, standardize = T))
-
-rm(x,model5,check5)
 
 #######################################
 ##Export data setup
@@ -136,6 +119,8 @@ DlogDif_df <- DlogDif_df |> mutate(absDlogDif = abs(DlogDif),absDlogDif_1 = abs(
 output_df <- data.frame(Date = GSPC$Date, DlogDif_df,logDif = GSPC$logDif,
                         logDif_date_resid = GSPC$logDif_date_resid,
                         logDif_date_resid_1 = GSPC$logDif_date_resid_1,
+                        logDif_date_resid_2 = GSPC$logDif_date_resid_2,
+
                         blackSwan_SD3_1 = shift(GSPC$blackSwan_SD3,1),
                         blackSwan_SD4_1 = shift(GSPC$blackSwan_SD4,1),
                         blackSwan_SD5_1 = shift(GSPC$blackSwan_SD5,1),

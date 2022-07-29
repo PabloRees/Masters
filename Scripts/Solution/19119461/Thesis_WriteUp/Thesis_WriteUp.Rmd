@@ -346,7 +346,63 @@ Running time series analysis on the daily percentage change in the S&P 500 after
 
 While the years 2002 and 2008 are justifiable as significant because of the financial crashes that happened in each of those years (2002 – dot com bubble and 2008 housing bubble) and September is also relatable to the housing bubble; it is difficult to rationally justify the monthday variables as significant regardless of their quantitative significance. The high number of lags is also difficult to justify and implies rather that there may be persistence of volatility. Thus the following section focusses on the modelling of volatility over a time period that maximises the inclusion of volume statistics in the data. All of the analysis reported in this section was done in R using the packages ‘stats’, ‘dplyr’, ‘urca’, ‘tidyverse’, ‘ggplot2’ and ‘fixest’ (Marais, 2022).
 
-!!!!!!!!!!!!TABLES 3, 4 and 5 here!!!!!!!!!!!!
+
+```{r GSPC_TS_regs1, results = 'asis'}
+
+if(!require(huxtable)) install.packages(huxtable)
+library(huxtable)
+data(diamonds, package = 'ggplot2')
+Title <- "Exploratory Regression Output 1"
+Label <- "Reg01"
+regsList <- catTSAnal(GSPC)
+
+lm1 <- regsList[[1]]
+lm2 <- regsList[[2]]
+htab <-
+huxreg(lm1, lm2,
+                statistics = c(N = "nobs", R2 = "r.squared"),
+                note = "%stars%.") %>%
+  set_caption(Title) %>%
+  set_label(Label)
+# More settings:
+font_size(htab) <- 12
+# Let's change regression names: this is slightly hacky, but works. Comment out this section to see what the default looks like:
+  Names <- c( "Reg1", "Reg2")
+  for(i in 1:length(Names)) {
+    htab[1,][[1+i]] <- Names[i]
+  }
+# Now simply call the table:
+htab
+
+```
+
+```{r GSPC_TS_regs2, results = 'asis'}
+
+if(!require(huxtable)) install.packages(huxtable)
+library(huxtable)
+data(diamonds, package = 'ggplot2')
+Title <- "Exploratory Regression Output 2"
+Label <- "Reg01"
+regsList <- catTSAnal(GSPC)
+
+lm1 <- regsList[[6]]
+htab <-
+huxreg(lm1,
+                statistics = c(N = "nobs", R2 = "r.squared"),
+                note = "%stars%.") %>%
+  set_caption(Title) %>%
+  set_label(Label)
+# More settings:
+font_size(htab) <- 12
+# Let's change regression names: this is slightly hacky, but works. Comment out this section to see what the default looks like:
+  Names <- c( "Reg3")
+  for(i in 1:length(Names)) {
+    htab[1,][[1+i]] <- Names[i]
+  }
+# Now simply call the table:
+htab
+
+```
 
 ### 1950 onwards – ARCH model
 A second round of time series analysis was performed on all the data after Jan 1st 1950 which revealed that an ARMA(1,0) GARCH(1,1) model might be the most appropriate fit to the data and that the first lag on a date controlled version of standardized volume is a good predictor of DPC. The secondary analysis was performed because the number (and non-consecutiveness) of significant lags in the first model was out of the ordinary. The choice was made to extend the dataset back to 1950 because lagged volume appeared to be significant and volume data is available from that time onwards. 
@@ -412,37 +468,73 @@ ac(abs(logDif))
 
 ```
 
-Seven possible models were checked for performance considering the above results. Model 1 is an ARIMA(0,0,1) , model 2 is an ARIMA(1,0,0), model 3 is an ARMA(1,0) GARCH(1,1),  model 4 is a GARCH(1,1), model 5 is an EGARCH(1,1), model 6 is an ARMA(1,0) ARCH(1,0) and model 7 is an ARCH(1,0). The inclusion of an EGARCH model is motivated by its use in Nelson (1991), Blazsek & Mendoza (2016) and Tiwari, Raheem & Kang (2019) in their time series analyses of the S&P 500. Table 4 compares the coefficients from the 5 ARCH model variations (models 3, 4 and 5). Figure 10, 11 and 12, 13 and 14 show the results of autocorrelation and partial-autocorrelation functions of the residuals of the 5 ARCH variation models. Notably, all three of the models that do not contain an ARMA(1,0) component (models 4,5 and 7) yield a significant first residual indicating that inclusion of the ARMA(1,0) component is important. Further, model 6 – the non-generalized ARCH model –has intermittent significant residuals indicating that volatility is clustered and persistent. Persistent volatility is one of the oversights of the ARCH model that is addressed in the GARCH model . As can be seen, Model 3 (Figure 10) yields the least significant residuals and as such has been selected as the model that best fits this time series. The model linearly predicts the dependent variable using the first lag of the dependent variable, the first residual of an ARMA(6,0) model and the first lag of variance in the time series. As such the 1st , 2nd and 6th lags of DDPC and the first lag of variance of DPC will be included in the final dataset [@kotze2020univariate]. Additionally, as illustrated in Aras (2021) the inclusion of the GARCH model prediction can be beneficial to ML model training, thus the predictions of model 3 will also be included in the dataset.
+Eight models were tested for performance considering the above results. Model 1 is an ARIMA(0,0,1) , model 2 is an ARIMA(1,0,0), model 3 is an ARMA(1,0) GARCH(1,1),  model 4 is a GARCH(1,1), model 5 is an EGARCH(1,1), model 6 is an ARMA(1,0) ARCH(1,0), model 7 is an ARCH(1,0) and model 8 is an ARMA(2,0) GARCH(1,1). The inclusion of an EGARCH model is motivated by its use in Nelson (1991), Blazsek & Mendoza (2016) and Tiwari, Raheem & Kang (2019) in their time series analyses of the S&P 500. Table 4 compares the coefficients from the 6 ARCH model variations (models 3, 4, 5, 6, 7 and 8). Figure 10, 11 and 12, 13, 14 and 15 show the results of autocorrelation and partial-autocorrelation functions of the residuals of the 6 ARCH variation models. Notably, all three of the models that do not contain an ARMA(1,0) component (models 4,5 and 7) yield a significant first residual indicating that inclusion of the ARMA(1,0) component is important. However, all the models containing an ARCH(1,0) - besides model 6 - component yield a significant second residual  Further, model 6 – the non-generalized ARCH model – has intermittent significant residuals indicating that volatility is clustered and persistent. Persistent volatility is one of the oversights of the ARCH model that is addressed in the GARCH model. As can be seen, Model 8 (Figure 3.15) yields the least significant residuals and as such has been selected as the model that best fits this time series. The model linearly predicts the dependent variable using the first and second lags of the dependent variable, the first residual of an ARMA(1,0) model and the first lag of variance in the time series. As such the 1st and 2nd  lags of DlogDif and the first lag of variance of logDif will be included in the final dataset [@kotze2020univariate]. Additionally, as illustrated in Aras (2021) the inclusion of the GARCH model prediction can be beneficial to ML model training, thus the predictions of model 8 will also be included in the dataset.
 
-```{r ARCH_figure_10,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 3 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+```{r ARCH_figure_10,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 3 - ARMA(1,0) GARCH(1,1) - residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
 
 ac(ARCH_figures[[1]])
 
 ```
 
-```{r ARCH_figure_11,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 4 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+```{r ARCH_figure_11,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 4 - GARCH(1,1) -  residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
 
 ac(ARCH_figures[[2]])
 
 ```
 
-```{r ARCH_figure_12,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 5 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+```{r ARCH_figure_12,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 5 - EGARCH(1,1) -  residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
 
 ac(ARCH_figures[[3]])
 
 ```
 
-```{r ARCH_figure_13,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 6 residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+```{r ARCH_figure_13,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 6 - ARMA(1,0) ARCH(1,0) - residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
 
 ac(ARCH_figures[[4]])
 
 ```
 
+```{r ARCH_figure_14,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 7 - ARCH(1,0) - residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
 
-!!!!!!!!!!! TABLE 4 - should be plotted directly !!!!!!!!!!!
+ac(ARCH_figures[[5]])
+
+```
+
+```{r ARCH_figure_15,  warning =  FALSE, fig.align = 'center', fig.cap = "Autocorrelation and partial-autocorrelation functions of model 8 - ARMA(2,0) GARCH(1,1) - residuals \\label{Figure9}", fig.ext = 'png', fig.height = 3.5, fig.width = 6}
+
+ac(ARCH_figures[[6]])
+
+```
+
+```{r GARCH stats, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+require(pander)
+panderOptions('table.split.table', Inf)
+set.caption("Significancies of various ARCH models")
+
+Statistic <- c("Specification","$\\mu$", "AR1","AR2",    "$\\omega$","$\\alpha$ 1","$\\beta$ 1" ,"$\\gamma$ 1" )
+
+Model3    <- c("ARMA(1,0) G(1,1)", "1"     , "-","-"   , "2.22e-16 ***", "<2e-16 ***", "<2e-16 ***","-" )
+
+Model4    <- c("G(1,1)  ", "1", "<2e-16 ***","-", "<2e-16 ***", "<2e-16 ***", "<2e-16 ***","-" )
+
+Model5    <- c("EG(1,1)", "1", "6.16e-08 ***","-", "<2e-16 ***", "<2e-16 ***", "-","-" )
+
+Model6    <- c("ARMA(1,0) ARCH(1,0)", "1", "-","-", "<2e-16 ***", "<2e-16 ***", "-","-" )
+
+Model7    <- c("ARCH(1,0)", "1", "-","-", "<0.005 ***", "<2e-16 ***", "<2e-16 ***","<2e-16 ***" )
+
+Model8    <- c("ARMA(2,0) G(1,1)", "1" , "< 2e-16 ***"   , "0.00355 **", "<2e-16 ***", "<2e-16 ***","<2e-16 ***","-" )
+
+
+
+df <- data.frame(Statistic, Model3, Model4, Model5, Model6, Model7, Model8)
+
+row.names(df)<-NULL
+pander(df, style = 'rmarkdown')
+```
 
 #### Additional autoregressive variables \label{addAuto}
-
+A few additional autoregressive variables were included to bolster the information available to the algorithms under the assumption that the linear modelling completed here is insufficient to exhaustively extract useful variables. 
 
 !!!NEED TO WRITE THIS SECTION!!!
 
@@ -555,256 +647,8 @@ NN algorithms were responsible for six of the lowest ten MAEs and SGD models wer
 
 # Conclusion
 
-<!-- The following is a code chunk. It must have its own unique name (after the r), or no name. After the comma follows commands for R which are self-explanatory. By default, the code and messages will not be printed in your pdf, just the output: -->
 
-```{r Figure1,  warning =  FALSE, fig.align = 'center', fig.cap = "Caption Here \\label{Figure1}", fig.ext = 'png', fig.height = 3, fig.width = 6}
 
-  # This is just a random plot to show you a plot. This is done if the getwd() does not point to your Template's directory.
-  # Set WD below to your project's working directory.
-
-  g <-
-  ggplot(data = mtcars) +
-  geom_point(aes(x = disp, y = hp, color = cyl)) +
-  theme_bw() +
-  # theme(legend.position = "none") +
-  theme(plot.title = element_text(size = 10)) +
-  theme(axis.title = element_text(size = 10),
-        axis.title.x = element_text()) +
-  labs(y = "y-axis", x = "x-axis", title = "Some amazing plot")
-
-g
-
-```
-
-To make your graphs look extra nice in latex world, you could use Tikz device. Replace dev - 'png' with 'tikz' in the chunk below. Notice this makes the build time longer and produces extra tex files - so if you are comfortable with this, set your device to Tikz and try it out:
-
-```{r Figure2, warning =  FALSE, fig.align = 'center', fig.cap = "Caption Here \\label{Figure2}", fig.height = 3, fig.width = 6, dev = 'png'}
-
-ExampleData <- read_rds( "data/Example_data.rds")
-
-source("code/Example_Plot_Scatter.R") # Load a function from your 'code' folder. This e.g. plots scatters to your own preferences.
-source( "code/Data_Create.R") #
-
-ExampleData <- Data_Create(N = 100) # Same as the ExampleData loaded above - this is just a function to create the stored data.
-
-g <- Example_Plot_Scatter(DataInput = ExampleData,
-                          X = "Height_Score",
-                          Y = "Weight_Score",
-                          Z = "Agility_Score",
-                          Theme = theme_bw(), # run ?ggthemes for other themes.
-                          Title = "", # I prefer to use the caption set above.
-                          Ylab = "Height",
-                          Xlab = "Lenght",
-                          LegendTitle = "Agility",
-                          TitleSize = 10,
-                          LabSize = 10)
-
-g
-
-# Although the functions above are really simple, the principle is simple: containing calculations and data wrangling in their own functions will make this template much cleaner and more manageable.
-# When you start working, delete these meaningless functions and replace with your own...
-
-```
-
-To reference the plot above, add a ``\\label'' after the caption in the chunk heading, as done above. Then reference the plot as such: As can be seen, Figures \ref{Figure1}  and \ref{Figure2} are excellent, with Figure \ref{Figure2} being particularly aesthetically pleasing due to its device setting of Tikz. The nice thing now is that it correctly numbers all your figures (and sections or tables) and will update if it moves. The links are also dynamic.
-
-I very strongly suggest using ggplot2 (ideally in combination with dplyr) using the ggtheme package to change the themes of your figures.
-
-Also note the information that I have placed above the chunks in the code chunks for the figures. You can edit any of these easily - visit the Rmarkdown webpage for more information.
-
-# Splitting a page
-
-You can also very easily split a page using built-in Pandoc formatting. I comment this out in the code (as this has caused issues building the pdf for some users - which I presume to be a Pandoc issue), but you are welcome to try it out yourself by commenting out the following section in your Rmd file.
-
-
-<!-- :::::: {.columns data-latex="[T]"} -->
-<!-- ::: {.column data-latex="{0.7\textwidth}"} -->
-<!-- ```{r, echo=FALSE, fig.width=4, fig.height=4} -->
-<!-- par(mar = c(4, 4, .2, .1)) -->
-<!-- plot(cars, pch = 19) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- ::: {.column data-latex="{0.05\textwidth}"} -->
-<!-- \ -->
-<!-- ::: -->
-<!-- ::: {.column data-latex="{0.2\textwidth}"} -->
-<!-- \scriptsize -->
-
-<!-- ## Data {-} -->
-<!-- The figure on the left-hand side shows the `cars` data. -->
-
-<!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do -->
-<!-- eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut -->
-<!-- enim ad minim veniam, quis nostrud exercitation ullamco laboris -->
-<!-- nisi ut aliquip ex ea commodo consequat. -->
-<!-- ::: -->
-<!-- :::::: -->
-
-
-
-#  Methodology \label{Meth}
-
-## Subsection
-Ideally do not overuse subsections. It equates to bad writing.^[This is an example of a footnote by the way. Something that should also not be overused.]
-
-## Math section
-
-Equations should be written as such:
-
-\begin{align}
-\beta = \sum_{i = 1}^{\infty}\frac{\alpha^2}{\sigma_{t-1}^2} \label{eq3} \\
-\int_{x = 1}^{\infty}x_{i} = 1 \notag
-\end{align}
-
-If you would like to see the equations as you type in Rmarkdown, use $ symbols instead (see this for yourself by adjusted the equation):
-
-$$
-\beta = \sum_{i = 1}^{\infty}\frac{\alpha^2}{\sigma_{t-1}^2} \\
-\int_{x = 1}^{\infty}x_{i} = 1
-$$
-
-Note again the reference to equation \ref{eq3}. Writing nice math requires practice. Note I used a forward slashes to make a space in the equations. I can also align equations using  __\&__, and set to numbering only the first line. Now I will have to type ``begin equation'' which is a native \LaTeX command. Here follows a more complicated equation:
-
-
-\begin{align}
-	y_t &= c + B(L) y_{t-1} + e_t   \label{eq4}    \\ \notag
-	e_t &= H_t^{1/2}  z_t ; \quad z_t \sim  N(0,I_N) \quad \& \quad H_t = D_tR_tD_t \\ \notag
-		D_t^2 &= {\sigma_{1,t}, \dots, \sigma_{N,t}}   \\ \notag
-		\sigma_{i,t}^2 &= \gamma_i+\kappa_{i,t}  v_{i, t-1}^2 +\eta_i  \sigma_{i, t-1}^2, \quad \forall i \\ \notag
-		R_{t, i, j} &= {diag(Q_{t, i, j}}^{-1}) . Q_{t, i, j} . diag(Q_{t, i, j}^{-1})  \\ \notag
-		Q_{t, i, j} &= (1-\alpha-\beta)  \bar{Q} + \alpha  z_t  z_t'  + \beta  Q_{t, i, j} \notag
-\end{align}
-
-Note that in \ref{eq2} I have aligned the equations by the equal signs. I also want only one tag, and I create spaces using ``quads''.
-
-See if you can figure out how to do complex math using the two examples provided in \ref{eq3} and \ref{eq4}.
-
-<!-- $$ -->
-<!-- This is a commented out section in the writing part. -->
-<!-- Comments are created by highlighting text, amnd pressing CTL+C -->
-<!-- \\begin{align} -->
-<!-- \\beta = \\alpha^2 -->
-<!-- \end{align} -->
-<!-- $$ -->
-
-# Results
-
-Tables can be included as follows. Use the _xtable_ (or kable) package for tables. Table placement = H implies Latex tries to place the table Here, and not on a new page (there are, however, very many ways to skin this cat. Luckily there are many forums online!).
-
-
-```{r ShortTable, results = 'asis'}
-
-library(xtable)
-data <- mtcars[1:5,] %>% tibble::as_tibble()
-
-table <- xtable(data, caption = "Short Table Example \\label{tab1}")
-  print.xtable(table,
-             # tabular.environment = "longtable",
-             floating = TRUE,
-             table.placement = 'H',
-             # scalebox = 0.3,
-             comment = FALSE,
-             caption.placement = 'bottom'
-             )
-
-```
-
-To reference calculations __in text__, _do this:_ From table \ref{tab1} we see the average value of mpg is `r mean(mtcars[1:5,]$mpg)`.
-
-Including tables that span across pages, use the following (note that I add below the table: ``continue on the next page''). This is a neat way of splitting your table across a page.
-
-Use the following default settings to build your own possibly long tables. Note that the following will fit on one page if it can, but cleanly spreads over multiple pages:
-
-```{r LongTable, results = 'asis'}
-
-library(xtable)
-
-data = mtcars %>% tibble::as_tibble()
-  addtorow          <- list()
-  addtorow$pos      <- list()
-  addtorow$pos[[1]] <- c(0)
-  addtorow$command  <- c(paste("\\hline \n",
-                               "\\endhead \n",
-                               "\\hline \n",
-                               "{\\footnotesize Continued on next page} \n",
-                               "\\endfoot \n",
-                               "\\endlastfoot \n",sep=""))
-table <- xtable(data, caption = "Long Table Example")
-  print.xtable(table,
-             tabular.environment = "longtable",
-             floating = FALSE, # Leave this as is.
-             table.placement = 'H', # Leave this as is.
-             booktabs = T, # Aesthetics
-             include.rownames = FALSE,  # Typically you don't want this in a table.
-             add.to.row = addtorow, # For adding the Continued on next page part...
-             comment = FALSE,
-             caption.placement = 'top',  # Where do you want the caption?
-             size="\\fontsize{12pt}{13pt}\\selectfont"  # Size of text in table..
-             )
-# See https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf for table inspiration
-```
-
-\hfill
-
-<!-- hfill can be used to create a space, like here between text and table. -->
-
-
-## Huxtable
-
-Huxtable is a very nice package for making working with tables between Rmarkdown and Tex easier.
-
-This cost some adjustment to the Tex templates to make it work, but it now works nicely.
-
-See documentation for this package [here](https://hughjonesd.github.io/huxtable/huxtable.html). A particularly nice addition of this package is for making the printing of regression results a joy (see [here](https://hughjonesd.github.io/huxtable/huxtable.html#creating-a-regression-table)). Here follows an example:
-
-
-If you are eager to use huxtable, comment out the Huxtable table in the Rmd template, and uncomment the colortbl package in your Rmd's root.
-
-Note that I do not include this in the ordinary template, as some latex users have complained it breaks when they build their Rmds (especially those using tidytex - I don't have this problem as I have the full Miktex installed on mine). Up to you, but I strongly recommend installing the package manually and using huxtable. To make this work, uncomment the _Adding additional latex packages_ part in yaml at the top of the Rmd file. Then comment out the huxtable example in the template below this line. Reknit, and enjoy.
-
-```{r, results = 'asis'}
-
-if(!require(huxtable)) install.packages(huxtable)
-library(huxtable)
-data(diamonds, package = 'ggplot2')
-Title <- "Regression Output"
-Label <- "Reg01"
-lm1 <- lm(price ~ carat, diamonds)
-lm2 <- lm(price ~ depth, diamonds)
-lm3 <- lm(price ~ carat + depth, diamonds)
-htab <-
-huxreg(lm1, lm2, lm3,
-                statistics = c(N = "nobs", R2 = "r.squared"),
-                note = "%stars%.") %>%
-  set_caption(Title) %>%
-  set_label(Label)
-# More settings:
-font_size(htab) <- 12
-# Let's change regression names: this is slightly hacky, but works. Comment out this section to see what the default looks like:
-  Names <- c( "Reg1", "Reg2", "Reg3")
-  for(i in 1:length(Names)) {
-    htab[1,][[1+i]] <- Names[i]
-  }
-# Now simply call the table:
-htab
-
-```
-
-FYI - R also recently introduced the gt package, which is worthwhile exploring too.
-
-# Lists
-
-To add lists, simply using the following notation
-
-* This is really simple
-
-    + Just note the spaces here - writing in R you have to sometimes be pedantic about spaces...
-
-* Note that Rmarkdown notation removes the pain of defining \LaTeX environments!
-
-# Conclusion
-
-I hope you find this template useful. Remember, stackoverflow is your friend - use it to find answers to questions. Feel free to write me a mail if you have any questions regarding the use of this package. To cite this package, simply type citation("Texevier") in Rstudio to get the citation for @Texevier (Note that uncited references in your bibtex file will not be included in References).
 
 <!-- Make title of bibliography here: -->
 <!-- \newpage -->
