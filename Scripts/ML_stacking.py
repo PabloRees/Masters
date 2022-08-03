@@ -37,6 +37,8 @@ def setupSingleRun():
 
 filePath = '/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Combine_sameday_speeches/Combine_sameday_speeches_final_transposed.csv'
 
+nonCombineddf = pd.read_csv('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Data/Complete_data/final_dataset(73827, 458).csv')
+
 df = pd.read_csv(filePath)
 print(f'There are {len(df)} entries in the df and {len(df["Date"].unique())} unique dates in the df for a ratio of {len(df["Date"].unique())/len(df)}')
 
@@ -271,6 +273,18 @@ def checkScore(score):
 
     return finalScore
 
+figSavePath = f'/Users/pablo/Desktop/Masters/Github_Repository/Masters/Scripts/Solution/19119461/Thesis_WriteUp/Images/ELasticGrid_DV_20_3_0,1.png'
+
+X_1 = X_control + X_meta + DV_20
+X_2 = ['DlogDif_1', 'DlogDif_2', 'Nasdaq_ld_1', 'blackSwan_SD3_1','pos_neg_transform','USDX_ld_1']
+X_3 = ['DlogDif_1', 'DlogDif_2', 'Nasdaq_ld_1','pos_neg_transform','SSE_ld_1','VIX_ld_1','Oil_ld_1','USDX_ld_1','blackSwan_SD4_1','stdVol_1DateResid']
+possBest2 = ['DlogDif_1', 'DlogDif_2', 'Nasdaq_ld_1','pos_neg_transform','Oil_ld_1','VIX_ld_1','DV_20_6','DV_20_8','DV_20_13','DV_20_15']
+for i in possBest2:
+    X_1.remove(i)
+
+shrinkTest = Shrinkage_Methods( nonCombineddf, DV_20 ,'DlogDif', 10)
+
+shrinkTest.Elastic_Gridsearch(l1_ratio=0.1, show_coefficients=True, minAlpha=0, maxAlpha=2, figSavePath=figSavePath)
 
 
 

@@ -9,12 +9,15 @@ import seaborn as sns
 
 class Shrinkage_Methods:
 
-    def __init__(self, data:pandas.DataFrame, X_variables: list[str],Y_variable: str,  num_features: int=10 ):
+    def __init__(self, data: pd.DataFrame, X_variables: list[str], Y_variable: str, num_features: int = 10):
         data.dropna(inplace=True)
-        self.X_variables = data[X_variables]
         self.Y_variable = data[Y_variable]
-        self.num_features = num_features
+        self.X_variables = data[X_variables]
 
+        if Y_variable in X_variables:
+            self.X_variables.drop(columns=[Y_variable], inplace=True)
+
+        self.num_features = num_features
 
     def run_ElasticNet(self):
 
@@ -60,7 +63,7 @@ class Shrinkage_Methods:
 
         return regr
 
-    def Elastic_Gridsearch(self,l1_ratio,show_coefficients=False,minAlpha=0,maxAlpha=10):
+    def Elastic_Gridsearch(self,l1_ratio,figSavePath:str,show_coefficients=False,minAlpha=0,maxAlpha=10):
         l1_ratio = l1_ratio
         alphas = range(100*minAlpha,100*maxAlpha,2)
         alphas = [x/100 for x in alphas]
@@ -76,6 +79,7 @@ class Shrinkage_Methods:
             colNames.append(i)
 
         results_df = pd.DataFrame(results_list,columns=colNames)
+        print(results_df.head(5))
         colNames.pop(0)
         long_results_df = pd.melt(results_df,id_vars='alpha',value_vars=colNames)
 
@@ -85,14 +89,14 @@ class Shrinkage_Methods:
         sns.set_theme(style='darkgrid')
         sns.lineplot(data = long_results_df,x='alpha', y='value',hue = 'variable', palette='colorblind')
 
+
         plt.legend(list(self.X_variables.columns),loc='upper right')
+        plt.savefig(figSavePath)
         plt.show()
 
         if show_coefficients:
             for i in results_df.columns:
                 print(f'\n{i}:{results_df.loc[0][i]}')
-
-
 
 
 
