@@ -235,28 +235,20 @@ Stellenbosch University.\par}
 
 \begin{abstract}
 \small{
-Less than 500 words
-
-Purpose and motivation:
-
-Problem statement: The purpose of this study is to\ldots{}
-
-Methods: Time series, NLP, comparison of ML prediction and regression
-between datasets that contain NLP variables and those that don't
-
-Results:
-
-Conclusion: What do the results mean in the context of the problem? What
-unanswered questions remain? What other studies might yield solutions to
-these problems?
-
-Abstract to be written here. The abstract should not be too long and
-should provide the reader with a good understanding what you are writing
-about. Academic papers are not like novels where you keep the reader in
-suspense. To be effective in getting others to read your paper, be as
-open and concise about your findings here as possible. Ideally, upon
-reading your abstract, the reader should feel he / she must read your
-paper in entirety.
+The literature relating textual data to stock market data is deep but
+neglects to include the relation between speeches given by presidents
+and stock markets. This paper begins to fill this gap by exploring the
+relationship between U.S. presidential speeches and daily price
+movements in the S\&P 500 index. It was possible to explore this
+relationship by using natural language processing techniques,
+econometric time-series analysis and machine learning models. It was
+found that models including presidential speech data can achieve
+prediction accuracy of about 65\% over S\&P 500 index price movements.
+This is an increase of about 1\% over the models that did not include
+the presidential speech data (without losing ground in either recall or
+precision). Thus it is concluded that presidential speeches hold
+predictive power over stock market movements and that this relationship
+can be used to improve the power of predictive models.
 }
 \end{abstract}
 
@@ -311,20 +303,33 @@ S\&P 500 \sep Machine Learning \sep Natural Language Processing
 \section{\texorpdfstring{Introduction
 \label{Introduction}}{Introduction }}\label{introduction}}
 
-\begin{quote}
-I suggest renaming the top line after @article, as done in the template
-ref.bib file, to something more intuitive for you to remember. Do not
-change the rest of the code. Also, be mindful of the fact that bib
-references from google scholar may at times be incorrect. Reference
-Latex forums for correct bibtex notation.
-\end{quote}
+A lot of research exists relating text data to various types of
+financial market or macroeconomic data. Twitter is often the source of
+text data and the United States stock market is often the source of
+financial data. However, presidential speeches have so far been
+overlooked as a potential source of information pertaining to stock
+markets. This project begins to fill that gap in the literature.
 
-\hypertarget{data}{%
-\section*{Data}\label{data}}
-\addcontentsline{toc}{section}{Data}
+In specific, this project shows that U.S. Presidential Speeches have
+predictive power over S\&P 500 price fluctuations. In order to prove
+this, natural language processing (NLP), machine learning (ML) and time
+series analysis were used. The usage of these 3 methods allowed for the
+comparison of models based on purely financial data with models based on
+a combination of financial and language data. The result being that the
+best models based on a combination of financial and language data
+outperformed the best purely financial models by about 1\% in terms of
+predictive accuracy at a daily resolution.
 
-Notice how I used the curly brackets and dash to remove the numbering of
-the data section.
+This paper is divided into 4 main sections: a literature review, a data
+section, an explanation of the experiment design, and a results section.
+The literature review begins by defending 2 basic conjectures assumed by
+the undertaking of this project by citing results of other works and
+concludes by reviewing machine learning (ML) and natural language
+processing (NLP) methods that those works have used. The data section
+explains how the data was gathered, cleaned, manipulated, engineered and
+organised. The experiment section explains the exact construction of
+various sets of models that could be compared for best performance and
+finally, the results section reports these performances.
 
 \hypertarget{literature-review}{%
 \section{\texorpdfstring{Literature review
@@ -811,8 +816,8 @@ results used in a time series analysis of the financial time series
 (S\&P 500) data in order to extract useable auto-regressive features
 from it for the control data-subset.
 
-\hypertarget{data-1}{%
-\subsection{Data}\label{data-1}}
+\hypertarget{data}{%
+\subsection{Data}\label{data}}
 
 Three types of data were gathered for this project, namely: presidential
 speeches/text data (all the transcripts from the Presidency Project
@@ -867,11 +872,10 @@ variable was created by removing the stopwords\footnote{Stopwords are
   words that commonly occur in the English language and are therefore
   unlikely to contain any sort of signal and thus constitute only noise.}
 in the Natural Language Tool Kit (NLTK) stop words dictionary from the
-clean transcript. The original transcripts were also kept. Table A1 in
-Appendix A shows the shape of the data at this point. The cleaning of
-both the speech data and both financial datasets was done in their
-original collection scripts, i.e.~the `fin\_data\_downloader' Python
-script and the `WebScrapeAndClean' Python script respectively.
+clean transcript. The original transcripts were also kept. The cleaning
+of the speech data and both financial data-subsets was done in their
+original collection modules, i.e.~the `fin\_data\_downloader' Python
+modules and the `WebScrapeAndClean' Python modules respectively.
 
 \hypertarget{text-feature-engineering}{%
 \subsection{Text feature engineering}\label{text-feature-engineering}}
@@ -886,7 +890,8 @@ broad methods of feature engineering: feature selection, feature
 extraction and the creation of new features
 (\protect\hyperlink{ref-geron2019hands}{Géron, 2019: 27}). In this
 section the creation of new features occurred and took the form of
-sentiment analysis and word vectorization for the text data.
+sentiment analysis and vectorization via word embedding for the text
+data.
 
 \hypertarget{sentiment-analysis}{%
 \subsubsection{Sentiment analysis}\label{sentiment-analysis}}
@@ -904,7 +909,7 @@ when compared with alternative NLP feature extraction techniques has
 performed better on social media transcripts and generalized better to
 other areas \protect\hyperlink{ref-elbagir2019twitter}{Elbagir \& Yang}
 (\protect\hyperlink{ref-elbagir2019twitter}{2019}). VADER has been used
-in vectorizing text relative to financial data in
+in sentiment extraction from text relative to financial data in
 \protect\hyperlink{ref-pano2020complete}{Pano \& Kashef}
 (\protect\hyperlink{ref-pano2020complete}{2020}) for Bitcoin price
 predictions, \protect\hyperlink{ref-agarwal2020sentiment}{Agarwal}
@@ -923,15 +928,15 @@ are negative or positive, with lower scores indicating negativity while
 subjectivity indicates the extent of the usage of subjective words
 (\protect\hyperlink{ref-loria2018textblob}{Loria \& others, 2018}).
 \protect\hyperlink{ref-biswas2020examining}{Biswas, Sarkar, Das, Bose \&
-Roy} (\protect\hyperlink{ref-biswas2020examining}{2020}) use Textblob
+Roy} (\protect\hyperlink{ref-biswas2020examining}{2020}) use TextBlob
 sentiment scores in their analysis of the effects of Covid-19 on stock
-markets. Textblob was also tested in
+markets. TextBlob was also tested in
 \protect\hyperlink{ref-sohangir2018financial}{Sohangir \emph{et al.}}
 (\protect\hyperlink{ref-sohangir2018financial}{2018}) but did not
 perform as well as VADER although it did outperform ML methods in terms
-of area under the curve (AUC) scores. It is expected that the VADER
-sentiment tuple will outperform Textblob's sentiment tuple as a
-predictor of the S\&P 500 data.
+of area under the curve (AUC) scores. It was expected and is the case
+that the VADER sentiment tuple will outperform TextBlob's sentiment
+tuple as a predictor of the S\&P 500 data.
 
 \hypertarget{speech-vectorization}{%
 \subsubsection{Speech vectorization}\label{speech-vectorization}}
@@ -960,25 +965,25 @@ hidden layer neural network to predict words based on the words around
 them. The parameters used for training are available in Appendix A.
 
 The model contextually embeds each word in the entire corpus of speeches
-by running the speeches through the single hidden layer predictive
-neural network (NN). The NN is provided with the pseudo-task of
-predicting the word of focus from the words surrounding it each time it
-occurs in the corpus. Thus, a hidden layer is trained to contain the
-information that contextually embeds each word in the corpus. These
-hidden layer vectors (rather than the predictions) are the real output
-of the Word2Vec model. Words that appear in similar contexts throughout
-the corpus will have similar representational vectors (hidden layers)
-and thus can be said to have similar meanings in the corpus
+by running the speeches through a single hidden layer predictive neural
+network (NN). The NN is provided with the pseudo-task of predicting the
+word of focus from the words surrounding it each time it occurs in the
+corpus. Thus, a hidden layer is trained to contain the information that
+contextually embeds each word in the corpus. These hidden layer vectors
+(rather than the predictions) are the real output of the Word2Vec model.
+Words that appear in similar contexts throughout the corpus will have
+similar representational vectors (hidden layers) and thus can be said to
+have similar meanings in the corpus
 \protect\hyperlink{ref-mikolov2013distributed}{Mikolov \emph{et al.}}
 (\protect\hyperlink{ref-mikolov2013distributed}{2013}).
 
 An example phrase might be `The quick brown fox jumps'. If the word
 `brown' is the focus word, the words `quick' and `fox' would be fed into
-the neural network which would then be trained to map the input to the
-word `brown'. Doing this for every instance of `brown' in a corpus
-creates a hidden layer that contains all the contextual information
-required to predict the word `brown' in the given corpus. Figure 1
-depicts this process.
+the NN which would then be trained to map the input to the word `brown'.
+Doing this for every instance of `brown' in a corpus creates a hidden
+layer that contains all the contextual information required to predict
+the word `brown' in the given corpus. Figure \ref{Figure1} depicts this
+process.
 
 The model is extremely good at relating words that appear in similar
 contexts to each other. For example, when asked for the three words most
@@ -989,7 +994,7 @@ returns `crude', `gas' and `petroleum'. The input `gold' returns
 each contain 200 elements (because the hidden layers were set to contain
 200 elements). Thus each word is described by a vector containing 200
 elements. In order to create a similarly sized vector for each speech,
-the vectors describing all the words in each speech were averaged. Thus
+the vectors describing all the words in each speech were averaged. Thus,
 each speech has been reduced to a 200 element vector averaging the
 contextual embeddings of each word contained therein. This averaging
 technique was also used in
@@ -1023,10 +1028,13 @@ vectors while \protect\hyperlink{ref-qin230natural}{Qin}
 (\protect\hyperlink{ref-qin230natural}{2018}) used 300 element vectors.
 Both studies achieved prediction accuracy around 65\%.
 
-\begin{figure}
-\centering
-\includegraphics{Images/Word2Vec_model.png}
-\caption{Word2Vec model}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.95\linewidth]{Images/Word2Vec_model} 
+
+}
+
+\caption{Word2Vec Model \label{Figure1}}\label{fig:Word2Vec Model}
 \end{figure}
 
 \hypertarget{doc2vec}{%
@@ -1059,33 +1067,47 @@ the document tag vector is optimized for separately from the word
 vectors. This document tag vector is the relevant output in this case.
 Because a single vector of weights is created for each document, this
 vector should constitute a vectorized representation of the document as
-a whole. Figure 2 depicts the architecture of DM Doc2Vec algorithms.
-Alternatively, DBOW Doc2Vec algorithms ignore the context of a word and
-use random sampling to predict words from a paragraph. Figure 3 depicts
-the architecture of a DBOW Doc2Vec algorithm.
+a whole. Figure \ref{Figure2} depicts the architecture of DM Doc2Vec
+algorithms. Alternatively, DBOW Doc2Vec algorithms ignore the context of
+a word and use random sampling to predict words from a paragraph. Figure
+\ref{Figure3} depicts the architecture of a DBOW Doc2Vec algorithm.
 
-\begin{figure}
-\centering
-\includegraphics{Images/Doc2Vec_distributed_memory.png}
-\caption{Doc2Vec model - distributed memory architecture: dm = 1}
+Only one example of the use of Word2Vec for financial prediction could
+be found. \protect\hyperlink{ref-rashid2019making}{Rashid \& Leon}
+(\protect\hyperlink{ref-rashid2019making}{2019}) studies the possibility
+of predicting closing prices of 4 major private technology companies'
+and 3 major government contracted companies' stocks based on tweets from
+then U.S. president, Donald Trump. Backtesting a trading model based on
+the stock price predictions of a 4 layer NN using Doc2Vec data as input
+yielded fair portfolio gains for the government contracted companies'
+stocks but almost no change in portfolio values for the private
+technology companies' stocks.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.95\linewidth]{Images/Doc2Vec_distributed_memory} 
+
+}
+
+\caption{Doc2Vec model - distributed memory architecture: dm = 1 \label{Figure2}}\label{fig:Doc2Vec DM}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics{Images/Doc2Vec_distributed_bow.png}
-\caption{Doc2Vec model - distributed bag of words architecture: dm = 0}
-\end{figure}
+\begin{figure}[H]
 
-!!!!!!!!WHERE HAS DOC2VEC BEEN USEFUL FOR FINANCIAL
-PREDICTIONS!!!!!!!!!!
+{\centering \includegraphics[width=0.95\linewidth]{Images/Doc2Vec_distributed_bow} 
+
+}
+
+\caption{Doc2Vec model - distributed bag of words architecture: dm = 0 \label{Figure3}}\label{fig:Doc2Vec DBOW}
+\end{figure}
 
 \hypertarget{sp-500-time-series-analysis}{%
 \subsection{S\&P 500 time series
 analysis}\label{sp-500-time-series-analysis}}
 
-As part of feature extraction - econometric time series analysis has
-been run on the S\&P 500 data. The aim of this analysis was to find the
-linear model of best fit to the S\&P 500 data and then include relevant
+As part of feature extraction - econometric time series analysis was run
+on the S\&P 500 data. The aim of this analysis was to find the linear
+model of best fit to the S\&P 500 data and then include relevant
 auto-regressive variables in the final dataset under the assumption that
 they will be relevant in the highly non-linear ML models. An initial
 analysis was done on the S\&P 500 data after April 20th 1982 because
@@ -1098,58 +1120,104 @@ month were difficult to explain rationally. However, they did indicate
 persistence of volatility. This volatility persistence and the fact that
 volume is a strong indicator of absolute price change encouraged a
 second round of analysis that was done on all data following the initial
-recording of volume in 1950. This second round of analysis was focussed
+recording of volume in 1950. This second round of analysis was focused
 on finding an auto-regressive conditional heteroskedasticity (ARCH)
 model that fit the data well. The analysis concluded with the selection
-of an ARMA (1,0) GARCH (1,1) model. Thus, the core variables selected
-for inclusion in the final data set are the first lag of standardized
-volume, the first lag of daily percentage change, the first residual of
-daily percentage change (DPC) predicted by an ARMA (1,0) model and the
-first lag of variance of the DPC.
+of an ARMA (2,0) GARCH (1,1) model. Thus, the auto-regressive variables
+selected for inclusion in the final data set are the first and second
+lags of the demeaned log difference between consecutive closing prices
+(DlogDif), the first lag of the absolute DlogDif (absDlogDif\_1) as a
+pseudo-variance measure and the first lag of standardized volume of
+trade controlled for date trend (stdVol\_1DateResid) as a second
+pseudo-variance measure.
 
 \hypertarget{onwards}{%
-\subsubsection{1982 onwards}\label{onwards}}
+\subsubsection{\texorpdfstring{1982 onwards
+\label{1982}}{1982 onwards }}\label{onwards}}
 
 Running time series analysis on the daily percentage change in the S\&P
-500 after April 20th 1982 has revealed 10 significant non-consecutive
-lags. The `Daily percentage change `variable was created by taking the
+500 after April 20th 1982 revealed 10 significant non-consecutive lags.
+The `Daily percentage change' variable was created by taking the
 percentage difference between the `Close' and `Open' variables for each
 day of the data. Before April 20th 1982 the `Open' and `Close' variables
 hold identical values, hence the time series analysis only being run
-after that date. As can be seen in Figure 1, `Daily percentage change'
-is naturally stationary. This is supported by the results of an
-Augmented Dickey-Fuller unit root test which indicated that no unit root
-is present in the data. Running a partial autocorrelation function
-revealed 10 significant lags (these were lagged by 1, 2, 4, 12, 15, 16,
-18, 27, 32, and 34 periods). Regressing `Daily percentage change' on all
-10 significant lags reinforced the finding by yielding significance
-above the 95\% confidence interval for all 10 lags. Further, regressing
-the daily percentage change on weekday, monthday, month and year
-categorical variables yielded the significant correlations depicted in
-Table 1 (none of the weekdays were significant). Regressing on the
-categorical variables and the lags simultaneously yielded similar
-results with increased significance for 2002 (to the 99\% level) and
-2008 (to the 99,9\% level) and the addition of 2018 (significant at the
-95\% level), further an extra 4 monthdays were deemed significant -
-bringing the total to 21 (out of 31) significant monthdays, finally,
-some of the significance levels on the lags changed. These statistics
-are depicted in Table 2. Adding a normalized (distributed standard
-normal) volume variable lagged by one period to the regression yields a
-significance at the 99\% level on the lagged volume variable and alters
-the significance on the year variables as reported in Table 3.
+after that date. `Daily percentage change' is naturally stationary. This
+is supported by the results of an Augmented Dickey-Fuller unit root test
+which indicated that no unit root is present in the data. Running a
+partial autocorrelation function revealed 10 significant lags (these
+were lagged by 1, 2, 4, 12, 15, 16, 18, 27, 32, and 34 periods,
+respectively). Regressing `Daily percentage change' on all 10
+significant lags reinforced the finding by yielding significance above
+the 95\% confidence interval for all 10 lags. Further, regressing the
+daily percentage change on weekday, monthday, month and year categorical
+variables yielded an array of significant correlations across the
+monthday, month and year categories (none of the weekdays were
+significant). Regressing on the categorical variables and the lags
+simultaneously yielded similar results with increased significance for
+2002 (to the 99\% level) and 2008 (to the 99,9\% level) and the addition
+of 2018 (significant at the 95\% level), further an extra 4 monthdays
+were deemed significant - bringing the total to 21 (out of 31)
+significant monthdays, finally, some of the significance levels on the
+lags changed. Adding a normalized (distributed standard normal) volume
+variable lagged by one period to the regression yields a significance at
+the 99\% level on the lagged volume variable and reduces alters the
+significance on the year variables.
 
 While the years 2002 and 2008 are justifiable as significant because of
-the financial crashes that happened in each of those years (2002 -- dot
-com bubble and 2008 housing bubble) and September is also relatable to
-the housing bubble; it is difficult to rationally justify the monthday
+the financial crashes that happened in each of those years (2002 dot com
+bubble and 2008 housing bubble) and September is also relatable to the
+housing bubble; it is difficult to rationally justify the monthday
 variables as significant regardless of their quantitative significance.
 The high number of lags is also difficult to justify and implies rather
-that there may be persistence of volatility. Thus the following section
-focusses on the modelling of volatility over a time period that
-maximises the inclusion of volume statistics in the data. All of the
-analysis reported in this section was done in R using the packages
-`stats', `dplyr', `urca', `tidyverse', `ggplot2' and `fixest' (Marais,
-2022).
+that there may be persistence of volatility. Thus, the following section
+focuses on the modelling of volatility over a time period that maximises
+the inclusion of volume statistics in the data. All of the analysis
+reported in this section was done in R using the packages `stats',
+`dplyr', `urca', `tidyverse', `ggplot2' and `fixest' (Marais, 2022).
+
+\hypertarget{onwards-arch-model}{%
+\subsubsection{1950 onwards -- ARCH model}\label{onwards-arch-model}}
+
+A second round of time series analysis was performed on all the data
+after Jan 1st 1950 which revealed that an ARMA(2,0) GARCH(1,1) model
+might be the most appropriate linear fit to the data and that the first
+lag on a date controlled version of standardized volume is a good
+predictor of logDif. The secondary analysis was performed because the
+number (and non-consecutiveness) of significant lags in the first model
+was out of the ordinary. The choice was made to extend the dataset back
+to 1950 because lagged volume appeared to be significant and volume data
+is available from that time onwards.
+
+The extended dataset required a different dependent variable because
+open and closing prices were only differentiated between after April
+20th 1982. Thus, the inter-day log difference in closing price
+constituted the dependent variable in the second round of analysis.
+Figure \ref{Figure4} depicts the logDif from 1950 until present -- the
+persistence of volatility is made apparent by the intermittent spikes.
+Figure \ref{Figure5} illustrates the correlation between the logDif and
+standardized volume which justifies the extension of the dataset.
+Further the logDif auto-regression results depicted in Table 3.1 and the
+categorical regression results depicted in Table 3.2 align with the
+regression results presented in section \ref{1982} and further suggest
+persistent volatility exists in the logDif series.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1} 
+
+}
+
+\caption{SandP 500 Closing Price Log Difference 1950 – 2022 \label{Figure4}}\label{fig:GSPC_figure_4}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1} 
+
+}
+
+\caption{Standardized volume (red) and absolute logDiff (green) \label{Figure5}}\label{fig:GSPC_figure_5}
+\end{figure}
 
  
   \providecommand{\huxb}[2]{\arrayrulecolor[RGB]{#1}\global\arrayrulewidth=#2pt}
@@ -1161,7 +1229,7 @@ analysis reported in this section was done in R using the packages
 \begin{centerbox}
 \begin{threeparttable}
 \captionsetup{justification=centering,singlelinecheck=off}
-\caption{Exploratory Regression Output 1}
+\caption{Auto-regressions of logDif on significant lags}
  \label{Reg01}
 \setlength{\tabcolsep}{0pt}
 \begin{tabular}{l l l}
@@ -1407,8 +1475,8 @@ analysis reported in this section was done in R using the packages
 \begin{centerbox}
 \begin{threeparttable}
 \captionsetup{justification=centering,singlelinecheck=off}
-\caption{Exploratory Regression Output 2}
- \label{Reg01}
+\caption{Regression of logDif on significant categorical variables}
+ \label{Reg02}
 \setlength{\tabcolsep}{0pt}
 \begin{tabular}{l l}
 
@@ -1490,76 +1558,36 @@ analysis reported in this section was done in R using the packages
 \end{table}
  
 
-\hypertarget{onwards-arch-model}{%
-\subsubsection{1950 onwards -- ARCH model}\label{onwards-arch-model}}
-
-A second round of time series analysis was performed on all the data
-after Jan 1st 1950 which revealed that an ARMA(1,0) GARCH(1,1) model
-might be the most appropriate fit to the data and that the first lag on
-a date controlled version of standardized volume is a good predictor of
-DPC. The secondary analysis was performed because the number (and
-non-consecutiveness) of significant lags in the first model was out of
-the ordinary. The choice was made to extend the dataset back to 1950
-because lagged volume appeared to be significant and volume data is
-available from that time onwards.
-
-The extended dataset required a different dependent variable because
-open and closing prices were only differentiated between after April
-20th 1982. Thus, the inter-day percentage change in closing price
-constituted the dependent variable in the second round of analysis.
-Figure 4 depicts the Daily Percentage Change (DPC) in the S\&P 500 from
-1950 until present -- the persistence of volatility is again apparent.
-Figure 5 illustrates the correlation between the DPC and standardized
-volume which justifies the extension of the dataset.
-
-\begin{figure}[H]
-
-{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_4-1} 
-
-}
-
-\caption{S and P 500 Daily Percentage Change 1950 – Present \label{Figure4}}\label{fig:GSPC_figure_4}
-\end{figure}
-
-\begin{figure}[H]
-
-{\centering \includegraphics{Thesis_WriteUp_files/figure-latex/GSPC_figure_5-1} 
-
-}
-
-\caption{Standardized volume (red) and absolute logDiff (green) \label{Figure5}}\label{fig:GSPC_figure_5}
-\end{figure}
-
 \hypertarget{volume}{%
 \paragraph{Volume}\label{volume}}
 
-Regressing the DPC on the first lag of standardized volume yielded
-insignificant results. However, regressing absolute DPC
+Regressing the logDif on the first lag of standardized volume yielded
+insignificant results. However, regressing absolute logDif
 (pseudo-volatility) on the first lag of standardized volume (stdVol\_1)
 yielded a coefficient of 0,148 significant above the 99,9th percentile.
-Figure 6 shows this relationship. Figure 6 also shows that standardized
-volume (stdVol) trends upwards over time. Further, regressing stdVol\_1
-on Date (regression 6) yields a positive coefficient significant above
-the 99,9th percentile and an adjusted R2 of 0,6. This shows that a large
-percentage of the variation in stdVol is explained by variation in Date.
-Thus to avoid implicitly including a Date proxy\footnote{The goal of
-  this project is to create a model that can predict future S\&P 500
-  returns. Thus, to include a proxy for date (in this case in the date
-  trending stdVol) would cause data contamination since dates do not
-  hold any information relevant to the S\&P 500 returns besides price or
-  volatility trends.} as a predictor of S\&P 500 returns the included
-volume variable must be adjusted to be stationary over time. The
-residuals from regression 6 make up the variation in stdVol that cannot
-be explained by the variation in Date -- thus they are a Date neutral
-measure of stdVol. Figure 7 shows the difference between stdVol and
-stdVol controlled for variance due to Date (stdVolControlled).
-Regressing the residuals of regression 6 on Date (regression 7) shows no
-significant relationship between the two while regressing absolute DPC
-on the residuals from regression 6 (regression 8) yields a coefficient
-of 0,164 significant above the 99,9th percentile. Figure 8 shows the
-relationship between absolute DPC and stdVolControlled. Thus these
-residuals (rather than stdVol) should be included as a variable in the
-final prediction data.
+Figure \ref{Figure6} shows this relationship. Figure 6 also shows that
+standardized volume (stdVol) trends upwards over time. Further,
+regressing stdVol\_1 on Date (regression 6) yields a positive
+coefficient significant above the 99,9th percentile and an adjusted R2
+of 0,6. This shows that a large percentage of the variation in stdVol is
+explained by variation in Date. Thus to avoid implicitly including a
+Date proxy\footnote{The goal of this project is to create a model that
+  can predict future S\&P 500 returns. Thus, to include a proxy for date
+  (in this case in the date trending stdVol) would cause data
+  contamination since dates do not hold any information relevant to the
+  S\&P 500 returns besides price or volatility trends.} as a predictor
+of S\&P 500 returns the included volume variable must be adjusted to be
+stationary over time. The residuals from regression 6 make up the
+variation in stdVol that cannot be explained by the variation in Date --
+thus they are a Date neutral measure of stdVol. Figure \ref{Figure7}
+shows the difference between stdVol and stdVol controlled for variance
+due to Date (stdVolControlled). Regressing the residuals of regression 6
+on Date (regression 7) shows no significant relationship between the two
+while regressing absolute logDif on the residuals from regression 6
+(regression 8) yields a coefficient of 0,164 significant above the
+99,9th percentile. Figure \ref{Figure8} shows the relationship between
+absolute logDif and stdVolControlled. Thus these residuals (rather than
+stdVol) should be included as a variable in the final prediction data.
 
 \begin{figure}[H]
 
@@ -1610,22 +1638,22 @@ Athanasopoulos} (\protect\hyperlink{ref-hyndman2018forecasting}{2018}).
 Thus the maximum number of lags that satisfy the smallest H/T ratio is
 18 and any number of lags less than 18 is permissible.
 
-Running a 10-Lag LJung Box test on the DPC yields a p-value of 0.0002
+Running a 10-Lag LJung Box test on the logDif yields a p-value of 0.0002
 which indicates that the null hypothesis should be rejected and that the
 series is not a white noise series. I.e. ARCH effects are present in the
 series. Running autocorrelation and partial-autocorrelation tests on the
-absolute DPC indicates that there is a degree of persistence of
+absolute logDif indicates that there is a degree of persistence of
 volatility (\protect\hyperlink{ref-kotze2021volatility}{Kotzé, 2021}).
-This can be seen in Figure 9. A t-test indicates that the mean of the
-population is significantly different from zero (0.036). Thus, demeaning
-the equation constitutes the construction of a mean equation
-(essentially the demeaned DPC) represented in the series -- a demeaned
-daily percentage change(DDPC)
+This can be seen in Figure \ref{Figure9}. A t-test indicates that the
+mean of the population is significantly different from zero (0.036).
+Thus, demeaning the equation constitutes the construction of a mean
+equation (essentially the demeaned logDif) represented in the series --
+a demeaned daily percentage change(DlogDif)
 (\protect\hyperlink{ref-kotze2020univariate}{Kotzé, 2020}). A 10 lag
 Ljung-Box test again indicates the presence of ARCH effects specifically
 in the 1st,2nd, 5th, 6th, 8th, and 9th lags. However, running a multiple
-linear regression (OLS) of DDPC on its lags reveals only the 2nd, 6th,
-8th and 9th lags as significant above the 95th percentile.
+linear regression (OLS) of DlogDif on its lags reveals only the 2nd,
+6th, 8th and 9th lags as significant above the 95th percentile.
 
 \begin{figure}[H]
 
@@ -1651,21 +1679,20 @@ models that do not contain an ARMA(1,0) component (models 4,5 and 7)
 yield a significant first residual indicating that inclusion of the
 ARMA(1,0) component is important. However, all the models containing an
 ARCH(1,0) - besides model 6 - component yield a significant second
-residual Further, model 6 -- the non-generalized ARCH model -- has
+residual. Further, model 6 -- the non-generalized ARCH model -- has
 intermittent significant residuals indicating that volatility is
 clustered and persistent. Persistent volatility is one of the oversights
 of the ARCH model that is addressed in the GARCH model. As can be seen,
-Model 8 (Figure 3.15) yields the least significant residuals and as such
-has been selected as the model that best fits this time series. The
-model linearly predicts the dependent variable using the first and
-second lags of the dependent variable, the first residual of an
-ARMA(1,0) model and the first lag of variance in the time series. As
-such the 1st and 2nd lags of DlogDif and the first lag of variance of
-logDif will be included in the final dataset
-(\protect\hyperlink{ref-kotze2020univariate}{Kotzé, 2020}).
-Additionally, as illustrated in Aras (2021) the inclusion of the GARCH
-model prediction can be beneficial to ML model training, thus the
-predictions of model 8 will also be included in the dataset.
+Model 8 (Figure \ref{Figure15}) yields the least significant residuals
+and as such has been selected as the model that best fits this time
+series. The model linearly predicts the dependent variable using the
+first and second lags of the dependent variable, the first residual of
+an ARMA(1,0) model and the first lag of variance in the time series
+(\protect\hyperlink{ref-kotze2020univariate}{Kotzé, 2020}). As such the
+first and second lags of DlogDif and both the the first lag of the
+absolute DlogDif (absDlogDif\_1) and the first lag of standardized
+volume of trade controlled for date trend (stdVol\_1DateResid) as a
+pseudo-variance measures.
 
 \begin{figure}[H]
 
@@ -1673,7 +1700,7 @@ predictions of model 8 will also be included in the dataset.
 
 }
 
-\caption{Autocorrelation and partial-autocorrelation functions of model 3 - ARMA(1,0) GARCH(1,1) - residuals \label{Figure9}}\label{fig:ARCH_figure_10}
+\caption{Autocorrelation and partial-autocorrelation functions of model 3 - ARMA(1,0) GARCH(1,1) - residuals \label{Figure10}}\label{fig:ARCH_figure_10}
 \end{figure}
 
 \begin{figure}[H]
@@ -1682,7 +1709,7 @@ predictions of model 8 will also be included in the dataset.
 
 }
 
-\caption{Autocorrelation and partial-autocorrelation functions of model 4 - GARCH(1,1) -  residuals \label{Figure9}}\label{fig:ARCH_figure_11}
+\caption{Autocorrelation and partial-autocorrelation functions of model 4 - GARCH(1,1) -  residuals \label{Figure11}}\label{fig:ARCH_figure_11}
 \end{figure}
 
 \begin{figure}[H]
@@ -1691,7 +1718,7 @@ predictions of model 8 will also be included in the dataset.
 
 }
 
-\caption{Autocorrelation and partial-autocorrelation functions of model 5 - EGARCH(1,1) -  residuals \label{Figure9}}\label{fig:ARCH_figure_12}
+\caption{Autocorrelation and partial-autocorrelation functions of model 5 - EGARCH(1,1) -  residuals \label{Figure12}}\label{fig:ARCH_figure_12}
 \end{figure}
 
 \begin{figure}[H]
@@ -1700,7 +1727,7 @@ predictions of model 8 will also be included in the dataset.
 
 }
 
-\caption{Autocorrelation and partial-autocorrelation functions of model 6 - ARMA(1,0) ARCH(1,0) - residuals \label{Figure9}}\label{fig:ARCH_figure_13}
+\caption{Autocorrelation and partial-autocorrelation functions of model 6 - ARMA(1,0) ARCH(1,0) - residuals \label{Figure13}}\label{fig:ARCH_figure_13}
 \end{figure}
 
 \begin{figure}[H]
@@ -1709,7 +1736,7 @@ predictions of model 8 will also be included in the dataset.
 
 }
 
-\caption{Autocorrelation and partial-autocorrelation functions of model 7 - ARCH(1,0) - residuals \label{Figure9}}\label{fig:ARCH_figure_14}
+\caption{Autocorrelation and partial-autocorrelation functions of model 7 - ARCH(1,0) - residuals \label{Figure14}}\label{fig:ARCH_figure_14}
 \end{figure}
 
 \begin{figure}[H]
@@ -1718,7 +1745,7 @@ predictions of model 8 will also be included in the dataset.
 
 }
 
-\caption{Autocorrelation and partial-autocorrelation functions of model 8 - ARMA(2,0) GARCH(1,1) - residuals \label{Figure9}}\label{fig:ARCH_figure_15}
+\caption{Autocorrelation and partial-autocorrelation functions of model 8 - ARMA(2,0) GARCH(1,1) - residuals \label{Figure15}}\label{fig:ARCH_figure_15}
 \end{figure}
 
 \begin{longtable}[]{@{}
@@ -1805,7 +1832,7 @@ variables and the posNegTransform are lagged by one period. Thus another
 4 auto-regressive variables are added to the dataset.
 
 Further, five S\&P 500 adjacent indicators were selected for this study.
-Notably they were only included in the speech-centred dataset. The five
+Notably they were only included in the speech-centered dataset. The five
 series included were the NASDAQ composite index, the oil price, the
 Shanghai Stock Exchange composite index (SSE), the Dollar strength index
 and the CBOE volatility index (VIX).
@@ -1822,26 +1849,24 @@ lowercase, stopword removal and lemmatization for the text data.
 Collection of the financial data is a done via a Python script that will
 always download the entire history of the S\&P 500. Cleaning requires
 only the removal of the adjusted close variable. Text data feature
-engineering took the form of Textblob sentiment analysis, VADER
+engineering took the form of TextBlob sentiment analysis, VADER
 sentiment analysis, Word2Vec vectorization and Doc2Vec vectorization.
-The results of which were 2 sentiment descriptors from Textblob, 4
+The results of which were 2 sentiment descriptors from TextBlob, 4
 sentiment descriptors from VADER, a 200 element average descriptor
 vector from Word2Vec, a 200 and a 20 element vector speech descriptor
-from Doc2Vec for the speech-centred data, and two 21 element vector
-speech descriptors from Doc2Vec for the date-centred data for a total of
-426 variables (features) engineered from the text data for the
-speech-centred data and 42 variables engineered from the text data for
-the date-centred data. The financial data analysis took the form of time
-series econometrics. This analysis resulted in the fitting of an
+from Doc2Vec for the speech-centered data, and two 21 element vector
+speech descriptors from Doc2Vec for the date-centered data for a total
+of 426 variables (features) engineered from the text data for the
+speech-centered data and 42 variables engineered from the text data for
+the date-centered data. The financial data analysis took the form of
+time series econometrics. This analysis resulted in the fitting of an
 ARMA(2,0) GARCH(1,1) model to the engineered daily percentage change
 variable. The model linearly predicts the dependent variable using the
 first and second lags of the dependent variable, the first residual and
 the first lag of variance in the time series. Thus the first and second
-lags of the log difference of the closing price and the first lag of
-variance of log difference are included in the data. Additionally, the
-prediction of the ARMA(2,0) GARCH(1,1) model and the first lag of
-standardized volume of trade are included. Thus 4 variables (features)
-have been engineered using time series analysis of the S\&P 500 data.
+lags of logDif, the first lag of stdVol\_1DateResid and the first lag of
+absDlogDif are included in the data. Thus 4 variables (features) have
+been engineered using time series analysis of the S\&P 500 data.
 Additionally, a further four auto-regressive variables were added to
 make up for the flaws inherent in purely linear modelling and six S\&P
 500 adjacent variables were also selected for addition to the dataset.
@@ -1850,8 +1875,8 @@ make up for the flaws inherent in purely linear modelling and six S\&P
 \section{Experiment design}\label{experiment-design}}
 
 Two sets of experiments were run on two categories of data design. The
-first is a speech-centred design. For every speech in this dataset there
-is a row of data attached. Thus there is no data for dates when no
+first is a speech-centered design. For every speech in this dataset
+there is a row of data attached. Thus there is no data for dates when no
 speeches occurred and there are duplicate dates because there are days
 when more than one speech occurred. This dataset is the larger of the
 two datasets and contains 35 251 rows of data -- one for each unique
@@ -1859,20 +1884,20 @@ speech since 1998-01-01.
 
 Based on the assumption that every speech that occurs on a day affects
 the closing price of the S\&P 500 on that day - the second dataset uses
-a date-centred design. For every date (trading day) there is one row in
+a date-centered design. For every date (trading day) there is one row in
 the dataset. Thus on dates when more than one speech occurred the speech
-data has been aggregated into a single vector (see the Doc2Vec methods
-section for an explanation of this method). The date-centred dataset
-contains 25 383 rows of data -- one for each trading day between
-1950-01-01 and 2022-03-22. The speech-centred and date-centred datasets
-are exemplified in Table 5 and 6, respectively.
+data has been aggregated into a single vector (see section \ref{Doc2Vec}
+for an explanation of this method). The date-centered dataset contains
+25 383 rows of data -- one for each trading day between 1950-01-01 and
+2022-03-22. The speech-centered and date-centered datasets are
+exemplified in Table 5 and 6, respectively.
 
 \begin{longtable}[]{@{}cccccc@{}}
-\caption{Example of the speech-centred data design -- Note that there is
-no data for dates that no speeches occurred and that there are duplicate
-dates. Note also that on dates where more than one speech occurred there
-is duplicate data in the LD\_Date\_Resid\_1 column which is
-representative of the auto-regressive data in this example. Finally,
+\caption{Example of the speech-centered data design -- Note that there
+is no data for dates that no speeches occurred and that there are
+duplicate dates. Note also that on dates where more than one speech
+occurred there is duplicate data in the LD\_Date\_Resid\_1 column which
+is representative of the auto-regressive data in this example. Finally,
 note that the V1 and V2 columns (representative of the vectorized speech
 data) is different for every row of data.}\tabularnewline
 \toprule
@@ -1891,7 +1916,7 @@ Date & Speech & LD\_Date\_Resid\_1 & V1 & V2 & V3 \\
 \end{longtable}
 
 \begin{longtable}[]{@{}cccccc@{}}
-\caption{Example of the date-centred data design -- Note that every
+\caption{Example of the date-centered data design -- Note that every
 consecutive trading day is included in the data. Note also that on days
 when no speeches occurred the V1 and V2 (representing vectorized speech
 data) from the last date that a speech occurred are duplicated and the
@@ -1916,10 +1941,10 @@ Date & Speech & LD\_Date\_Resid\_1 & Days since last speech & V1 & V2 \\
 \bottomrule
 \end{longtable}
 
-For the speech-centred dataset a total of 1152 models were tested. These
-consisted of 384 regression tasks and 768 classification tasks. While
-for the date-centred data 336 models were tested. These consisted of 112
-regression models and 224 classification models. The models were
+For the speech-centered dataset a total of 1152 models were tested.
+These consisted of 384 regression tasks and 768 classification tasks.
+While for the date-centered data 336 models were tested. These consisted
+of 112 regression models and 224 classification models. The models were
 selected by incrementally altering a single hyperparameter across 5
 fields for regression and 6 fields for classification. These fields are
 detailed in the following sections.
@@ -1933,15 +1958,15 @@ refers to the date from which the dataset began: 1998-01-01, 2000-01-01
 and 2010-01-01. The 1998 dataset runs from 1998-01-01 until 2022-03-22,
 the 2000 dataset runs from 2000-01-01 until 2022-03-22 etc.
 
-The Remove\_duplicates field divides the speech-centred data into two
+The Remove\_duplicates field divides the speech-centered data into two
 subsets -- one with all the duplicate dates removed and one including
 the duplicate dates. Duplicate dates occurred because some speeches
 occurred on the same date. This hyperparameter is necessary because the
 Meta and Auto datasets only contain one value in each field -- thus
 duplicating dates duplicates Meta and Auto data which creates the risk
 of data contamination between the train and test sets. This field is not
-valid for the dates centred dataset and is set to `False' for all the
-models using it.
+valid for the date-centered data-subset and is set to `False' for all
+the models using it.
 
 The Reg\_Types field contains two options, TS\_Regressor and
 CS\_Regressor. These refer to the manner in which the data is split for
@@ -1956,7 +1981,7 @@ only the fifth (and latest) split. This method is employed to force the
 algorithm to perform prediction instead of interpolation. It avoids
 giving the models access to the future of a data trend when making
 predictions for a data point. However, the method is not strictly
-necessary in this case because the dependent variable has been centred
+necessary in this case because the dependent variable has been centered
 and is close to normally distributed -- i.e.~it does not have a trend
 (Bergmeir, Hyndman \& Koo, 2018). The CS\_Regressor option performs
 regular 5-fold cross validation.
@@ -1968,7 +1993,7 @@ boosting. The hyper-parameters for each of these fields can be found in
 Appendix B.1.
 
 Datasets is a complicated field. There are three groups of prediction
-sub-datasets in the speech-centred dataset -- the control subset:
+sub-datasets in the speech-centered dataset -- the control subset:
 X\_control ; the meta subset: X\_meta ; and the test subset: X\_test.
 X\_control contains the auto-regressive variables described in section
 \ref{ARCHandGARCH} and \ref{addVars}, X\_meta contains the meta
@@ -1976,12 +2001,12 @@ variables (also described in section \ref{addVars}) and X\_test contains
 the variables of focus -- the NLP variables. However, in total there are
 458 variables across these three subsets. The X\_test subset makes up
 the majority of this. There are 4 variables derived from the VADER
-sentiment analysis, 2 variables from the textBlob sentiment analysis,
+sentiment analysis, 2 variables from the TextBlob sentiment analysis,
 200 variables from Word2Vec, 200 variables from Doc2Vec\_200 and 20
 variables from Doc2Vec\_20.
 
 In order to minimize training times and redundancy the X\_test dataset
-was reduced to contain 26 variables. These are the VADER and textBlob
+was reduced to contain 26 variables. These are the VADER and TextBlob
 sentiment scores and the Doc2Vec\_20 word embeddings. The Word2Vec
 embeddings were dropped after underperforming in a series of prediction
 tasks when compared with the Doc2Vec embeddings. The Doc2Vec\_20 and
@@ -1990,15 +2015,15 @@ combining them did not improve performance. Thus, to minimize the number
 of variables the ML-models had to contend with, the Doc2Vec\_20
 embeddings were kept.
 
-The date-centred dataset also contains three groups of prediction
-subsets. These are the same X\_control dataset as in the speech-centred
+The date-centered dataset also contains three groups of prediction
+subsets. These are the same X\_control dataset as in the speech-centered
 data, and two versions of the vectorised speech data -- the distributed
 bag of words (DBOW) subset and the distributed memory (DM) subset --
 both detailed in section \ref{Doc2Vec}. A detailed description of the
 variables available and tested is available in Appendix B.3.
 
-All 8 X\_control variables were included in both the speech-centred and
-the date-centred datasets. The final X\_meta variables selected were
+All 8 X\_control variables were included in both the speech-centered and
+the date-centered datasets. The final X\_meta variables selected were
 Nasdaq\_ld\_1, Oil\_ld\_1, SSE\_ld\_1, USDX\_ld\_1 and VIX\_ld\_1. The
 final X\_test variables selected were the VADER scores, the TextBlob
 scores and the set of 20 Doc2Vec variables. While the DBOW and DM
@@ -2006,31 +2031,41 @@ datasets each contained all 20 of their variables and the number of days
 since the last speech. The datasets field provided the option for any
 combination of each data designs' three subsets as training variables
 for a sum of 7 combinations each. Additionally a PossibleBest set of
-variables was selected for the speech-centred dataset using an elastic
+variables was selected for the speech-centered dataset using an elastic
 net regression algorithm from SciKitLearn (hyperparameters available in
 appendix B). It was decided to create a 10 variable dataset using 4 NLP
 variables, 3 control variables and three meta variable. The elastic net
 selected DlogDif\_1, DlogDif\_2, pos\_neg\_transform, Nasdaq\_ld\_1,
 Oil\_ld\_1, VIX\_ld\_1, DV\_20\_6, DV\_20\_8, DV\_20\_13, DV\_20\_15 as
 the most prominent variables in each of the three subsets of variables.
-The elastic net regressions are depicted in Figures 4.1, 4.2 and 4.3.
+The elastic net regressions are depicted in Figures \ref{16}, \ref{17}
+and \ref{18}.
 
-\begin{figure}
-\centering
-\includegraphics{Images/ElasticGrid_control_1_0,1.png}
-\caption{Elastic net: test set}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.95\linewidth]{Images/ElasticGrid_control_1_0,1} 
+
+}
+
+\caption{Elastic net: test set \label{Figure16}}\label{fig:Elastic net: test set}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics{Images/ElasticGrid_meta_2_0,2.png}
-\caption{Elastic net: meta set}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.95\linewidth]{Images/ElasticGrid_meta_2_0,2} 
+
+}
+
+\caption{Elastic net: meta set \label{Figure17}}\label{fig:Elastic net: meta set}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics{Images/ElasticGrid_DV_20_3_0,1.png}
-\caption{Elastic net: control set}
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.95\linewidth]{Images/ElasticGrid_DV_20_3_0,1} 
+
+}
+
+\caption{Elastic net: test set \label{Figure18}}\label{fig:Elastic net: control set}
 \end{figure}
 
 \hypertarget{classification-fields}{%
@@ -2091,28 +2126,28 @@ for each of these fields can be found in Appendix B.2.
 The results of the models indicated that U.S. Presidential Speeches hold
 at least a small amount of predictive power over movements in the S\&P
 500 stock index. This conclusion was deduced from the fact that the best
-performing datasets in both the date-centred classification analysis and
-the date-centred regression analysis included vectorized speech data. It
-is also corroborated by the consistent appearance of speech subset
-inclusive data in the top ten performing models across both data design
-types, and both classification and regression tasks.
+performing datasets in both the date-centered classification analysis
+and the date-centered regression analysis included vectorized speech
+data. It is also corroborated by the consistent appearance of speech
+subset inclusive data in the top ten performing models across both data
+design types, and both classification and regression tasks.
 
-The date-centred dataset outperformed the speech-centred dataset by
+The date-centered dataset outperformed the speech-centered dataset by
 about 2 percentage points (\textasciitilde0,58 vs \textasciitilde0,6) on
 the test set accuracy score for binary classification analysis. Models
-using the date-centred dataset also achieved lower MAE's than models
-trained and tested on the speech-centred dataset. Interestingly, an
-implication of the superior performance of the (smaller) date-centred
+using the date-centered dataset also achieved lower MAE's than models
+trained and tested on the speech-centered dataset. Interestingly, an
+implication of the superior performance of the (smaller) date-centered
 dataset is that data with high quality has outperformed data with high
 quantity. The section below explains the results in more detail.
 
-\hypertarget{speech-centred-classification-analysis}{%
-\subsection{Speech-centred classification
-analysis}\label{speech-centred-classification-analysis}}
+\hypertarget{speech-centered-classification-analysis}{%
+\subsection{Speech-centered classification
+analysis}\label{speech-centered-classification-analysis}}
 
 Analysing the best performing classification models, in terms of test
-set accuracy, across all categories of the speech-centred data reveals a
-very high likelihood of data contamination in the data containing
+set accuracy, across all categories of the speech-centered data reveals
+a very high likelihood of data contamination in the data containing
 duplicate dates. All ten of the top performers are on data containing
 duplicates and the accuracies range from 0,72 to 0,80. It is highly
 unlikely that these models have managed to achieve 80\% accuracy in
@@ -2136,34 +2171,34 @@ constitutes evidence of the predictive power of US Presidential speeches
 over S\&P 500 movements and lends credibility to the hypothesis of this
 project.
 
-\hypertarget{date-centred-classification-analysis}{%
-\subsection{Date-centred classification
-analysis}\label{date-centred-classification-analysis}}
+\hypertarget{date-centered-classification-analysis}{%
+\subsection{Date-centered classification
+analysis}\label{date-centered-classification-analysis}}
 
 The means of both the full set of 1950-01-01 binary Y's and the test set
 of 1950-01-01 binary Y's are maintained at \textasciitilde{} 0,5. This
 implies that any accuracy above 0,5 beats chance.
 
-In the date-centred classification results analysis, the top ten models
+In the date-centered classification results analysis, the top ten models
 in terms of test set accuracies contain ten 1950 subsets, ten TS subsets
 and eight binary subsets. All of the top ten models utilised
 auto-regressive data, five positions included the DBOW vector set and
 two included the DM vector set. The range of the top ten models test set
-accuracies is 0,57 to 0,59. Thus the date-centred dataset initially
-outperforms the (duplicate dates removed) speech-centred dataset by 2
+accuracies is 0,57 to 0,59. Thus the date-centered dataset initially
+outperforms the (duplicate dates removed) speech-centered dataset by 2
 percentage points at the bottom of the range and 1 percentage point at
 the top of the range in terms of test set classification accuracy.
-Because of this the models trained on the date-centred dataset were
+Because of this the models trained on the date-centered dataset were
 optimised for maximum performance. Log-regression is initially the best
 performing classifier in the TS section generally taking the top two and
 the seventh positions. However, AutoDBOW outperforms Auto in the Binary
 NN and the Binary Gradient Boosting categories. Thus, these three models
 were selected for optimisation.
 
-\hypertarget{optimization-of-classification-models-for-ts-classification-of-date-centred-data}{%
+\hypertarget{optimization-of-classification-models-for-ts-classification-of-date-centered-data}{%
 \subsubsection{Optimization of classification models for TS
-classification of date-centred
-data}\label{optimization-of-classification-models-for-ts-classification-of-date-centred-data}}
+classification of date-centered
+data}\label{optimization-of-classification-models-for-ts-classification-of-date-centered-data}}
 
 The training set accuracy on the 1950 binary AutoDBOW for the gradient
 boosting classifier was initially 77,5\% indicating that it may have
@@ -2183,9 +2218,9 @@ test set accuracy of 0,599. This difference indicates that there is at
 least a slight benefit to including the DBOW dataset in predictive data
 and corroborates the evidence presented in section 2.1.
 
-\hypertarget{speech-centred-regression-analysis}{%
-\subsection{Speech-centred regression
-analysis}\label{speech-centred-regression-analysis}}
+\hypertarget{speech-centered-regression-analysis}{%
+\subsection{Speech-centered regression
+analysis}\label{speech-centered-regression-analysis}}
 
 The average Mean Absolute Error (MAE) recorded across all 384 regression
 models run was 0,87 for the training data, 0,95 for the test data and
@@ -2220,7 +2255,7 @@ datasets in the duplicates removed dataset, at this point, it remains
 likely that the NLP data holds predictive power.
 
 A final analysis of all the regression models trained on only 1998 NLP
-data from the speech-centred dataset shows that the top ten performing
+data from the speech-centered dataset shows that the top ten performing
 models all achieved a MAE below 1,06. This is still below the standard
 deviation of 1,26 for the 1998 Y variable (logDif\_date\_resid) and thus
 indicates that regression models trained only on the NLP data outperform
@@ -2228,15 +2263,15 @@ the mean of the series as a predictor. This again corroborates evidence
 that U.S. Presidential Speeches having predictive power over S\&P 500
 movements.
 
-\hypertarget{date-centred-regression-analysis}{%
-\subsection{Date-centred regression
-analysis}\label{date-centred-regression-analysis}}
+\hypertarget{date-centered-regression-analysis}{%
+\subsection{Date-centered regression
+analysis}\label{date-centered-regression-analysis}}
 
 The initial ten lowest test set MAE's across all the regression
 categories were in the 1950 and cross section categories. The standard
 deviation for the 1950 test set is 0.96. All ten of these MAEs clustered
 around 0,66 so the regressions are better predictors than the mean.
-Again the date-centred dataset has outperformed the speech-centred
+Again the date-centered dataset has outperformed the speech-centered
 dataset. The best score was achieved for the DBOW dataset by the SGD
 algorithm. The subsets including NLP data were included in seven of the
 top ten performing models and three of them only contained NLP data.
@@ -2260,6 +2295,48 @@ power over the S\&P 500.
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
+The core conclusion of the research presented here is that U.S
+Presidential Speeches do hold predictive power over price changes in the
+S\&P 500 index. This is exhibited by the improvement of accuracy in
+predictive models gained from the inclusion of vectorized speech data.
+Further 2 more useful conclusions can be drawn from this research.
+First, an ARMA(2,0) GARCH(1,1) model is the best linear model describing
+the log difference of closing prices in the S\&P 500 and second, Doc2Vec
+outperforms Word2Vec, VADER and TextBlob as a text vectorization method
+when relating U.S. Presidential Speeches to fluctuations in the S\&P
+500. This information should be useful to other researchers looking to
+explore the relationship between text data and stock market movements as
+well as traders who need to make informed decisions about the S\&P 500.
+
+\hypertarget{further-research-avenues}{%
+\section{Further research avenues}\label{further-research-avenues}}
+
+Improvements in this research could be achieved by the addition of extra
+variables and/or the exploration of more sophisticated machine learning
+algorithms. Additional auto-regressive variables could have been
+included in the control dataset. In particular, the first lag of the
+residual of an ARMA (1,0) model and the prediction of an ARMA(2,0)
+GARCH(1,1) may have increased predictive power of the control data
+subset (\protect\hyperlink{ref-aras2021stacking}{Aras, 2021}). More
+powerful NLP techniques, such as Bidirectional Encoder Representations
+from Transformers (BERT), could also lead to more comprehensive
+word-embeddings and better information transfer to the final ML
+algorithms and better prediction results by extension.
+
+A lot more research could be done in the political science and
+linguistic realms using the NLP component of the dataset. For example it
+could be interesting to determine which presidents produced the most
+similar speech vectors and if similarities in speech correlated with
+similarities in policy decisions or voter behavior. Another example
+could be creating a timeline of speech vectors and relating modern
+influential speakers to time periods based on similarity in speech
+vectors.
+
+Further economic research could be done into the macroeconomic or
+macro-financial effects of certain types of speeches by simply relating
+the speech vectors to other macro-indicators such as long term bond
+yields or GDP figures.
+
 \newpage
 
 \hypertarget{references}{%
@@ -2272,6 +2349,10 @@ power over the S\&P 500.
 Agarwal, A. 2020. Sentiment analysis of financial news. In IEEE
 \emph{2020 12th international conference on computational intelligence
 and communication networks (CICN)}. 312--315.
+
+\leavevmode\vadjust pre{\hypertarget{ref-aras2021stacking}{}}%
+Aras, S. 2021. Stacking hybrid GARCH models for forecasting bitcoin
+volatility. \emph{Expert Systems with Applications}. 174:114747.
 
 \leavevmode\vadjust pre{\hypertarget{ref-baker2016measuring}{}}%
 Baker, S.R., Bloom, N. \& Davis, S.J. 2016. Measuring economic policy
@@ -2395,6 +2476,10 @@ Qin, C.J.J. 2018. Natural language processing and event-driven stock
 prediction. {[}Online{]}, Available:
 \url{http://cs230.stanford.edu/projects_spring_2018/reports/8290001.pdf}.
 
+\leavevmode\vadjust pre{\hypertarget{ref-rashid2019making}{}}%
+Rashid, R. \& Leon, A. de. 2019. Making trading great again: Trump-based
+stock predictions via doc2vec embeddings.
+
 \leavevmode\vadjust pre{\hypertarget{ref-rees2022mastersgithub}{}}%
 Rees, P. 2022. {[}Online{]}, Available:
 \url{https://github.com/PabloRees/Masters}.
@@ -2450,15 +2535,676 @@ establishing its relationship with the s\&p 500 index. In IEEE
 \section*{Appendix}\label{appendix}}
 \addcontentsline{toc}{section}{Appendix}
 
-\hypertarget{appendix-a}{%
-\subsection*{Appendix A}\label{appendix-a}}
-\addcontentsline{toc}{subsection}{Appendix A}
+\hypertarget{appendix-a-data-collection-and-feature-extraction}{%
+\subsection*{Appendix A: Data collection and feature
+extraction}\label{appendix-a-data-collection-and-feature-extraction}}
+\addcontentsline{toc}{subsection}{Appendix A: Data collection and
+feature extraction}
 
-Some appendix information here
+\hypertarget{a.1.-speech-nlp-data-at-collection-and-cleaning-intervals}{%
+\subsubsection*{A.1. Speech (NLP) data at collection and cleaning
+intervals}\label{a.1.-speech-nlp-data-at-collection-and-cleaning-intervals}}
+\addcontentsline{toc}{subsubsection}{A.1. Speech (NLP) data at
+collection and cleaning intervals}
 
-\hypertarget{appendix-b}{%
-\subsection*{Appendix B}\label{appendix-b}}
-\addcontentsline{toc}{subsection}{Appendix B}
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.13}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.29}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.24}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.23}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.03}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.06}}@{}}
+\caption{Speech data after webscrape and cleaning}\tabularnewline
+\toprule
+\begin{minipage}[b]{\linewidth}\centering
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Date
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Transcript
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+No Stops Transcript
+\end{minipage} \\
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{\linewidth}\centering
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Date
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Transcript
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+No Stops Transcript
+\end{minipage} \\
+\midrule
+\endhead
+elections-and-transitions/convention-speeches &
+/people/president/joseph-r-biden & 2020-08-20 22:48:00+00:00 & Address
+Accepting the Democratic Presidential Nomination in Wilmington, Delaware
+& & \\
+& {[}`good', `evening', `.', `ella', `baker', `a', `giant', `of', `the',
+`civil', `rights', `movement',\ldots{]} & {[}`good', `evening', `.',
+`ella', `baker', `giant', `civil', `rights', `movement',\ldots{]} & &
+& \\
+& & & & & \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{a.2.-feature-extraction-parameters}{%
+\subsubsection*{A.2. Feature extraction
+parameters}\label{a.2.-feature-extraction-parameters}}
+\addcontentsline{toc}{subsubsection}{A.2. Feature extraction parameters}
+
+Word2Vec -- the Gensim Word2Vec module was used to create the Word2Vec
+NLP variables. The parameters specified during model specification were:
+
+• min\_count = 5\\
+• vector\_size = 200\\
+• workers = cores\\
+• sg = 1\\
+• compute\_loss = True
+
+Where `cores' is equal to the number of central processing units
+available as determined by the multiprocessing.cpu\_count() function
+available in the Python multiprocessing package.
+
+Doc2Vec-- the Gensim Doc2Vec module was used to create 4 sets of Doc2Vec
+NLP variables. The parameters specified during model specification were:
+
+• dm = 0\\
+• vecto\_size = vecSize\\
+• negative = 5\\
+• hs = 0\\
+• min\_count = 2\\
+• sample = 0\\
+• epochs = 20\\
+• workers = cores
+
+Where `cores' is determined in the same manner as in the Word2Vec
+description above and where vecSize is set to either 20 for the two 20
+variable sets and 200 for the two 200 variable sets.
+
+\hypertarget{appendix-b-machine-learning-model-specifications-and-hyper-parameters}{%
+\subsection*{Appendix B: Machine Learning Model Specifications and
+Hyper-Parameters}\label{appendix-b-machine-learning-model-specifications-and-hyper-parameters}}
+\addcontentsline{toc}{subsection}{Appendix B: Machine Learning Model
+Specifications and Hyper-Parameters}
+
+\hypertarget{b.1.-regression-algorithm-hyper-parameters}{%
+\subsubsection*{B.1. Regression Algorithm
+Hyper-Parameters}\label{b.1.-regression-algorithm-hyper-parameters}}
+\addcontentsline{toc}{subsubsection}{B.1. Regression Algorithm
+Hyper-Parameters}
+
+The Stochastic Gradient Descent model uses SciKit Learn's SGDRegressor
+class. I specified the following hyper-parameters:\\
+• loss =' squared\_error'\\
+• max\_iter = 10000\\
+• shuffle = True\\
+• random\_state = 42\\
+• fit\_intercept = False
+
+The Neural Network model uses SciKit Learn's MLPRegressor class. I
+specified the following hyper-parameters:\\
+• hidden\_layer\_sizes = (L\_1, 8, 1)\\
+• activation = `relu'\\
+• solver = `sgd'\\
+• max\_iter = 10000\\
+• random\_state = 42
+
+If the number of input variables is above 40 then L\_1 is set to the
+number of input variables divided by 8 (rounded up to the nearest whole
+number). If the number of input variables is smaller than 40 then L\_1
+is set to 8.
+
+The Multiple Linear Regression model uses SciKit Learn's
+LinearRegression class. I specified the following hyper-parameters:\\
+• fit\_intercept = False\\
+• n\_jobs = -1
+
+The Gradient Boosting model uses SciKit Learn's
+GradientBoostingRegressor class. I specified the following
+hyper-parameters:\\
+• random\_state = 42\\
+• loss =' squared\_error'\\
+• learning\_rate = 0.1\\
+• min\_samples\_split = 0.05\\
+• min\_samples\_leaf = 0.02\\
+• max\_depth = 3
+
+\hypertarget{b.2.-classification-algorithm-hyper-parameters}{%
+\subsubsection*{B.2. Classification Algorithm
+Hyper-Parameters}\label{b.2.-classification-algorithm-hyper-parameters}}
+\addcontentsline{toc}{subsubsection}{B.2. Classification Algorithm
+Hyper-Parameters}
+
+The Stochastic Gradient Descent model uses SciKit Learn's SGDClassifier
+class. I specified the following hyper-parameters:\\
+• loss =' log'\\
+• random\_state = 42\\
+• shuffle = True\\
+• max\_iter = 10000
+
+The Neural Network model uses SciKit Learn's MLPClassifier class. I
+specified the following hyper-parameters:\\
+• hidden\_layer\_sizes = (L\_1, 8, L\_3)\\
+• activation = `relu'\\
+• solver = `sgd'\\
+• max\_iter = 1000\\
+• random\_state = 42
+
+If the number of input variables is above 40 then L\_1 is set to the
+number of input variables divided by 8 (rounded up to the nearest whole
+number). If the number of input variables is smaller than 40 then L\_1
+is set to 8.
+
+If Binary is True then L\_3 is set to 1 while if Binary is False then
+L\_3 is set to 7
+
+The Logistic Regression model uses SciKit Learn's LogisticRegression
+class. I specified the following hyper-parameters:\\
+• solver = `lbfgs'\\
+• penalty = `l2'\\
+• max\_iter = 10000\\
+• random\_state = 42
+
+The Gradient Boosting model uses SciKit Learn's
+GradientBoostingClassifier class. I specified the following
+hyper-parameters:\\
+• random\_state = 42\\
+• loss =' squared\_error'\\
+• learning\_rate = 0.1\\
+• min\_samples\_split = 0.05\\
+• min\_samples\_leaf = 0.02\\
+• max\_depth = 5
+
+\hypertarget{b.3.-datasets-and-variables}{%
+\subsubsection*{B.3. Datasets and
+variables}\label{b.3.-datasets-and-variables}}
+\addcontentsline{toc}{subsubsection}{B.3. Datasets and variables}
+
+The full X\_control dataset contains 13 autoregressive variables from
+the S\&P 500 daily closing price. These are:
+
+• DlogDif -- the demeaned log difference of the S\&P 500 daily closing
+price (this should be used as a dependent variable only)\\
+• DlogDif\_1 -- the first lag of DlogDif\\
+• DlogDif\_2 -- the second lag of DlogDif\\
+• absDlogDif -- the absolute of DlogDif (this should be used as a
+dependent variable only)\\
+• absDlogDif\_1 -- the first lag of absDlogDif\\
+• logDif -- the log difference of the S\&P 500 daily closing price
+(dependent variable only)\\
+• logDif\_date\_resid -- the residual of the regression of logDif on the
+Date variable\\
+• logDif\_date\_resid\_1 -- the first lag of logDif\_date\_resid\\
+• blackSwan\_SD3\_1 -- a dummy variable that is set to 1 if the first
+lag of the logDif\_date\_resid variable lies outside 3 standard
+deviations from its mean and 0 otherwise\\
+• blackSwan\_SD4\_1 -- the same as blackSwan\_SD3\_1 but for 4 standard
+deviations\\
+• blackSwan\_SD5\_1 -- the same as blackSwan\_SD3\_1 but for 5 standard
+deviations\\
+• stdVol\_1DateResid -- the first lag of the residual of standardized
+volume regressed on the Date variable\\
+• pos\_neg\_transform -- the first lag of a pseudo-dummy variable which
+is set to 1 if DlogDif is positive and set to the ratio of the mean of
+all negative DlogDifs to the mean of all positive DlogDifs
+
+The full X\_meta dataset contains 12 adjacent financial variables that
+may have correlation with S\&P 500 movements. These are:
+
+• BTC\_ld\_1 -- the first lag of the log difference of the daily Bitcoin
+closing price.\\
+• BTC\_dr\_1 -- the first lag of the residual of the regression of the
+Bitcoin closing price on the date.\\
+• Nasdaq\_ld\_1 -- the first lag of the log difference of the daily
+Nasdaq Composite Index closing price.\\
+• Nasdaq\_dr\_1 -- the first lag of the residual of the regression of
+the Nasdaq Composite Index closing price on the date.\\
+• Oil\_ld\_1 -- the first lag of the log difference of the daily crude
+oil closing price.\\
+• Oil\_dr\_1 -- the first lag of the residual of the regression of the
+crude oil closing price on the date.\\
+• SSE\_ld\_1 -- the first lag of the log difference of the daily
+Shanghai Stock Exchange Composite Index closing price.\\
+• SSE\_dr\_1 -- the first lag of the residual of the regression of the
+Shanghai Stock Exchange Composite Index closing price on the date.\\
+• USDX\_ld\_1 -- the first lag of the log difference of the daily US
+Dollar Index closing price.\\
+• USDX\_dr\_1 -- the first lag of the residual of the regression of the
+US Dollar Index closing price on the date.\\
+• VIX\_ld\_1 -- the first lag of the log difference of the daily Chicago
+Board Options Exchange's Volatility Index closing price.\\
+• VIX\_dr\_1 -- the first lag of the residual of the regression of the
+Chicago Board Options Exchange's Volatility Index closing price on the
+date.
+
+The full X\_test dataset contains 426 NLP variables extracted from the
+US Presidential Speeches. 6 of these are generated by the VADER and
+TextBlob sentiment analysis tools. They are:
+
+• VaderNeg -- The negativity score generated using the VADER tool.\\
+• VaderNeu -- The neutrality score generated using the VADER tool.\\
+• VaderPos -- The positivity score generated using the VADER tool.\\
+• VaderComp -- The compound score generated using the VADER tool. This
+is a combination of the negativity, neutrality and positivity scores.\\
+• blobPol -- The polarity score generated using the TextBlob tool.\\
+• blobSubj -- The subjectivity score generated using the TextBlob tool.
+The higher the score the more subjective a text is.
+
+200 of these are generated using the Word2Vec text vectorization tool.
+These variables do not contain specified meaning but are rather the
+average of final parameters from hidden layers in neural networks
+performing the pseudo-task of word prediction. Their purpose is to
+relate words to each other depending on the context of each word within
+the broader corpus. These are annotated as:
+
+• WV\_0\\
+• WV\_1\\
+• \ldots{}\\
+• WV\_198\\
+• WV\_199
+
+The final 220 variables are generated using the Doc2Vec text
+vectorization tool. The Doc2Vec tool works similarly to the Word2Vec
+tool except that during training a second hidden layer is incorporated.
+This second layer is persisted across each word in a text in the
+training corpus and its hyper parameters adjusted so as to create a
+single vector describing the text as a whole. This tool was used to
+create 2 sets of variables (each one a hidden layer from a pseudo-task).
+These are a 200 variable set, annotated as:
+
+• DV\_200\_0\\
+• DV\_200\_1\\
+• \ldots{}\\
+• DV\_200\_198\\
+• DV\_200\_199
+
+and a 20 variable set, annotated as:
+
+• DV\_20\_0\\
+• DV\_20\_1\\
+• \ldots{}\\
+• DV\_20\_18\\
+• DV\_20\_19
+
+\hypertarget{b.4.-hyper-parameter-tuning-for-ts-classification-models}{%
+\subsubsection*{B.4. Hyper-parameter tuning for TS Classification
+models}\label{b.4.-hyper-parameter-tuning-for-ts-classification-models}}
+\addcontentsline{toc}{subsubsection}{B.4. Hyper-parameter tuning for TS
+Classification models}
+
+Two datasets and four models were focussed on during the hyper-parameter
+tuning for in the TS Classification category. The two datasets were the
+1950-01-01 AutoPVDBOW dataset and the 1950-01-01 Auto dataset. While the
+model focus was on neural networks (NN) and gradient boosting (GB) for
+the AutoPVDBOW dataset and on logistic regressions (Logreg) and
+stochastic gradient descent (SGD) for the Auto dataset. Only models that
+yielded improvements in some score or another are included here. No
+regression hyper-parameter tuning is reported here because the tuning
+failed to improve the performance of the regression models.
+
+\hypertarget{b.4.1.-time-series-classification-1950-01-01-autopvdbow-tuning}{%
+\subsubsection*{B.4.1. Time series classification 1950-01-01 AutoPVDBOW
+tuning}\label{b.4.1.-time-series-classification-1950-01-01-autopvdbow-tuning}}
+\addcontentsline{toc}{subsubsection}{B.4.1. Time series classification
+1950-01-01 AutoPVDBOW tuning}
+
+NN\_1:
+
+\begin{verbatim}
+elif clf_type == 'clf_NN':  
+    inputVars = len(XVars)
+    
+    if inputVars / 5 < 8:
+        L_1 = 8
+    else:
+        L_1 = round(inputVars / 8)
+
+    if binary:
+        L_3 = 2
+    else:
+        L_3 = 7
+
+    clf = MLPClassifier(hidden_layer_sizes=(L_1, 8, L_3), activation='relu', 
+                        solver='sgd', max_iter=10000, random_state=random_state)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.590 Precision: 0.598Recall: 0.794\\
+Test Scores Accuracy: 0.573 Precision: 0.566 Recall: 0.838
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.590 Precision: 0.592 Recall: 0.708\\
+Test Scores Accuracy: 0.582 Precision: 0.573 Recall: 0.683
+
+NN\_2:
+
+\begin{verbatim}
+elif clf_type == 'clf_NN':
+    inputVars = len(XVars)
+    if inputVars / 5 < 8:
+        L_1 = inputVars
+        L_2 = inputVars
+    else:
+        L_1 = inputVars
+        L_2 = inputVars
+
+    if binary:
+        L_3 = 2
+    else:
+        L_3 = 7
+
+    clf = MLPClassifier(hidden_layer_sizes=(L_1, L_2, L_3), activation='relu', 
+                        solver='sgd', max_iter=10000, random_state=random_state)
+                        
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.59 Precision: 0.598 Recall: 0.795\\
+Test Scores Accuracy: 0.573 Precision: 0.567 Recall: 0.839
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.591 Precision: 0.598 Recall: 0.682\\
+Test Scores Accuracy: 0.594 Precision: 0.592 Recall: 0.645
+
+NN\_3: L3 = 5
+
+\begin{verbatim}
+elif clf_type == 'clf_NN':
+    inputVars = len(XVars)
+    if inputVars / 5 < 8:
+        L_1 = 2*inputVars
+        L_2 = inputVars
+    else:
+        L_1 = 2*inputVars
+        L_2 = inputVars
+
+    if binary:
+        L_3 = 5
+    else:
+        L_3 = 7
+
+    clf = MLPClassifier(hidden_layer_sizes=(L_1, L_2, L_3), activation='tanh', 
+                        solver='sgd', max_iter=10000, random_state=random_state)
+                         
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.586 Precision: 0.601 Recall: 0.598\\
+Test Scores Accuracy: 0.599 Precision: 0.592 Recall: 0.648
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.594 Precision: 0.606 Recall: 0.664\\
+Test Scores Accuracy: 0.587 Precision: 0.573 Recall: 0.694
+
+NN\_4: solver = `adam'
+
+\begin{verbatim}
+elif clf_type == 'clf_NN':  
+    inputVars = len(XVars)  
+    if inputVars / 5 < 8:  
+        L_1 = 2*inputVars  
+        L_2 = inputVars  
+    else:  
+        L_1 = 2*inputVars  
+        L_2 = inputVars  
+
+    if binary:  
+        L_3 = 2  
+    else:  
+        L_3 = 7  
+
+    clf = MLPClassifier(hidden_layer_sizes=(L_1, L_2, L_3), activation='relu', 
+                        solver='adam', max_iter=10000,
+                        random_state=random_state)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.601 Precision: 0.619 Recall: 0.674\\
+Test Scores Accuracy: 0.587 Precision: 0.59 Recall: 0.777
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.96 Precision: 0.937 Recall: 0.991 - overfit\\
+Test Scores Accuracy: 0.526 Precision: 0.527 Recall: 0.621
+
+NN\_5: solver = adam, early\_stopping = True
+
+\begin{verbatim}
+elif clf_type == 'clf_NN':
+    inputVars = len(XVars)
+    if inputVars / 5 < 8:
+        L_1 = 2*inputVars
+        L_2 = inputVars
+    else:
+        L_1 = 2*inputVars
+        L_2 = inputVars
+
+    if binary:
+        L_3 = round(inputVars/2)
+    else:
+        L_3 = 7
+
+    clf = MLPClassifier(hidden_layer_sizes=(L_1,L_2,L_3), activation='relu', 
+                        solver='adam',
+                        max_iter=10000, random_state=random_state,
+                        early_stopping=True)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.595 Precision: 0.6 Recall: 0.702\\
+Test Scores Accuracy: 0.581 Precision: 0.563 Recall: 0.736
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.605 Precision: 0.621 Recall: 0.657\\
+Test Scores Accuracy: 0.592 Precision: 0.585 Recall: 0.793
+
+GB\_1:
+
+\begin{verbatim}
+elif clf_type == 'clf_GradientBoosting':  
+    clf = GradientBoostingClassifier(random_state=random_state,learning_rate=0.01,
+                        min_samples_split=0.025,min_samples_leaf=0.01,max_depth=8)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.506 Precision: 0.491 Recall: 0.412\\
+Test Scores Accuracy: 0.513 Precision: 0.500 Recall: 0.416
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.512 Precision: 0.5 Recall: 0.441\\
+Test Scores Accuracy: 0.511 Precision: 0.498 Recall: 0.397
+
+GB\_2:
+
+\begin{verbatim}
+else : #clf_type == 'clf_GradientBoosting'
+    clf = GradientBoostingClassifier(random_state=random_state,
+                        learning_rate=0.0001,
+                        min_samples_split=0.01,min_samples_leaf=0.001,
+                        max_depth=12)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.529 Precision: 0.529 Recall: 1.0\\
+Test Scores Accuracy: 0.523 Precision: 0.523 Recall: 1.0
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.529 Precision: 0.529 Recall: 1.0\\
+Test Scores Accuracy: 0.524 Precision: 0.524 Recall: 1.0
+
+\hypertarget{b.4.2.-time-series-classification-1950-01-01-auto-tuning}{%
+\subsubsection*{B.4.2. Time series classification 1950-01-01 Auto
+tuning}\label{b.4.2.-time-series-classification-1950-01-01-auto-tuning}}
+\addcontentsline{toc}{subsubsection}{B.4.2. Time series classification
+1950-01-01 Auto tuning}
+
+Logreg\_1:
+
+\begin{verbatim}
+elif clf_type == 'clf_logreg':
+    clf = LogisticRegression(solver='lbfgs', penalty='l2', max_iter=10000,
+                             random_state=random_state)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.589 Precision: 0.598 Recall: 0.665\\
+Test Scores Accuracy: 0.594 Precision: 0.594 Recall: 0.607
+
+Logreg\_2: fit\_intercept = False
+
+\begin{verbatim}
+elif clf_type == 'clf_logreg':
+    clf = LogisticRegression(solver='lbfgs', penalty='l2', max_iter=10000,
+                             random_state=random_state,fit_intercept=False)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.591 Precision: 0.599 Recall: 0.667\\
+Test Scores Accuracy: 0.594 Precision: 0.589 Recall: 0.633
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.594 Precision: 0.599 Recall: 0.679\\
+Test Scores Accuracy: 0.596 Precision: 0.601 Recall: 0.583
+
+Logreg\_3: penalty=elasticnet
+
+\begin{verbatim}
+elif clf_type == 'clf_logreg':
+    clf = LogisticRegression(solver='saga', penalty='elasticnet', max_iter=10000,
+                      l1_ratio=0.5,random_state=random_state,fit_intercept=False)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.591 Precision: 0.599 Recall: 0.666\\
+Test Scores Accuracy: 0.593 Precision: 0.588 Recall: 0.63
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.594 Precision: 0.599 Recall: 0.68\\
+Test Scores Accuracy: 0.6 Precision: 0.599 Recall: 0.615
+
+Logreg\_4: L1\_ratio = 0.4
+
+\begin{verbatim}
+elif clf_type == 'clf_logreg':
+    clf = LogisticRegression(solver='saga', penalty='elasticnet', max_iter=10000,
+                      l1_ratio=0.4,random_state=random_state,fit_intercept=False)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.591 Precision: 0.599 Recall: 0.666\\
+Test Scores Accuracy: 0.593 Precision: 0.588 Recall: 0.63
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.594 Precision: 0.599 Recall: 0.679\\
+Test Scores Accuracy: 0.601 Precision: 0.6 Recall: 0.614
+
+SGD\_1:
+
+\begin{verbatim}
+if clf_type == 'clf_SGD':
+    clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', 
+                       max_iter=10000)
+\end{verbatim}
+
+Classification type: TS\_Classifier: Classification algo: clf\_SGD\\
+Dataset: Auto\\
+Train Scores: Accuracy: 0.575 Precision: 0.597 Recall: 0.965\\
+Test Scores Accuracy: 0.591 Precision: 0.6 Recall: 0.968
+
+SGD\_2: fit\_intercept = False
+
+\begin{verbatim}
+if clf_type == 'clf_SGD':
+    clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', 
+                        max_iter=10000, fit_intercept=False)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.59 Precision: 0.609 Recall: 0.694\\
+Test Scores Accuracy: 0.591 Precision: 0.595 Recall: 0.754
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.577 Precision: 0.601 Recall: 0.689\\
+Test Scores Accuracy: 0.574 Precision: 0.601 Recall: 0.929
+
+SGD\_3: learning\_rate = adaptive
+
+\begin{verbatim}
+if clf_type == 'clf_SGD':
+    clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log',
+                        max_iter=10000, fit_intercept=False,
+                        learning_rate='adaptive', eta0=0.0001)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.583 Precision: 0.597 Recall: 0.606\\
+Test Scores Accuracy: 0.595 Precision: 0.596 Recall: 0.6
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.588 Precision: 0.595 Recall: 0.662\\
+Test Scores Accuracy: 0.595 Precision: 0.59 Recall: 0.631
+
+SGD\_4: n\_iter\_no\_change = 30
+
+\begin{verbatim}
+if clf_type == 'clf_SGD':
+    clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', 
+                max_iter=10000, fit_intercept=False,
+                learning_rate='adaptive', eta0=0.0001, n_iter_no_change=30)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.587 Precision: 0.597 Recall: 0.635\\
+Test Scores Accuracy: 0.594 Precision: 0.59 Recall: 0.625
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.59 Precision: 0.596 Recall: 0.671\\
+Test Scores Accuracy: 0.597 Precision: 0.591 Recall: 0.644
+
+SGD\_5: n\_iter\_no\_change = 100
+
+\begin{verbatim}
+if clf_type == 'clf_SGD':
+    clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', 
+                    max_iter=10000, fit_intercept=False,
+                    learning_rate='adaptive', eta0=0.0001, n_iter_no_change=100)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.59 Precision: 0.599 Recall: 0.663\\
+Test Scores Accuracy: 0.595 Precision: 0.591 Recall: 0.631
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.591 Precision: 0.6 Recall: 0.681\\
+Test Scores Accuracy: 0.597 Precision: 0.59 Recall: 0.652
+
+SGD\_5: eta0=0.001
+
+\begin{verbatim}
+if clf_type == 'clf_SGD':
+    clf = SGDClassifier(random_state=random_state, shuffle=True, loss='log', 
+                    max_iter=10000, fit_intercept=False,
+                    learning_rate='adaptive', eta0=0.001, n_iter_no_change=100)
+\end{verbatim}
+
+Dataset: Auto\\
+Train Scores: Accuracy: 0.591 Precision: 0.599 Recall: 0.666\\
+Test Scores Accuracy: 0.594 Precision: 0.591 Recall: 0.627
+
+Dataset: AutoPVDBOW\\
+Train Scores: Accuracy: 0.594 Precision: 0.599 Recall: 0.679\\
+Test Scores Accuracy: 0.597 Precision: 0.593 Recall: 0.631
 
 \bibliography{Tex/ref}
 
