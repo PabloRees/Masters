@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e05146fc-c998-459d-8d91-e460f6ff982e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Ensamble.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Ensamble.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Feature_selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Feature_selection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/R_Interface.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Results_Analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Results_Analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/std_fin-ts_data_setup.R" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Writeups/Results_Analysis.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Writeups/Results_Analysis.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.Rmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.log" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-1.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-1.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-10.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-10.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-11.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-11.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-12.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-12.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-13.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-13.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-14.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-14.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-2.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-2.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-3.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-3.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-4.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-4.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-5.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-5.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-6.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-6.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-7.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-7.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-8.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-8.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-9.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Solution/19119461/Thesis_WriteUp/Thesis_WriteUp_files/figure-latex/runARCHsection-9.pdf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +43,39 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration name="ML_stacking" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Masters" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Scripts/ML_stacking.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ML_stacking" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -38,10 +86,16 @@
       <option name="presentableId" value="Default" />
       <updated>1658310160543</updated>
       <workItem from="1658310162492" duration="33000" />
+      <workItem from="1659357672805" duration="8604000" />
+      <workItem from="1659606251228" duration="2435000" />
+      <workItem from="1660295658089" duration="46000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Masters$ML_stacking.coverage" NAME="ML_stacking Coverage Results" MODIFIED="1659438922380" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Scripts" />
   </component>
 </project>

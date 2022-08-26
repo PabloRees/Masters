@@ -3,7 +3,7 @@
 \usepackage{lmodern}
 %%%% My spacing
 \usepackage{setspace}
-\setstretch{1.2}
+\setstretch{1}
 \DeclareMathSizes{12}{14}{10}{10}
 
 % Wrap around which gives all figures included the [H] command, or places it "here". This can be tedious to code in Rmarkdown.
@@ -235,20 +235,20 @@ Stellenbosch University.\par}
 
 \begin{abstract}
 \small{
-The literature relating textual data to stock market data is deep but
-neglects to include the relation between speeches given by presidents
-and stock markets. This paper begins to fill this gap by exploring the
-relationship between U.S. presidential speeches and daily price
-movements in the S\&P 500 index. It was possible to explore this
+The literature relating textual to stock market data is deep but
+research into the relationship between speeches given by presidents and
+stock markets is lacking. This paper begins to fill this gap by
+exploring the relationship between U.S. presidential speeches and daily
+price movements in the S\&P 500 index. It was possible to explore this
 relationship by using natural language processing techniques,
 econometric time-series analysis and machine learning models. It was
 found that models including presidential speech data can achieve
-prediction accuracy of about 65\% over S\&P 500 index price movements.
-This is an increase of about 1\% over the models that did not include
-the presidential speech data (without losing ground in either recall or
-precision). Thus it is concluded that presidential speeches hold
-predictive power over stock market movements and that this relationship
-can be used to improve the power of predictive models.
+prediction accuracy of about 60\% over S\&P 500 index price movements.
+This is an increase of about 1 percentage point over the models that did
+not include the presidential speech data (without losing ground in
+either recall or precision). Thus it is concluded that presidential
+speeches hold predictive power over stock market movements and that this
+relationship can be used to improve the power of predictive models.
 }
 \end{abstract}
 
@@ -297,18 +297,87 @@ S\&P 500 \sep Machine Learning \sep Natural Language Processing
 
 
 
+\listoffigures
+\listoftables
 \newpage
 
 \hypertarget{introduction}{%
 \section{\texorpdfstring{Introduction
 \label{Introduction}}{Introduction }}\label{introduction}}
 
-A lot of research exists relating text data to various types of
-financial market or macroeconomic data. Twitter is often the source of
-text data and the United States stock market is often the source of
-financial data. However, presidential speeches have so far been
-overlooked as a potential source of information pertaining to stock
-markets. This project begins to fill that gap in the literature.
+The efficient market hypothesis states that the history of a market is
+an ineffective predictor of its future, nonetheless there are many
+iterations of attempts to predict markets based on their own histories
+and external factors (\protect\hyperlink{ref-famaEfficient}{Fama,
+1965}). Moore's law states that computing power doubles every two years
+and although this is not strictly true, the lived experience is close
+(\protect\hyperlink{ref-mollick2006establishing}{Mollick, 2006}). This
+combined with the onset of massive amounts of publicly available data
+has given empirical research in the social sciences power that it has
+never been able to muster until recent years. Computer driven analysis
+of large amounts of text data is rapidly becoming mainstream and
+specifically, political text data is one external factor useful in
+predicting market
+futures(\protect\hyperlink{ref-grimmer2013text}{Grimmer \& Stewart,
+2013}; \protect\hyperlink{ref-hayo2008communicating}{Hayo, Kutan \&
+Neuenkirch, 2008};
+\protect\hyperlink{ref-maligkris2017political}{Maligkris, 2017};
+\protect\hyperlink{ref-soroka2015bad}{Soroka, Young \& Balmas, 2015}).
+
+Hayo \emph{et al.} (\protect\hyperlink{ref-hayo2008communicating}{2008})
+performed a generalized auto-regressive conditional heteroscedastic
+(GARCH) analysis of the relationship between Federal Open Market
+Committee (FOMC) speeches and the U.S. financial market. The analysis
+was quantitative on the market side and qualitative on the speech side
+and demonstrates that the sentiments of communications influence the
+effect of those communications on markets. Thus, analyzing sentiment is
+an important factor in an accurate appraisal of the relationship between
+speeches and markets. Using regression analysis Maligkris
+(\protect\hyperlink{ref-maligkris2017political}{2017}) demonstrate that
+there is a correlation between presidential candidates' speeches and
+stock movements. Further, they indicate that speeches laden with
+economic information tend to boost stock returns while also reducing
+volatility while speeches with a negative tone have the opposite effect
+and the long run effect of speeches is dependent on market conditions.
+Baker, Bloom \& Davis (\protect\hyperlink{ref-baker2016measuring}{2016})
+show that language processing can be used to predict economic events,
+and particularly economic uncertainty and economic policy uncertainty.
+They develop an Economic Policy Uncertainty Index based on the frequency
+of articles containing a trio of terms in 10 leading U.S. newspapers.
+The terms were selected over a period of 24 months during which more
+than 15 000 news articles were read by humans in an auditing process.
+The index proved to be quite accurate, spiking near the expected events,
+including wars, tight presidential elections, fiscal policy battles and
+terrorist activity. Sazedj \& Tavares
+(\protect\hyperlink{ref-sazedj2011hope}{2011}) highlight the
+relationship between the content of a presidential speech and stock
+market returns by regressing the event of a speech during Obama's first
+11 months as U.S. president on the daily excess returns of the Dow
+Jones, the S\&P 500 and the NASDAQ indices. They found that the event of
+a speech had a generally insignificant effect on daily excesses.
+However, by regressing key terms contained in 43 speeches given during
+the first 11 months of Obama's presidency it was found that the content
+of speeches can significantly affect daily excess returns nearly
+uniformly across all three indices. Notably, the NASDAQ's correlation to
+the content of speeches was weaker -- indicating that technology markets
+may be less susceptible to presidential rhetoric.
+
+The aim of this project is to determine whether U.S Presidential
+speeches have predictive power over U.S. stock market movements. A
+positive result would be powerful and could add to the ability of
+traders to accurately predict stock market movements. The undertaking of
+this project assumes two important conjectures - both of which have been
+confirmed by the research reported above. First, that there is a
+correlation between the linguistic factors\footnote{`Linguistic factors'
+  in this sense is intended to mean any and all patterns that can be
+  detected in spoken language including verbiage, lexicon, tone,
+  register, sentence length, word combination etc.} of speech employed
+by U.S. presidents in their speeches and U.S. stock market movements;
+and second, that the prominence of speech factors can be quantified by
+using machine learning algorithms. Broadly, machine learning has been
+selected as the method of modelling and the S\&P 500 index has been
+chosen as representative of the `stock market'. As far as I am aware,
+this research is novel.
 
 In specific, this project shows that U.S. Presidential Speeches have
 predictive power over S\&P 500 price fluctuations. In order to prove
@@ -317,232 +386,29 @@ series analysis were used. The usage of these 3 methods allowed for the
 comparison of models based on purely financial data with models based on
 a combination of financial and language data. The result being that the
 best models based on a combination of financial and language data
-outperformed the best purely financial models by about 1\% in terms of
-predictive accuracy at a daily resolution.
+outperformed the best purely financial models by about 1 percentage
+point in terms of predictive accuracy at a daily resolution.
 
-This paper is divided into 4 main sections: a literature review, a data
-section, an explanation of the experiment design, and a results section.
-The literature review begins by defending 2 basic conjectures assumed by
-the undertaking of this project by citing results of other works and
-concludes by reviewing machine learning (ML) and natural language
-processing (NLP) methods that those works have used. The data section
-explains how the data was gathered, cleaned, manipulated, engineered and
-organised. The experiment section explains the exact construction of
-various sets of models that could be compared for best performance and
-finally, the results section reports these performances.
+\hypertarget{methodology-review}{%
+\section{Methodology review}\label{methodology-review}}
 
-\hypertarget{literature-review}{%
-\section{\texorpdfstring{Literature review
-\label{Literature review}}{Literature review }}\label{literature-review}}
-
-The aim of this project is to determine whether U.S Presidential
-speeches have predictive power over stock market movements. A positive
-result would be powerful and could add to the ability of traders to
-accurately predict stock market movements. Broadly, machine learning has
-been selected as the method of modelling and the S\&P 500 index has been
-chosen as representative of the `stock market'.
-
-The undertaking of this project assumes 2 important conjectures. First,
-that there is a correlation between the linguistic factors\footnote{`Linguistic
-  factors' in this sense is intended to mean any and all patterns that
-  can be detected in spoken language including verbiage, lexicon, tone,
-  register, sentence length, word combination etc.} of speech employed
-by U.S. presidents in their speeches and U.S. stock market movements;
-and second, that the prominence of speech factors can be quantified by
-using machine learning algorithms. The following literature review
-defends the two conjectures, confirms the novelty of the project, and
-surveys methods of data cleaning and analysis to discover which machine
-learning methods are most appropriate for this project.
-
-\hypertarget{conjecture-defence}{%
-\subsection{\texorpdfstring{Conjecture defence
-\label{Conjecture defence}}{Conjecture defence }}\label{conjecture-defence}}
-
-The following section references the findings of four peer-reviewed
-articles in defence of the conjectures made in section 1. More evidence
-exists but is not necessary to sufficiently defend the conjectures made
-here.
-
-\hypertarget{fomc-speeches-and-u.s.-financial-market-reactions}{%
-\subsubsection{\texorpdfstring{FOMC speeches and U.S. financial market
-reactions
-\label{FOMC speeches}}{FOMC speeches and U.S. financial market reactions }}\label{fomc-speeches-and-u.s.-financial-market-reactions}}
-
-\protect\hyperlink{ref-hayo2008communicating}{Hayo, Kutan \& Neuenkirch}
-(\protect\hyperlink{ref-hayo2008communicating}{2008: 27}) performed a
-generalized auto-regressive conditional heteroscedastic (GARCH) analysis
-of the relationship between Federal Open Market Committee (FOMC)
-speeches and the U.S. financial market. The analysis was quantitative on
-the market side and qualitative on the speech side. They found that FOMC
-speeches influence trader behaviour, but that this effect is both
-asymmetrical (negative impacts were larger than positive impacts) and
-non-uniform across trader type (bond markets were affected far more than
-financial and forex markets). Further, more formal modes of
-communication have a larger impact on both returns and conditional
-variance and more prominent speakers have a greater impact on bond
-markets. Finally, they found that volatility in 3- and 6-month T-bills
-was reduced on the day of a speech.
-
-It was commented that heteroskedasticity left something to be desired
-when assessing the effects of monetary shocks. Further, it was found
-that speeches alone were not sufficient to create significant effects
-for financial markets. It is important that news agencies propagate the
-news for market repercussions to occur. In a brief, informal interview
-with a few bond traders it was discovered that they tended to ``read
-monetary policy statements and listen to speeches by Greenspan
-(Bernanke) themselves. Other types of communications are rather
-neglected and the traders tend to rely on newswire information''
-(\protect\hyperlink{ref-hayo2008communicating}{Hayo \emph{et al.},
-2008}). Further, it was noted that news articles fail to take a neutral
-stance on the contents of speeches implying that the market effect may
-be distorted by the sentiment of news agencies.
-
-This article shows that the sentiments of communications influence the
-effect of those communications on markets. Thus, analysing sentiment is
-an important factor in an accurate appraisal of the relationship between
-speeches and markets. The finding that speeches need to be propagated by
-news agencies in order to have significant impacts on financial markets
-is counter to the hypothesis of this project; however the FOMC is less
-publicly scrutinized than a U.S. president which may render this finding
-only mildly significant to this project.
-
-\hypertarget{political-speeches-and-stock-market-outcomes}{%
-\subsubsection{\texorpdfstring{Political speeches and stock market
-outcomes
-\label{Political speeches}}{Political speeches and stock market outcomes }}\label{political-speeches-and-stock-market-outcomes}}
-
-\protect\hyperlink{ref-maligkris2017political}{Maligkris}
-(\protect\hyperlink{ref-maligkris2017political}{2017}) demonstrates that
-the speeches given by U.S. presidential candidates directly influence
-the stock market, particularly during the early months of their
-campaigns. These speeches often contain information about potential
-presidents' positions on policy changes and public issues. Thus, they
-can affect investor sentiment and, in turn, the stock market. The
-employed methodology was to analyse transcripts of presidential
-candidates' speeches from the American Presidency Project archives and
-the U.S. Government Publishing Project from the 2004-2016 period
-according to the index developed in
-\protect\hyperlink{ref-baker2016measuring}{Baker, Bloom \& Davis}
-(\protect\hyperlink{ref-baker2016measuring}{2016}) (explained in section
-\ref{policy uncertainty}). He shows, using regression analysis that
-there is an average increase in excess market returns of 26 basis points
-following candidate speeches, however the direction and magnitude of
-this effect varies between candidates. He goes on to examine whether the
-difference in effect is due to heterogenous speech content. Finally, it
-was demonstrated that speeches laden with economic information tend to
-boost stock returns while also reducing volatility. Speeches with a
-negative tone have the opposite effect and the long run effect of
-speeches is dependent on market conditions.
-
-This paper demonstrates that there is a correlation between presidential
-candidates' speeches and stock movements. It is then reasonable to
-believe that there is also a correlation between presidents' speeches
-and stock market movements. It also highlights that tone affects the
-relationship and thus that the sentiment of a speech is important.
-Further, the the paper provides a perfect resource for gathering U.S
-presidential speech data - the American Presidency Project.
-
-\hypertarget{measuring-economic-policy-uncertainty}{%
-\subsubsection{\texorpdfstring{Measuring economic policy uncertainty
-\label{policy uncertainty}}{Measuring economic policy uncertainty }}\label{measuring-economic-policy-uncertainty}}
-
-\protect\hyperlink{ref-baker2016measuring}{Baker \emph{et al.}}
-(\protect\hyperlink{ref-baker2016measuring}{2016}) develop an Economic
-Policy Uncertainty Index based on the frequency of articles containing a
-trio of terms in 10 leading U.S. newspapers. These terms were: `
-``economic'' or ``economy'' ; ``uncertain'' or ``uncertainty''; and one
-or more of ``congress'', ``deficit'', ``Federal Reserve'',
-`legislation'', ``regulation'', or ``White House''\,'
-(\protect\hyperlink{ref-baker2016measuring}{Baker \emph{et al.}, 2016:
-1594}). The terms were selected over a period of 24 months during which
-more than 15 000 news articles were read by humans in an auditing
-process. The index proved to be quite accurate, spiking near the
-expected events, including wars, tight presidential elections, fiscal
-policy battles and terrorist activity.
-
-They went on to show that their index had a strong relationship with
-other economic uncertainty measures and policy uncertainty measures.
-Further, congruence in uncertainty prediction was found between left-
-and right- leaning newspapers.
-
-This article shows that language processing can be used to predict
-economic events, particularly economic uncertainty and economic policy
-uncertainty. However, the type of language processing proposed for this
-project differs significantly. While
-\protect\hyperlink{ref-baker2016measuring}{Baker \emph{et al.}}
-(\protect\hyperlink{ref-baker2016measuring}{2016}) used man hours; this
-project uses machine learning.
-
-\hypertarget{hope-change-and-financial-markets-can-obamas-words-drive-the-market}{%
-\subsubsection{\texorpdfstring{Hope, change and financial markets: can
-Obama's words drive the market?
-\label{Obama}}{Hope, change and financial markets: can Obama's words drive the market? }}\label{hope-change-and-financial-markets-can-obamas-words-drive-the-market}}
-
-\protect\hyperlink{ref-sazedj2011hope}{Sazedj \& Tavares}
-(\protect\hyperlink{ref-sazedj2011hope}{2011}) asked whether the
-speeches made by former U.S. President Barack Obama affected stock
-market prices. By regressing the event of a speech during Obama's first
-11 months in office on the daily excess returns of the Dow Jones, the
-S\&P 500 and the NASDAQ they found that the event of a speech had a
-generally insignificant effect on daily excesses. However, by regressing
-key terms contained in 43 speeches given during the first 11 months of
-Obama's presidency it was found that the content of speeches can
-significantly affect daily excess returns nearly uniformly across all
-three indices. Notably, the NASDAQ's correlation to the content of
-speeches was weaker -- indicating that technology markets may be less
-susceptible to presidential rhetoric.
-
-This paper highlights the relationship between the content of a
-presidential speech and stock market returns. However, this study was
-correlational rather than predictive in nature and therefore does not
-offer a conclusion on the hypothesis of this project
-
-\hypertarget{conjecture-defence-summary}{%
-\subsubsection{\texorpdfstring{Conjecture defence summary
-\label{defence summary}}{Conjecture defence summary }}\label{conjecture-defence-summary}}
-
-As seen in section \ref{Political speeches} and section \ref{Obama} it
-is true that there is a correlation between the linguistic factors of
-speech employed by U.S. presidents in their speeches and U.S. stock
-market movements. Further, section \ref{FOMC speeches} and section
-\ref{policy uncertainty} show that sentiment and other linguistic
-factors of speech can be quantified using machine learning methods.
-Thus, both conjectures hold and further investigation is warranted. This
-is not the total of all evidence supporting these conjectures but is
-sufficient. Other articles reviewed here can be seen for further
-evidence.
-
-\hypertarget{novelty}{%
-\subsection{\texorpdfstring{Novelty
-\label{novelty}}{Novelty }}\label{novelty}}
-
-Searching `sentiment analysis stock market' on Google Scholar yields
-mostly articles linking Twitter data and the stock market. Searching
-`presidential speeches affect stock market' on Google Scholar yields
-articles on the relationship between presidential speeches and the stock
-market but none using Machine Learning techniques.
-\protect\hyperlink{ref-khedr2017predicting}{Khedr, Yaseen \& others}
-(\protect\hyperlink{ref-khedr2017predicting}{2017}) describe related
-work as including relating news or Twitter data to stock market behavior
-and prices and relating financial news to stock prices, but do not
-mention presidential speeches. Searching `machine learning S\&P 500' on
-Google Scholar yields an array of articles using machine learning as a
-technical analysis tool but most of these use other financial indicators
-and are not NLP based -- bar one article analysing the effects of former
-U.S. president, Donald Trump's tweets on the S\&P 500 and the DJIA.
-Searching `political speech machine learning' on Google Scholar yields
-articles that focus on political speeches but have no link to stock
-markets. Other searches yielded similar results, thus as far as can be
-told -- this research is novel in nature.
+In order to select the methods most applicable to this project a review
+of similar projects was undertaken. Seven papers are reviewed here in
+order to elucidate commonly used methods in data cleaning, sentiment
+analysis and stock market prediction. The results are summarized in two
+tables following the review. Table \ref{Table 1} represents the
+literature review in a condensed format which allows for easy comparison
+of the data and methods used and resulting accuracies. Table
+\ref{Table 2} represents the metadata, linked through `Paper number' for
+Table \ref{Table 1}.
 
 \hypertarget{data-cleaning-methods-for-nlp}{%
 \subsection{\texorpdfstring{Data cleaning methods for NLP
 \label{data cleaning}}{Data cleaning methods for NLP }}\label{data-cleaning-methods-for-nlp}}
 
-\protect\hyperlink{ref-katre2019nlp}{Katre}
-(\protect\hyperlink{ref-katre2019nlp}{2019}), in his analysis of Indian
-political speeches, uses the Natural Language Toolkit (NLTK) package and
-string methods to remove punctuation, HTML tags and English
+Katre (\protect\hyperlink{ref-katre2019nlp}{2019}), in his analysis of
+Indian political speeches, uses the Natural Language Toolkit (NLTK)
+package and string methods to remove punctuation, HTML tags and English
 stopwords\footnote{`Stopwords' are words that commonly occur across all
   speech and therefore only create noise in the data. Some examples are
   `the', `it', `they' and `and'.}, as well as converting speeches to
@@ -550,18 +416,15 @@ lowercase and tokenizing\footnote{`Tokenizing' refers to the splitting
   of words into tokens that have linguistic importance, for example the
   words `terrorism', `terrorist' and `terror' may all be tokenized to
   `terror'. Thus, the core concept of the word is captured while also
-  simplifying the dataset.} them.
-\protect\hyperlink{ref-zubair2015extracting}{Zubair \& Cios}
+  simplifying the dataset.} them. Zubair \& Cios
 (\protect\hyperlink{ref-zubair2015extracting}{2015}), before correlating
 the sentiment in Reuters articles with S\&P 500 movements, clean their
-text data by tokenizing it with NLTK.
-\protect\hyperlink{ref-kinyua2021analysis}{Kinyua, Mutigwe, Cushing \&
-Poggi} (\protect\hyperlink{ref-kinyua2021analysis}{2021}) clean their
-Twitter data (tweets from then U.S. president, Donald Trump) by deleting
-all tweets on days when the stock trading was closed, deleting all
-tweets that only contained standard stopwords and deleting all tweets
-that only contained URLs.
-\protect\hyperlink{ref-khedr2017predicting}{Khedr \emph{et al.}}
+text data by tokenizing it with NLTK. Kinyua, Mutigwe, Cushing \& Poggi
+(\protect\hyperlink{ref-kinyua2021analysis}{2021}) clean their Twitter
+data (tweets from then U.S. president, Donald Trump) by deleting all
+tweets on days when the stock trading was closed, deleting all tweets
+that only contained standard stopwords and deleting all tweets that only
+contained URLs. Khedr, Yaseen \& others
 (\protect\hyperlink{ref-khedr2017predicting}{2017}) tokenize,
 standardize by converting to lowercase, remove stopwords from and
 stem\footnote{`Stemming' refers to the removal of suffixes to reduce the
@@ -582,13 +445,12 @@ between the two.
 \subsubsection{\texorpdfstring{Sentiment analysis methods
 \label{sentAnal}}{Sentiment analysis methods }}\label{sentiment-analysis-methods}}
 
-\protect\hyperlink{ref-ren2018forecasting}{Ren, Wu \& Liu}
-(\protect\hyperlink{ref-ren2018forecasting}{2018}) analyse news articles
-at the sentence level by assigning a sentiment polarity (using software
-designed for the Chinese language) to each word followed by a sentiment
-score for each sentence in a document. Each document is then categorized
-and a sentiment score between -1 and 1 for all news for each day is
-generated. \protect\hyperlink{ref-zubair2015extracting}{Zubair \& Cios}
+Ren, Wu \& Liu (\protect\hyperlink{ref-ren2018forecasting}{2018})
+analyse news articles at the sentence level by assigning a sentiment
+polarity (using software designed for the Chinese language) to each word
+followed by a sentiment score for each sentence in a document. Each
+document is then categorized and a sentiment score between -1 and 1 for
+all news for each day is generated. Zubair \& Cios
 (\protect\hyperlink{ref-zubair2015extracting}{2015}) use the positive
 and negative valence categories from the Harvard General Enquirer (HGI)
 to assign each word in a Reuters news article a positive or negative
@@ -598,19 +460,18 @@ vector that represents each news article. The vectors are organized into
 time series, normalized by dividing all vectors by the first vector,
 parsed through a Kalman filter and then correlated to S\&P 500 returns
 using Pearson correlation (for both the positive and negative scalar in
-the vector). \protect\hyperlink{ref-kinyua2021analysis}{Kinyua \emph{et
-al.}} (\protect\hyperlink{ref-kinyua2021analysis}{2021}) use the Valence
-Aware Dictionary for Sentiment Reasoning (VADER) to create a sentiment
-feature for former U.S. president Donald Trump's tweets which was then
-used as a regression feature in linear, decision tree and random forest
-regressions. \protect\hyperlink{ref-khedr2017predicting}{Khedr \emph{et
-al.}} (\protect\hyperlink{ref-khedr2017predicting}{2017}) use N-gram
-(n=2) to extract key phrases from their corpus of news text data, then
+the vector). Kinyua \emph{et al.}
+(\protect\hyperlink{ref-kinyua2021analysis}{2021}) use the Valence Aware
+Dictionary for Sentiment Reasoning (VADER) to create a sentiment feature
+for former U.S. president Donald Trump's tweets which was then used as a
+regression feature in linear, decision tree and random forest
+regressions. Khedr \emph{et al.}
+(\protect\hyperlink{ref-khedr2017predicting}{2017}) use N-gram (n=2) to
+extract key phrases from their corpus of news text data, then
 term-frequency inverse-document-frequency (TF-IDF) is used to determine
 the importance of those phrases within the corpus, and finally use a
 naïve-Bayes classifier to assign positive and negative labels to each
-news document. \protect\hyperlink{ref-purevdagva2020machine}{Purevdagva,
-Zhao, Huang \& Mahoney}
+news document. Purevdagva, Zhao, Huang \& Mahoney
 (\protect\hyperlink{ref-purevdagva2020machine}{2020}) use a variety of
 features present in both data and metadata to predict fake political
 speech. Two features relevant to this project were `speaker job' and
@@ -624,60 +485,47 @@ classifier for feature selection and then support vector machine (SVM),
 multilayer perceptron, convolutional neural network (CNN), decision
 trees, fasttext and bidirectional encoder representations from
 transformers (BERT) for prediction with the highest accuracy resulting
-from the SVM. \protect\hyperlink{ref-dilaisentiment}{Dilai, Onukevych \&
-Dilai} (\protect\hyperlink{ref-dilaisentiment}{2021}) use SentiStrength
--- an automatic sentiment analysis tool - to compare the sentiment in
-speeches between former U.S. president Donald Trump and former Ukrainian
+from the SVM. Dilai, Onukevych \& Dilai
+(\protect\hyperlink{ref-dilaisentiment}{2021}) use SentiStrength -- an
+automatic sentiment analysis tool - to compare the sentiment in speeches
+between former U.S. president Donald Trump and former Ukrainian
 president Petro Poroshenko.
 
 \hypertarget{stock-market-prediction-methods}{%
 \subsubsection{\texorpdfstring{Stock market prediction methods
 \label{stockPred}}{Stock market prediction methods }}\label{stock-market-prediction-methods}}
 
-\protect\hyperlink{ref-ren2018forecasting}{Ren \emph{et al.}}
-(\protect\hyperlink{ref-ren2018forecasting}{2018}) use an SVM and
-five-fold cross validation approach to achieve a prediction accuracy of
-98\% when predicting fake news in political speech. They combined
-sentiment data and market indicators as their input data.
-\protect\hyperlink{ref-kinyua2021analysis}{Kinyua \emph{et al.}}
-(\protect\hyperlink{ref-kinyua2021analysis}{2021}) use linear, decision
-tree and random forest regressions to predict S\&P 500 and DJIA
-directional changes. Random forest regression performed best for both
-datasets. \protect\hyperlink{ref-khedr2017predicting}{Khedr \emph{et
-al.}} (\protect\hyperlink{ref-khedr2017predicting}{2017}) use open,
-high, low and close (OHLC) prices and the first lag of directional
-change as features for prediction of future market trends.
-\protect\hyperlink{ref-jiao2017predicting}{Jiao \& Jakubowicz}
+Ren \emph{et al.} (\protect\hyperlink{ref-ren2018forecasting}{2018}) use
+an SVM and five-fold cross validation approach to achieve a prediction
+accuracy of 98\% when predicting fake news in political speech. They
+combined sentiment data and market indicators as their input data.
+Kinyua \emph{et al.} (\protect\hyperlink{ref-kinyua2021analysis}{2021})
+use linear, decision tree and random forest regressions to predict S\&P
+500 and DJIA directional changes. Random forest regression performed
+best for both datasets. Khedr \emph{et al.}
+(\protect\hyperlink{ref-khedr2017predicting}{2017}) use open, high, low
+and close (OHLC) prices and the first lag of directional change as
+features for prediction of future market trends. Jiao \& Jakubowicz
 (\protect\hyperlink{ref-jiao2017predicting}{2017}) extracted lag and
 window features from the S\&P 500 and the global 8 index before running
 time series random forest, neural network and gradient boosted trees to
-predict movements of individual stocks in the S\&P 500.
-\protect\hyperlink{ref-liu2016forecasting}{Liu, Wang, Xiao \& Liang}
-(\protect\hyperlink{ref-liu2016forecasting}{2016}) used forward search
-feature selection to select features for SVM, naïve-Bayes, Gaussian
-discriminant analysis and logistic regression from a set of economic
-features including the crude oil daily return, currency exchange rates
-and major stock indices daily returns in order to forecast the S\&P 500
-movement.
-
-\hypertarget{summary-of-literature-review}{%
-\subsection{\texorpdfstring{Summary of literature review
-\label{litSumm}}{Summary of literature review }}\label{summary-of-literature-review}}
-
-Table 2.1 represents the literature review in a condensed format which
-allows for easy comparison of the data and methods used and resulting
-accuracies. Table 2.2 represents the metadata, linked through `Paper
-number' for Table 2.1.
+predict movements of individual stocks in the S\&P 500. Liu, Wang, Xiao
+\& Liang (\protect\hyperlink{ref-liu2016forecasting}{2016}) used forward
+search feature selection to select features for SVM, naïve-Bayes,
+Gaussian discriminant analysis and logistic regression from a set of
+economic features including the crude oil daily return, currency
+exchange rates and major stock indices daily returns in order to
+forecast the S\&P 500 movement.
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.07}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.26}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.31}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.17}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.13}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.07}}@{}}
-\caption{Condensed literature review}\tabularnewline
-\toprule
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0654}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2570}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.3131}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1729}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1262}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0654}}@{}}
+\caption{Condensed literature review \label{Table 1}}\tabularnewline
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Paper number
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -691,9 +539,9 @@ Index predicted
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 Max accuracy
 \end{minipage} \\
-\midrule
+\midrule()
 \endfirsthead
-\toprule
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Paper number
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -707,7 +555,7 @@ Index predicted
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 Max accuracy
 \end{minipage} \\
-\midrule
+\midrule()
 \endhead
 1 & Support vector machine with fivefold cross validation & & Daily
 online stock reviews & SSE 50 & 0.98 \\
@@ -743,15 +591,15 @@ and metadata & Liar dataset & 0.74 \\
 7 & Convolutional neural network & & & & 0.61 \\
 7 & Fasttext & & & & 0.66 \\
 7 & BERT & & & & 0.66 \\
-\bottomrule
+\bottomrule()
 \end{longtable}
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.08}}
-  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.76}}
-  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.16}}@{}}
-\caption{Table 2.1 metadata}\tabularnewline
-\toprule
+  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0848}}
+  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.7576}}
+  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1576}}@{}}
+\caption{Table 2.1 metadata \label{Table 2}}\tabularnewline
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Paper number
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -759,9 +607,9 @@ Title
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 Citation
 \end{minipage} \\
-\midrule
+\midrule()
 \endfirsthead
-\toprule
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Paper number
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -769,7 +617,7 @@ Title
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 Citation
 \end{minipage} \\
-\midrule
+\midrule()
 \endhead
 1 & Forecasting Stock Market Movement Direction Using Sentiment Analysis
 and Support Vector Machine &
@@ -781,7 +629,7 @@ Cios, 2015}) \\
 and S\&P 500 using machine learning and sentiment analysis &
 (\protect\hyperlink{ref-kinyua2021analysis}{Kinyua \emph{et al.},
 2021}) \\
-4 & Predicting Stock Market Behaviour using Data Mining Technique and
+4 & Predicting Stock Market behavior using Data Mining Technique and
 News Sentiment Analysis &
 (\protect\hyperlink{ref-khedr2017predicting}{Khedr \emph{et al.},
 2017}) \\
@@ -794,7 +642,7 @@ Extensive Study on S\&P 500 Stocks &
 7 & A machine-learning based framework for detection of fake political
 speech & (\protect\hyperlink{ref-purevdagva2020machine}{Purevdagva
 \emph{et al.}, 2020}) \\
-\bottomrule
+\bottomrule()
 \end{longtable}
 
 \hypertarget{data-collection-and-cleaning-process}{%
@@ -831,13 +679,13 @@ Presidency Project (\protect\hyperlink{ref-yahooSP500}{Yahoo, n.d.})
 (\protect\hyperlink{ref-americanPresProj1}{Woolley \& Peters, n.d}). The
 S\&P 500 is downloaded using the `fin\_data\_downloader' Python module
 and will always download the entire history of the S\&P 500 index at a
-daily interval (\protect\hyperlink{ref-rees2022mastersgithub}{Rees,
-2022}). The same goes for the metadata. The presidential speeches on the
-other hand were scraped using the `WebScrapeAndClean' Python module
-which will also always scrape the entire corpus available on the
-American Presidency Project website
-(\protect\hyperlink{ref-rees2022mastersgithub}{Rees, 2022}). This allows
-for perfectly updated data to be collected at any time.
+daily interval \footnote{All code used in this project can be found on
+  my Github profile at github.com/PabloRees/Masters}. The same goes for
+the metadata. The presidential speeches on the other hand were scraped
+using the `WebScrapeAndClean' Python module which will also always
+scrape the entire corpus available on the American Presidency Project
+website. This allows for perfectly updated data to be collected at any
+time.
 
 The S\&P 500 data contains seven variables, namely: `Date', `Open',
 `High', `Low', `Close', `Adj Close', and `Volume'. `Open' records the
@@ -862,20 +710,23 @@ The S\&P 500 index did not require any cleaning after download, besides
 the removal of the redundant `Adj Close' variable. Conversely, the
 presidential speeches required extensive cleaning. Text that has been
 web-scraped contains HTML tags\footnote{HTML tags include paragraphing
-  and spacing indicators for computers to interpret such as '}, thus the
-first step was to remove the HTML tags from the text. Similarly, the
+  and spacing indicators for computers to interpret such as
+  `\textless p\textgreater{}' and `\textless/p\textgreater{}'.}, thus
+the first step was to remove the HTML tags from the text. Similarly, the
 test contained reactions from the crowds listening to the
-speeches\footnote{These were tags such as `Laughter' and `Applause'.},
-which were also removed. Next, the transcripts were converted to lower
-case and the question sections removed. Next a `No Stops Transcript'
-variable was created by removing the stopwords\footnote{Stopwords are
-  words that commonly occur in the English language and are therefore
-  unlikely to contain any sort of signal and thus constitute only noise.}
-in the Natural Language Tool Kit (NLTK) stop words dictionary from the
-clean transcript. The original transcripts were also kept. The cleaning
-of the speech data and both financial data-subsets was done in their
-original collection modules, i.e.~the `fin\_data\_downloader' Python
-modules and the `WebScrapeAndClean' Python modules respectively.
+speeches\footnote{These were tags such as
+  `\textless em\textgreater Laughter\textless/em\textgreater{}' and
+  `\textless em\textgreater Applause\textless/em\textgreater{}'.}, which
+were also removed. Next, the transcripts were converted to lower case
+and the question sections removed. Next a `No Stops Transcript' variable
+was created by removing the stopwords\footnote{Stopwords are words that
+  commonly occur in the English language and are therefore unlikely to
+  contain any sort of signal and thus constitute only noise.} in the
+Natural Language Tool Kit (NLTK) stop words dictionary from the clean
+transcript. The original transcripts were also kept. The cleaning of the
+speech data and both financial data-subsets was done in their original
+collection modules, i.e.~the `fin\_data\_downloader' Python modules and
+the `WebScrapeAndClean' Python modules respectively.
 
 \hypertarget{text-feature-engineering}{%
 \subsection{Text feature engineering}\label{text-feature-engineering}}
@@ -907,18 +758,17 @@ transcript independently of the other scores while compound describes a
 transcript comprehensively (combining the other three scores). VADER,
 when compared with alternative NLP feature extraction techniques has
 performed better on social media transcripts and generalized better to
-other areas \protect\hyperlink{ref-elbagir2019twitter}{Elbagir \& Yang}
+other areas Elbagir \& Yang
 (\protect\hyperlink{ref-elbagir2019twitter}{2019}). VADER has been used
-in sentiment extraction from text relative to financial data in
-\protect\hyperlink{ref-pano2020complete}{Pano \& Kashef}
-(\protect\hyperlink{ref-pano2020complete}{2020}) for Bitcoin price
-predictions, \protect\hyperlink{ref-agarwal2020sentiment}{Agarwal}
+in sentiment extraction from text relative to financial data in Pano \&
+Kashef (\protect\hyperlink{ref-pano2020complete}{2020}) for Bitcoin
+price predictions, Agarwal
 (\protect\hyperlink{ref-agarwal2020sentiment}{2020}) which found a
 strong correlation between VADER sentiment scores and stock price
-changes and \protect\hyperlink{ref-sohangir2018financial}{Sohangir
-\emph{et al.}} (\protect\hyperlink{ref-sohangir2018financial}{2018})
-which shows the superiority of lexicon based approaches (specifically
-VADER) over ML approaches for sentiment classification.
+changes and Sohangir \emph{et al.}
+(\protect\hyperlink{ref-sohangir2018financial}{2018}) which shows the
+superiority of lexicon based approaches (specifically VADER) over ML
+approaches for sentiment classification.
 
 Next, the TextBlob package's sentiment analysis tool was used. This
 yields two scores (in a tuple) describing the sentiment of a transcript,
@@ -927,16 +777,17 @@ namely, a polarity score (ranging from -1 to 1) and a subjectivity score
 are negative or positive, with lower scores indicating negativity while
 subjectivity indicates the extent of the usage of subjective words
 (\protect\hyperlink{ref-loria2018textblob}{Loria \& others, 2018}).
-\protect\hyperlink{ref-biswas2020examining}{Biswas, Sarkar, Das, Bose \&
-Roy} (\protect\hyperlink{ref-biswas2020examining}{2020}) use TextBlob
+Biswas, Sarkar, Das, Bose \& Roy
+(\protect\hyperlink{ref-biswas2020examining}{2020}) use TextBlob
 sentiment scores in their analysis of the effects of Covid-19 on stock
-markets. TextBlob was also tested in
-\protect\hyperlink{ref-sohangir2018financial}{Sohangir \emph{et al.}}
+markets. TextBlob was also tested in Sohangir \emph{et al.}
 (\protect\hyperlink{ref-sohangir2018financial}{2018}) but did not
 perform as well as VADER although it did outperform ML methods in terms
-of area under the curve (AUC) scores. It was expected and is the case
-that the VADER sentiment tuple will outperform TextBlob's sentiment
-tuple as a predictor of the S\&P 500 data.
+of area under the curve (AUC) scores. Given the superior performance of
+VADER in other projects it was expected that VADER's sentiment tuple
+would outperform TextBlob's sentiment tuple as a predictor of the S\&P
+500 data. The results explained in section \ref{results} show that this
+expectation was correct.
 
 \hypertarget{speech-vectorization}{%
 \subsubsection{Speech vectorization}\label{speech-vectorization}}
@@ -946,13 +797,12 @@ conversion from words to numbers. This vectorization can be done in
 various ways but in order to preserve the meaning of the texts the
 Word2Vec and Doc2Vec Python packages provided by Gensim were used
 (\protect\hyperlink{ref-rehurek2011gensim}{Rehurek \& Sojka, 2011}).
-However, Word2Vec was originally published in two papers by
-\protect\hyperlink{ref-mikolov2013efficient}{Mikolov, Chen, Corrado \&
-Dean} (\protect\hyperlink{ref-mikolov2013efficient}{2013}) and
-\protect\hyperlink{ref-mikolov2013distributed}{Mikolov, Sutskever, Chen,
-Corrado \& Dean} (\protect\hyperlink{ref-mikolov2013distributed}{2013})
-while Doc2Vec was suggested by
-\protect\hyperlink{ref-le2014distributed}{Le \& Mikolov}
+However, Word2Vec was not originally designed by Gensim, but rather by
+Mikolov, Chen, Corrado \& Dean
+(\protect\hyperlink{ref-mikolov2013efficient}{2013}) and Mikolov,
+Sutskever, Chen, Corrado \& Dean
+(\protect\hyperlink{ref-mikolov2013distributed}{2013}) while Doc2Vec was
+suggested by Le \& Mikolov
 (\protect\hyperlink{ref-le2014distributed}{2014}).
 
 \hypertarget{word2vec}{%
@@ -973,8 +823,7 @@ contextually embeds each word in the corpus. These hidden layer vectors
 (rather than the predictions) are the real output of the Word2Vec model.
 Words that appear in similar contexts throughout the corpus will have
 similar representational vectors (hidden layers) and thus can be said to
-have similar meanings in the corpus
-\protect\hyperlink{ref-mikolov2013distributed}{Mikolov \emph{et al.}}
+have similar meanings in the corpus Mikolov, Sutskever, \emph{et al.}
 (\protect\hyperlink{ref-mikolov2013distributed}{2013}).
 
 An example phrase might be `The quick brown fox jumps'. If the word
@@ -990,17 +839,23 @@ contexts to each other. For example, when asked for the three words most
 similar to `oil' the model trained on the presidential speeches corpus
 returns `crude', `gas' and `petroleum'. The input `gold' returns
 `silver', `bullion' and `coin'; whilst `virus' returns `covid19',
-`infection' and `pandemic'. In this study the representational vectors
-each contain 200 elements (because the hidden layers were set to contain
-200 elements). Thus each word is described by a vector containing 200
+`infection' and `pandemic'.
+
+In this study the representational vectors each contain 200 elements
+(because the hidden layers were set to contain 200 elements). The size
+of the vector was set to 200 because of precedent set by Vargas, De Lima
+\& Evsukoff (\protect\hyperlink{ref-vargas2017deep}{2017}), however
+there is little consensus on the dimensions of word embedding vectors
+that should be used and most researchers use a vector size between 50
+and 300 (\protect\hyperlink{ref-patel-bhattacharyya-2017-towards}{Patel
+\& Bhattacharyya, 2017}). However, this is an avenue that warrants
+further research. Thus each word is described by a vector containing 200
 elements. In order to create a similarly sized vector for each speech,
 the vectors describing all the words in each speech were averaged. Thus,
 each speech has been reduced to a 200 element vector averaging the
 contextual embeddings of each word contained therein. This averaging
-technique was also used in
-\protect\hyperlink{ref-vargas2017deep}{Vargas, De Lima \& Evsukoff}
-(\protect\hyperlink{ref-vargas2017deep}{2017}) and
-\protect\hyperlink{ref-qin230natural}{Qin}
+technique was also used in Vargas \emph{et al.}
+(\protect\hyperlink{ref-vargas2017deep}{2017}) and Qin
 (\protect\hyperlink{ref-qin230natural}{2018}). However, this method
 fails to preserve word order in a document vector
 (\protect\hyperlink{ref-le2014distributed}{Le \& Mikolov, 2014}).
@@ -1016,17 +871,14 @@ once -- which is the case here.
 Word2vec is used by (\protect\hyperlink{ref-shi2019word2vec}{Shi, Zhao
 \& Xu, 2019}) for the improvement of sentiment classification which
 implies that the final vectors in this study may contain sentiment
-information. It is also used by
-\protect\hyperlink{ref-vargas2017deep}{Vargas \emph{et al.}}
-(\protect\hyperlink{ref-vargas2017deep}{2017}) and
-\protect\hyperlink{ref-qin230natural}{Qin}
+information. It is also used by Vargas \emph{et al.}
+(\protect\hyperlink{ref-vargas2017deep}{2017}) and Qin
 (\protect\hyperlink{ref-qin230natural}{2018}) in their predictive
-modelling of S\&P 500 changes based on Twitter data.
-\protect\hyperlink{ref-vargas2017deep}{Vargas \emph{et al.}}
-(\protect\hyperlink{ref-vargas2017deep}{2017}) also used 200 element
-vectors while \protect\hyperlink{ref-qin230natural}{Qin}
-(\protect\hyperlink{ref-qin230natural}{2018}) used 300 element vectors.
-Both studies achieved prediction accuracy around 65\%.
+modelling of S\&P 500 changes based on Twitter data. Vargas \emph{et
+al.} (\protect\hyperlink{ref-vargas2017deep}{2017}) also used 200
+element vectors while Qin (\protect\hyperlink{ref-qin230natural}{2018})
+used 300 element vectors. Both studies achieved prediction accuracy
+around 65\%.
 
 \begin{figure}[H]
 
@@ -1073,7 +925,7 @@ a word and use random sampling to predict words from a paragraph. Figure
 \ref{Figure3} depicts the architecture of a DBOW Doc2Vec algorithm.
 
 Only one example of the use of Word2Vec for financial prediction could
-be found. \protect\hyperlink{ref-rashid2019making}{Rashid \& Leon}
+be found. Rashid \& Leon
 (\protect\hyperlink{ref-rashid2019making}{2019}) studies the possibility
 of predicting closing prices of 4 major private technology companies'
 and 3 major government contracted companies' stocks based on tweets from
@@ -1172,8 +1024,9 @@ The high number of lags is also difficult to justify and implies rather
 that there may be persistence of volatility. Thus, the following section
 focuses on the modelling of volatility over a time period that maximises
 the inclusion of volume statistics in the data. All of the analysis
-reported in this section was done in R using the packages `stats',
-`dplyr', `urca', `tidyverse', `ggplot2' and `fixest' (Marais, 2022).
+reported in this section was done in R\footnote{The primary packages
+  used were `stats', `tidyverse', `ggplot2' and `fixest'.} (Marais,
+2022).
 
 \hypertarget{onwards-arch-model}{%
 \subsubsection{1950 onwards -- ARCH model}\label{onwards-arch-model}}
@@ -1196,10 +1049,10 @@ Figure \ref{Figure4} depicts the logDif from 1950 until present -- the
 persistence of volatility is made apparent by the intermittent spikes.
 Figure \ref{Figure5} illustrates the correlation between the logDif and
 standardized volume which justifies the extension of the dataset.
-Further the logDif auto-regression results depicted in Table 3.1 and the
-categorical regression results depicted in Table 3.2 align with the
-regression results presented in section \ref{1982} and further suggest
-persistent volatility exists in the logDif series.
+Further the logDif auto-regression results depicted in Table \ref{Reg 1}
+and the categorical regression results depicted in Table \ref{Reg 2}
+align with the regression results presented in section \ref{1982} and
+further suggest persistent volatility exists in the logDif series.
 
 \begin{figure}[H]
 
@@ -1229,7 +1082,7 @@ persistent volatility exists in the logDif series.
 \begin{centerbox}
 \begin{threeparttable}
 \captionsetup{justification=centering,singlelinecheck=off}
-\caption{Auto-regressions of logDif on significant lags}
+\caption{Auto-regressions of logDif on significant lags \label{Reg 1}}
  \label{Reg01}
 \setlength{\tabcolsep}{0pt}
 \begin{tabular}{l l l}
@@ -1475,7 +1328,7 @@ persistent volatility exists in the logDif series.
 \begin{centerbox}
 \begin{threeparttable}
 \captionsetup{justification=centering,singlelinecheck=off}
-\caption{Regression of logDif on significant categorical variables}
+\caption{Regression of logDif on significant categorical variables \label{Reg 2}}
  \label{Reg02}
 \setlength{\tabcolsep}{0pt}
 \begin{tabular}{l l}
@@ -1624,19 +1477,17 @@ The LJung-Box test is a standard inference test in time series analysis.
 It tests the null-hypothesis that a series is a white noise series
 (\protect\hyperlink{ref-hassani2020selecting}{Hassani \& Yeganegi,
 2020}). Selection of the number of lags to be included in the Ljung-Box
-test is discussed by
-\protect\hyperlink{ref-hassani2020selecting}{Hassani \& Yeganegi}
+test is discussed by Hassani \& Yeganegi
 (\protect\hyperlink{ref-hassani2020selecting}{2020}). Critical to this
 decision is the ratio of lags (H) to the number of observations (T) in
 the data set. If the size of H is too large the actual size of the test
 exceeds the nominal size of the test and the integrity of the test is
 violated. The dataset for this set of tests contains 18143 observations.
 The smallest (most difficult to satisfy) ratio permitted in the
-discussion is 0,001 suggested by
-\protect\hyperlink{ref-hyndman2018forecasting}{Hyndman \&
-Athanasopoulos} (\protect\hyperlink{ref-hyndman2018forecasting}{2018}).
-Thus the maximum number of lags that satisfy the smallest H/T ratio is
-18 and any number of lags less than 18 is permissible.
+discussion is 0,001 suggested by Hyndman \& Athanasopoulos
+(\protect\hyperlink{ref-hyndman2018forecasting}{2018}). Thus the maximum
+number of lags that satisfy the smallest H/T ratio is 18 and any number
+of lags less than 18 is permissible.
 
 Running a 10-Lag LJung Box test on the logDif yields a p-value of 0.0002
 which indicates that the null hypothesis should be rejected and that the
@@ -1671,28 +1522,28 @@ EGARCH(1,1), model 6 is an ARMA(1,0) ARCH(1,0), model 7 is an ARCH(1,0)
 and model 8 is an ARMA(2,0) GARCH(1,1). The inclusion of an EGARCH model
 is motivated by its use in Nelson (1991), Blazsek \& Mendoza (2016) and
 Tiwari, Raheem \& Kang (2019) in their time series analyses of the S\&P
-500. Table 4 compares the coefficients from the 6 ARCH model variations
-(models 3, 4, 5, 6, 7 and 8). Figure 10, 11 and 12, 13, 14 and 15 show
-the results of autocorrelation and partial-autocorrelation functions of
-the residuals of the 6 ARCH variation models. Notably, all three of the
-models that do not contain an ARMA(1,0) component (models 4,5 and 7)
-yield a significant first residual indicating that inclusion of the
-ARMA(1,0) component is important. However, all the models containing an
-ARCH(1,0) - besides model 6 - component yield a significant second
-residual. Further, model 6 -- the non-generalized ARCH model -- has
-intermittent significant residuals indicating that volatility is
-clustered and persistent. Persistent volatility is one of the oversights
-of the ARCH model that is addressed in the GARCH model. As can be seen,
-Model 8 (Figure \ref{Figure15}) yields the least significant residuals
-and as such has been selected as the model that best fits this time
-series. The model linearly predicts the dependent variable using the
-first and second lags of the dependent variable, the first residual of
-an ARMA(1,0) model and the first lag of variance in the time series
-(\protect\hyperlink{ref-kotze2020univariate}{Kotzé, 2020}). As such the
-first and second lags of DlogDif and both the the first lag of the
-absolute DlogDif (absDlogDif\_1) and the first lag of standardized
-volume of trade controlled for date trend (stdVol\_1DateResid) as a
-pseudo-variance measures.
+500. Table \ref{Table 3} compares the coefficients from the 6 ARCH model
+variations (models 3, 4, 5, 6, 7 and 8). Figure 10, 11 and 12, 13, 14
+and 15 show the results of autocorrelation and partial-autocorrelation
+functions of the residuals of the 6 ARCH variation models. Notably, all
+three of the models that do not contain an ARMA(1,0) component (models
+4,5 and 7) yield a significant first residual indicating that inclusion
+of the ARMA(1,0) component is important. However, all the models
+containing an ARCH(1,0) - besides model 6 - component yield a
+significant second residual. Further, model 6 -- the non-generalized
+ARCH model -- has intermittent significant residuals indicating that
+volatility is clustered and persistent. Persistent volatility is one of
+the oversights of the ARCH model that is addressed in the GARCH model.
+As can be seen, Model 8 (Figure \ref{Figure15}) yields the least
+significant residuals and as such has been selected as the model that
+best fits this time series. The model linearly predicts the dependent
+variable using the first and second lags of the dependent variable, the
+first residual of an ARMA(1,0) model and the first lag of variance in
+the time series (\protect\hyperlink{ref-kotze2020univariate}{Kotzé,
+2020}). As such the first and second lags of DlogDif and both the the
+first lag of the absolute DlogDif (absDlogDif\_1) and the first lag of
+standardized volume of trade controlled for date trend
+(stdVol\_1DateResid) as a pseudo-variance measures.
 
 \begin{figure}[H]
 
@@ -1749,15 +1600,16 @@ pseudo-variance measures.
 \end{figure}
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.14}}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.16}}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.11}}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.13}}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.19}}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.11}}
-  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.16}}@{}}
-\caption{Significancies of various ARCH models}\tabularnewline
-\toprule
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1364}}
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1636}}
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1091}}
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1273}}
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1909}}
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1091}}
+  >{\centering\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1636}}@{}}
+\caption{Significancies of various ARCH models
+\label{Table 3}}\tabularnewline
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Statistic
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -1773,9 +1625,9 @@ Model7
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 Model8
 \end{minipage} \\
-\midrule
+\midrule()
 \endfirsthead
-\toprule
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Statistic
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -1791,7 +1643,7 @@ Model7
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 Model8
 \end{minipage} \\
-\midrule
+\midrule()
 \endhead
 Specification & ARMA(1,0) G(1,1) & G(1,1) & EG(1,1) & ARMA(1,0)
 ARCH(1,0) & ARCH(1,0) & ARMA(2,0) G(1,1) \\
@@ -1806,7 +1658,7 @@ AR2 & - & - & - & - & - & 0.00355 ** \\
 \(\beta\) 1 & \textless2e-16 *** & \textless2e-16 *** & - & - &
 \textless2e-16 *** & \textless2e-16 *** \\
 \(\gamma\) 1 & - & - & - & - & \textless2e-16 *** & - \\
-\bottomrule
+\bottomrule()
 \end{longtable}
 
 \hypertarget{additional-variables}{%
@@ -1832,10 +1684,10 @@ variables and the posNegTransform are lagged by one period. Thus another
 4 auto-regressive variables are added to the dataset.
 
 Further, five S\&P 500 adjacent indicators were selected for this study.
-Notably they were only included in the speech-centered dataset. The five
-series included were the NASDAQ composite index, the oil price, the
-Shanghai Stock Exchange composite index (SSE), the Dollar strength index
-and the CBOE volatility index (VIX).
+The five series included were the NASDAQ composite index, the oil price,
+the Shanghai Stock Exchange composite index (SSE), the Dollar strength
+index and the CBOE volatility index (VIX). These variables are dubbed
+`meta-data'.
 
 \hypertarget{summary-of-data-collection-and-preparation}{%
 \subsection{Summary of data collection and
@@ -1889,47 +1741,70 @@ the dataset. Thus on dates when more than one speech occurred the speech
 data has been aggregated into a single vector (see section \ref{Doc2Vec}
 for an explanation of this method). The date-centered dataset contains
 25 383 rows of data -- one for each trading day between 1950-01-01 and
-2022-03-22. The speech-centered and date-centered datasets are
-exemplified in Table 5 and 6, respectively.
+2022-03-22. Notably, the meta-data is not included in this dataset
+because two types of test data are included and the decision was taken
+to focus on them. The speech-centered and date-centered datasets are
+exemplified in Table \ref{Speech_center} and \ref{Date_center},
+respectively.
 
 \begin{longtable}[]{@{}cccccc@{}}
-\caption{Example of the speech-centered data design -- Note that there
-is no data for dates that no speeches occurred and that there are
-duplicate dates. Note also that on dates where more than one speech
-occurred there is duplicate data in the LD\_Date\_Resid\_1 column which
-is representative of the auto-regressive data in this example. Finally,
-note that the V1 and V2 columns (representative of the vectorized speech
-data) is different for every row of data.}\tabularnewline
-\toprule
+\caption{Example of the speech-centered data design
+\label{Speech_center}}\tabularnewline
+\toprule()
 Date & Speech & LD\_Date\_Resid\_1 & V1 & V2 & V3 \\
-\midrule
+\midrule()
 \endfirsthead
-\toprule
+\toprule()
 Date & Speech & LD\_Date\_Resid\_1 & V1 & V2 & V3 \\
-\midrule
+\midrule()
 \endhead
 1950-01-02 & Good morning\ldots{} & 0.02 & 3.6 & 2.6 & 1 \\
 1950-01-06 & Ladies and\ldots{} & -0.05 & 2.1 & 2 & 0.36 \\
 1950-01-06 & Congress\ldots{} & -0.05 & 0.12 & 3.4 & 2.8 \\
 \ldots{} & & & & & \\
-\bottomrule
+\bottomrule()
 \end{longtable}
 
-\begin{longtable}[]{@{}cccccc@{}}
-\caption{Example of the date-centered data design -- Note that every
-consecutive trading day is included in the data. Note also that on days
-when no speeches occurred the V1 and V2 (representing vectorized speech
-data) from the last date that a speech occurred are duplicated and the
-number of days since the last speech is recorded. Finally, note that on
-days when multiple speeches occurred there is only one row of data --
-i.e.~the speeches are amalgamated into a single vector.}\tabularnewline
-\toprule
-Date & Speech & LD\_Date\_Resid\_1 & Days since last speech & V1 & V2 \\
-\midrule
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1395}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2442}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1977}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2791}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0581}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0814}}@{}}
+\caption{Example of the date-centered data design
+\label{Date_center}}\tabularnewline
+\toprule()
+\begin{minipage}[b]{\linewidth}\centering
+Date
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Speech
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+LD\_Date\_Resid\_1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Days since last speech
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+V1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+V2
+\end{minipage} \\
+\midrule()
 \endfirsthead
-\toprule
-Date & Speech & LD\_Date\_Resid\_1 & Days since last speech & V1 & V2 \\
-\midrule
+\toprule()
+\begin{minipage}[b]{\linewidth}\centering
+Date
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Speech
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+LD\_Date\_Resid\_1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Days since last speech
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+V1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+V2
+\end{minipage} \\
+\midrule()
 \endhead
 1950-01-02 & Good morning\ldots{} & 0.02 & 0 & 1.2 & 1.8 \\
 1950-01-03 & N/A & 0.025 & 1 & 1.2 & 1.8 \\
@@ -1938,8 +1813,24 @@ Date & Speech & LD\_Date\_Resid\_1 & Days since last speech & V1 & V2 \\
 1950-01-06 & Today marks\ldots{} & -0.03 & 0 & 5.3 & -0.86 \\
 1950-01-09 & N/A & 0.04 & 3 & 5.3 & -0.86 \\
 \ldots{} & & & & & \\
-\bottomrule
+\bottomrule()
 \end{longtable}
+
+Note that for the speech-centered data design there is no data for dates
+that no speeches occurred and that there are duplicate dates. Note also
+that on dates where more than one speech occurred there is duplicate
+data in the LD\_Date\_Resid\_1 column which is representative of the
+auto-regressive data in this example. Finally, note that the V1 and V2
+columns (representative of the vectorized speech data) is different for
+every row of data.
+
+Next, note that for the date-centered data design every consecutive
+trading day is included in the data. Note also that on days when no
+speeches occurred the V1 and V2 (representing vectorized speech data)
+from the last date that a speech occurred are duplicated and the number
+of days since the last speech is recorded. Finally, note that on days
+when multiple speeches occurred there is only one row of data --
+i.e.~the speeches are amalgamated into a single vector.
 
 For the speech-centered dataset a total of 1152 models were tested.
 These consisted of 384 regression tasks and 768 classification tasks.
@@ -1972,7 +1863,7 @@ The Reg\_Types field contains two options, TS\_Regressor and
 CS\_Regressor. These refer to the manner in which the data is split for
 cross validation. The TS\_Regressor cross validation method splits the
 data into 5 time-consecutive subsets using the `TimeSeriesSplit' out of
-sample (OOS) method from Sci Kit Learn. Model training is done on the
+sample (OOS) method from scikit-learn. Model training is done on the
 first subset, then the first and second subset etc. up until the fourth
 subset. Training scores are calculated for each of the four training
 subsets and the maximum score is passed forward as the final
@@ -2032,14 +1923,14 @@ since the last speech. The datasets field provided the option for any
 combination of each data designs' three subsets as training variables
 for a sum of 7 combinations each. Additionally a PossibleBest set of
 variables was selected for the speech-centered dataset using an elastic
-net regression algorithm from SciKitLearn (hyperparameters available in
+net regression algorithm from scikit-learn (hyperparameters available in
 appendix B). It was decided to create a 10 variable dataset using 4 NLP
 variables, 3 control variables and three meta variable. The elastic net
 selected DlogDif\_1, DlogDif\_2, pos\_neg\_transform, Nasdaq\_ld\_1,
 Oil\_ld\_1, VIX\_ld\_1, DV\_20\_6, DV\_20\_8, DV\_20\_13, DV\_20\_15 as
 the most prominent variables in each of the three subsets of variables.
-The elastic net regressions are depicted in Figures \ref{16}, \ref{17}
-and \ref{18}.
+The elastic net regressions are depicted in Figures \ref{Figure16},
+\ref{Figure17} and \ref{Figure18}.
 
 \begin{figure}[H]
 
@@ -2047,7 +1938,7 @@ and \ref{18}.
 
 }
 
-\caption{Elastic net: test set \label{Figure16}}\label{fig:Elastic net: test set}
+\caption{Elastic net: control set \label{Figure16}}\label{fig:Elastic net: test set}
 \end{figure}
 
 \begin{figure}[H]
@@ -2121,7 +2012,8 @@ network, logistic regression and gradient boosting. The hyper-parameters
 for each of these fields can be found in Appendix B.2.
 
 \hypertarget{results-and-discussion}{%
-\section{Results and discussion}\label{results-and-discussion}}
+\section{\texorpdfstring{Results and discussion
+\label{results}}{Results and discussion }}\label{results-and-discussion}}
 
 The results of the models indicated that U.S. Presidential Speeches hold
 at least a small amount of predictive power over movements in the S\&P
@@ -2142,8 +2034,8 @@ dataset is that data with high quality has outperformed data with high
 quantity. The section below explains the results in more detail.
 
 \hypertarget{speech-centered-classification-analysis}{%
-\subsection{Speech-centered classification
-analysis}\label{speech-centered-classification-analysis}}
+\subsection{\texorpdfstring{Speech-centered classification analysis
+\label{speech-centered}}{Speech-centered classification analysis }}\label{speech-centered-classification-analysis}}
 
 Analysing the best performing classification models, in terms of test
 set accuracy, across all categories of the speech-centered data reveals
@@ -2152,8 +2044,8 @@ duplicate dates. All ten of the top performers are on data containing
 duplicates and the accuracies range from 0,72 to 0,80. It is highly
 unlikely that these models have managed to achieve 80\% accuracy in
 prediction of detrended S\&P 500 on unseen data over a 52 year period.
-Thus results of models trained and tested on duplicate date containing
-data is discarded henceforth.
+Thus results of classification models trained and tested on duplicate
+date containing data is discarded henceforth.
 
 Of the duplicate removed results the top ten performers contain seven
 models trained and tested on the 2010 dataset -- including the top four.
@@ -2181,7 +2073,7 @@ implies that any accuracy above 0,5 beats chance.
 
 In the date-centered classification results analysis, the top ten models
 in terms of test set accuracies contain ten 1950 subsets, ten TS subsets
-and eight binary subsets. All of the top ten models utilised
+and eight binary subsets. All of the top ten models utilized
 auto-regressive data, five positions included the DBOW vector set and
 two included the DM vector set. The range of the top ten models test set
 accuracies is 0,57 to 0,59. Thus the date-centered dataset initially
@@ -2189,11 +2081,11 @@ outperforms the (duplicate dates removed) speech-centered dataset by 2
 percentage points at the bottom of the range and 1 percentage point at
 the top of the range in terms of test set classification accuracy.
 Because of this the models trained on the date-centered dataset were
-optimised for maximum performance. Log-regression is initially the best
-performing classifier in the TS section generally taking the top two and
-the seventh positions. However, AutoDBOW outperforms Auto in the Binary
-NN and the Binary Gradient Boosting categories. Thus, these three models
-were selected for optimisation.
+optimized for maximum performance. Log-regression is initially the best
+performing classifier in the TS section generally, taking the top two
+and the seventh positions. However, AutoDBOW outperforms Auto in the
+Binary NN and the Binary Gradient Boosting categories. Thus, these three
+models were selected for optimization.
 
 \hypertarget{optimization-of-classification-models-for-ts-classification-of-date-centered-data}{%
 \subsubsection{Optimization of classification models for TS
@@ -2202,7 +2094,7 @@ data}\label{optimization-of-classification-models-for-ts-classification-of-date-
 
 The training set accuracy on the 1950 binary AutoDBOW for the gradient
 boosting classifier was initially 77,5\% indicating that it may have
-been slightly overfitting the training data. For the NN the training
+been slightly overfitting the training data. For the NN, the training
 accuracy is 59\% which is similar to the test set accuracy and indicates
 a good fit for the data. Grid search was manually performed to optimize
 NN and Gradient Boosting for the binary 1950 AutoDBOW and Auto datasets.
@@ -2216,7 +2108,8 @@ which achieved a test set accuracy of 0,601 while the best performing
 algorithm for the Auto dataset was the NN\_7 algorithm which achieved a
 test set accuracy of 0,599. This difference indicates that there is at
 least a slight benefit to including the DBOW dataset in predictive data
-and corroborates the evidence presented in section 2.1.
+and corroborates the evidence presented in section
+\ref{speech-centered}.
 
 \hypertarget{speech-centered-regression-analysis}{%
 \subsection{Speech-centered regression
@@ -2321,7 +2214,14 @@ subset (\protect\hyperlink{ref-aras2021stacking}{Aras, 2021}). More
 powerful NLP techniques, such as Bidirectional Encoder Representations
 from Transformers (BERT), could also lead to more comprehensive
 word-embeddings and better information transfer to the final ML
-algorithms and better prediction results by extension.
+algorithms and better prediction results by extension. Other
+improvements in the NLP component could come from using more
+sophisticated methods of parameter selection such as that suggested by
+Patel \& Bhattacharyya
+(\protect\hyperlink{ref-patel-bhattacharyya-2017-towards}{2017}) for
+embedding dimensions or the inclusion of more specific dictionaries such
+as the emotion specific one presented in Widmann \& Wich
+(\protect\hyperlink{ref-widmann_wich_2022}{2022}).
 
 A lot more research could be done in the political science and
 linguistic realms using the NLP component of the dataset. For example it
@@ -2375,10 +2275,20 @@ language toolkit and VADER sentiment. In Vol. 122 \emph{Proceedings of
 the international multiconference of engineers and computer scientists}.
 16.
 
+\leavevmode\vadjust pre{\hypertarget{ref-famaEfficient}{}}%
+Fama, E.F. 1965. The behavior of stock-market prices. \emph{The Journal
+of Business}. 38(1):34--105. {[}Online{]}, Available:
+\url{http://www.jstor.org/stable/2350752} {[}2022, August 26{]}.
+
 \leavevmode\vadjust pre{\hypertarget{ref-geron2019hands}{}}%
 Géron, A. 2019. \emph{Hands-on machine learning with scikit-learn,
 keras, and TensorFlow: Concepts, tools, and techniques to build
 intelligent systems}. " O'Reilly Media, Inc.".
+
+\leavevmode\vadjust pre{\hypertarget{ref-grimmer2013text}{}}%
+Grimmer, J. \& Stewart, B.M. 2013. Text as data: The promise and
+pitfalls of automatic content analysis methods for political texts.
+\emph{Political analysis}. 21(3):267--297.
 
 \leavevmode\vadjust pre{\hypertarget{ref-hassani2020selecting}{}}%
 Hassani, H. \& Yeganegi, M.R. 2020. Selecting optimal lag order in
@@ -2460,10 +2370,22 @@ Distributed representations of words and phrases and their
 compositionality. \emph{Advances in neural information processing
 systems}. 26.
 
+\leavevmode\vadjust pre{\hypertarget{ref-mollick2006establishing}{}}%
+Mollick, E. 2006. Establishing moore's law. \emph{IEEE Annals of the
+History of Computing}. 28(3):62--75.
+
 \leavevmode\vadjust pre{\hypertarget{ref-pano2020complete}{}}%
 Pano, T. \& Kashef, R. 2020. A complete VADER-based sentiment analysis
 of bitcoin (BTC) tweets during the era of COVID-19. \emph{Big Data and
 Cognitive Computing}. 4(4):33.
+
+\leavevmode\vadjust pre{\hypertarget{ref-patel-bhattacharyya-2017-towards}{}}%
+Patel, K. \& Bhattacharyya, P. 2017. Towards lower bounds on number of
+dimensions for word embeddings. In Taipei, Taiwan: Asian Federation of
+Natural Language Processing \emph{Proceedings of the eighth
+international joint conference on natural language processing (volume 2:
+Short papers)}. 31--36. {[}Online{]}, Available:
+\url{https://aclanthology.org/I17-2006}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-purevdagva2020machine}{}}%
 Purevdagva, C., Zhao, R., Huang, P.-C. \& Mahoney, W. 2020. A
@@ -2479,10 +2401,6 @@ prediction. {[}Online{]}, Available:
 \leavevmode\vadjust pre{\hypertarget{ref-rashid2019making}{}}%
 Rashid, R. \& Leon, A. de. 2019. Making trading great again: Trump-based
 stock predictions via doc2vec embeddings.
-
-\leavevmode\vadjust pre{\hypertarget{ref-rees2022mastersgithub}{}}%
-Rees, P. 2022. {[}Online{]}, Available:
-\url{https://github.com/PabloRees/Masters}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-rehurek2011gensim}{}}%
 Rehurek, R. \& Sojka, P. 2011. Gensim--python framework for vector space
@@ -2508,6 +2426,12 @@ Sohangir, S., Petty, N. \& Wang, D. 2018. Financial sentiment lexicon
 analysis. In IEEE \emph{2018 IEEE 12th international conference on
 semantic computing (ICSC)}. 286--289.
 
+\leavevmode\vadjust pre{\hypertarget{ref-soroka2015bad}{}}%
+Soroka, S., Young, L. \& Balmas, M. 2015. Bad news or mad news?
+Sentiment scoring of negativity, fear, and anger in news content.
+\emph{The ANNALS of the American Academy of Political and Social
+Science}. 659(1):108--121.
+
 \leavevmode\vadjust pre{\hypertarget{ref-vargas2017deep}{}}%
 Vargas, M.R., De Lima, B.S. \& Evsukoff, A.G. 2017. Deep learning for
 stock market prediction from financial news articles. In IEEE \emph{2017
@@ -2515,13 +2439,22 @@ IEEE international conference on computational intelligence and virtual
 environments for measurement systems and applications (CIVEMSA)}.
 60--65.
 
+\leavevmode\vadjust pre{\hypertarget{ref-widmann_wich_2022}{}}%
+Widmann, T. \& Wich, M. 2022.
+\href{https://doi.org/10.1017/pan.2022.15}{Creating and comparing
+dictionary, word embedding, and transformer-based models to measure
+discrete emotions in german political text}. \emph{Political Analysis}.
+1--16.
+
 \leavevmode\vadjust pre{\hypertarget{ref-americanPresProj1}{}}%
 Woolley, J. \& Peters, G. n.d. {[}Online{]}, Available:
 \url{https://www.presidency.ucsb.edu/}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-yahooSP500}{}}%
 Yahoo. n.d. {[}Online{]}, Available:
-\url{https://finance.yahoo.com/quote/\%5EGSPC/history?period1=-\%201325635200\&period2=1641340800\&interval=1d\&filter=history\&frequency=1d\&includeAdj\%20ustedClose=true}.
+\href{https://finance.yahoo.com/quote/\%5EGSPC/history?period1=-\%201325635200\&period2=1641340800\&interval=1d\&filter=history\&frequency=1d\&includeAdj\%20ustedClose=true}{https://finance.yahoo.com/quote/\%5EGSPC/history?period1=-
+1325635200\&period2=1641340800\&interval=1d\&filter=history\&frequency=1d\&includeAdj
+ustedClose=true}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-zubair2015extracting}{}}%
 Zubair, S. \& Cios, K.J. 2015. Extracting news sentiment and
@@ -2530,6 +2463,8 @@ establishing its relationship with the s\&p 500 index. In IEEE
 969--975.
 
 \end{CSLReferences}
+
+\newpage
 
 \hypertarget{appendix}{%
 \section*{Appendix}\label{appendix}}
@@ -2548,14 +2483,15 @@ intervals}\label{a.1.-speech-nlp-data-at-collection-and-cleaning-intervals}}
 collection and cleaning intervals}
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.13}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.29}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.24}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.23}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.03}}
-  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.06}}@{}}
-\caption{Speech data after webscrape and cleaning}\tabularnewline
-\toprule
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2943}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2429}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2343}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0343}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0600}}@{}}
+\caption{Speech data after webscrape and cleaning
+\label{Table 6}}\tabularnewline
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Type
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -2569,9 +2505,9 @@ Transcript
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 No Stops Transcript
 \end{minipage} \\
-\midrule
+\midrule()
 \endfirsthead
-\toprule
+\toprule()
 \begin{minipage}[b]{\linewidth}\centering
 Type
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
@@ -2585,7 +2521,7 @@ Transcript
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
 No Stops Transcript
 \end{minipage} \\
-\midrule
+\midrule()
 \endhead
 elections-and-transitions/convention-speeches &
 /people/president/joseph-r-biden & 2020-08-20 22:48:00+00:00 & Address
@@ -2596,7 +2532,7 @@ Accepting the Democratic Presidential Nomination in Wilmington, Delaware
 `ella', `baker', `giant', `civil', `rights', `movement',\ldots{]} & &
 & \\
 & & & & & \\
-\bottomrule
+\bottomrule()
 \end{longtable}
 
 \hypertarget{a.2.-feature-extraction-parameters}{%

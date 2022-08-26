@@ -1,5 +1,11 @@
 source('/Users/pablo/Desktop/Masters/Github_Repository/Masters/Scripts/std_fin-ts_data_setup.R')
 
+everysecond <- function(x){
+  x <- sort(unique(x))
+  x[seq(2, length(x), 2)] <- ""
+  x
+}
+
 #Volume analysis
 volumeAnalysis <- function(GSPC){
 
@@ -9,7 +15,7 @@ volumeAnalysis <- function(GSPC){
         theme_bw() + # choose on of many existing themes
         geom_line(aes(x = Date, y = stdVol_1), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
         geom_line(aes(x = Date, y = abs(logDif)), size = 0.1, alpha = 0.5, color = "darkgreen")+ # similarly for points
-        scale_x_date(date_labels = "'%y", date_breaks = "year") +
+        scale_x_date(date_labels = "'%y", date_breaks = "2 years") +
         # make x axis labels
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         # rotate x axis labels
@@ -22,7 +28,7 @@ volumeAnalysis <- function(GSPC){
     figure4 <- GSPC %>% ggplot() + # creates the 'canvas'
         theme_bw() + # choose on of many existing themes
         geom_line(aes(x = Date, y = logDif), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
-        scale_x_date(date_labels = "'%y", date_breaks = "year") +
+        scale_x_date(date_labels = "'%y", date_breaks = "2 years") +
         # make x axis labels
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         # rotate x axis labels
@@ -33,7 +39,7 @@ volumeAnalysis <- function(GSPC){
     figure6 <- GSPC %>% ggplot() + # creates the 'canvas'
         theme_bw() + # choose on of many existing themes
         geom_line(aes(x = Date, y = abs(logDif)), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
-        scale_x_date(date_labels = "'%y", date_breaks = "year") +
+        scale_x_date(date_labels = "'%y", date_breaks = "2 years") +
         # make x axis labels
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         # rotate x axis labels
@@ -64,7 +70,7 @@ volumeAnalysis <- function(GSPC){
         theme_bw() + # choose on of many existing themes
         geom_line(aes(x = Date, y = stdVol_1DateResid), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
         geom_line(aes(x = Date, y = stdVol), size = 0.1, alpha = 1, color = "darkgreen") + # creates the line on the canvas with aes() coordinates
-        scale_x_date(date_labels = "'%y", date_breaks = "year") +
+        scale_x_date(date_labels = "'%y", date_breaks = "2 years") +
         # make x axis labels
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         # rotate x axis labels
@@ -76,7 +82,7 @@ volumeAnalysis <- function(GSPC){
         theme_bw() + # choose on of many existing themes
         geom_line(aes(x = Date, y = abs(logDif)), size = 0.1, alpha = 1, color = "firebrick4") + # creates the line on the canvas with aes() coordinates
         geom_line(aes(x = Date, y = stdVol_1DateResid), size = 0.1, alpha = 1, color = "darkgreen") + # creates the line on the canvas with aes() coordinates
-        scale_x_date(date_labels = "'%y", date_breaks = "year") +
+        scale_x_date(date_labels = "'%y", date_breaks = "2 years") +
         # make x axis labels
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         # rotate x axis labels
