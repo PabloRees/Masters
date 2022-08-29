@@ -188,7 +188,7 @@
     \centering
 %Entry1
     {\uppercase{\huge Correlating Factors of U.S. Presidential Speeches
-with Stock Market Movements: a Machine Learning Approach.\par}}
+with Stock Market Movements - a Machine Learning Approach.\par}}
     \vspace{2cm}
 %Author's name
     {\LARGE \textbf{Pablo Rees}\footnote{\textbf{Acknowledgements:}
@@ -317,11 +317,10 @@ has given empirical research in the social sciences power that it has
 never been able to muster until recent years. Computer driven analysis
 of large amounts of text data is rapidly becoming mainstream and
 specifically, political text data is one external factor useful in
-predicting market
-futures(\protect\hyperlink{ref-grimmer2013text}{Grimmer \& Stewart,
-2013}; \protect\hyperlink{ref-hayo2008communicating}{Hayo, Kutan \&
-Neuenkirch, 2008};
-\protect\hyperlink{ref-maligkris2017political}{Maligkris, 2017};
+predicting market futures
+(\protect\hyperlink{ref-grimmer2013text}{Grimmer \& Stewart, 2013};
+\protect\hyperlink{ref-hayo2008communicating}{Hayo, Kutan \& Neuenkirch,
+2008}; \protect\hyperlink{ref-maligkris2017political}{Maligkris, 2017};
 \protect\hyperlink{ref-soroka2015bad}{Soroka, Young \& Balmas, 2015}).
 
 Hayo \emph{et al.} (\protect\hyperlink{ref-hayo2008communicating}{2008})
@@ -362,7 +361,7 @@ uniformly across all three indices. Notably, the NASDAQ's correlation to
 the content of speeches was weaker -- indicating that technology markets
 may be less susceptible to presidential rhetoric.
 
-The aim of this project is to determine whether U.S Presidential
+The aim of this project is to determine whether U.S presidential
 speeches have predictive power over U.S. stock market movements. A
 positive result would be powerful and could add to the ability of
 traders to accurately predict stock market movements. The undertaking of
@@ -2015,23 +2014,24 @@ for each of these fields can be found in Appendix B.2.
 \section{\texorpdfstring{Results and discussion
 \label{results}}{Results and discussion }}\label{results-and-discussion}}
 
-The results of the models indicated that U.S. Presidential Speeches hold
-at least a small amount of predictive power over movements in the S\&P
-500 stock index. This conclusion was deduced from the fact that the best
-performing datasets in both the date-centered classification analysis
-and the date-centered regression analysis included vectorized speech
-data. It is also corroborated by the consistent appearance of speech
-subset inclusive data in the top ten performing models across both data
-design types, and both classification and regression tasks.
+The results of the model tests indicated that U.S. Presidential Speeches
+hold at least a small amount of predictive power over movements in the
+S\&P 500 stock index. This conclusion was deduced from the fact that the
+best performing datasets in both the date-centered classification
+analysis and the date-centered regression analysis included vectorized
+speech data. It is also corroborated by the consistent appearance of
+speech subset inclusive data in the best performing models across both
+data design types, and both classification and regression tasks.
 
-The date-centered dataset outperformed the speech-centered dataset by
-about 2 percentage points (\textasciitilde0,58 vs \textasciitilde0,6) on
-the test set accuracy score for binary classification analysis. Models
-using the date-centered dataset also achieved lower MAE's than models
-trained and tested on the speech-centered dataset. Interestingly, an
-implication of the superior performance of the (smaller) date-centered
-dataset is that data with high quality has outperformed data with high
-quantity. The section below explains the results in more detail.
+Models trained on the date-centered dataset outperformed models trained
+on the speech-centered dataset by about 2 percentage points
+(\textasciitilde0,58 vs \textasciitilde0,6) on the test set accuracy
+score for binary classification analysis. Models using the date-centered
+dataset also achieved lower MAE's than models trained and tested on the
+speech-centered dataset. Interestingly, an implication of the superior
+performance of the (smaller) date-centered dataset is that data with
+high quality has outperformed data with high quantity. The section below
+explains the results in more detail.
 
 \hypertarget{speech-centered-classification-analysis}{%
 \subsection{\texorpdfstring{Speech-centered classification analysis
@@ -2047,45 +2047,53 @@ prediction of detrended S\&P 500 on unseen data over a 52 year period.
 Thus results of classification models trained and tested on duplicate
 date containing data is discarded henceforth.
 
-Of the duplicate removed results the top ten performers contain seven
-models trained and tested on the 2010 dataset -- including the top four.
-Further, eight of the top ten models performed binary classification.
-Finally seven of the ten were trained on cross-sectional cross
-validation. Thus further analysis will take place within the binary,
-cross-sectional and 2010 categories. The test set accuracy ranges from
-0,54 to 0,58. The mean of the target variable is \textasciitilde{} 0,5
-and thus every model in the top ten models outperforms chance (recall
-that the target variable is binary). NLP data is included in six of the
-ten best models, while auto-regressive data is included in five and meta
-data is included in eight of them. Notably an NLP only (gradient
-boosting) model ranks fourth with a test set accuracy of 0,56. This
-constitutes evidence of the predictive power of US Presidential speeches
-over S\&P 500 movements and lends credibility to the hypothesis of this
-project.
+Analysis of the performance of the remaining (duplicates removed) data
+revealed that the best performing models were trained on the binary
+cross-sectional data from 2010 onward. Of the duplicate removed results
+the top ten performers contain seven models trained and tested on the
+2010 dataset -- including the top four. Further, eight of the top ten
+models performed binary classification. Finally seven of the ten were
+trained on cross-sectional cross validation. Thus further analysis took
+place within the binary, cross-sectional and 2010 categories.
+
+Having reduced the data to just the cross-sectional binary data from
+2010 onward - test set accuracy ranges from 0,54 to 0,58. The mean of
+the target variable is \textasciitilde{} 0,5 and thus every model in the
+top ten models outperforms chance (recall that the target variable is
+binary). Six of the ten best models were trained on data including NLP
+data, while only five of the best models were trained on auto-regressive
+inclusive data. Meta data was included in eight of them. Notably an
+NLP-only (gradient boosting) model ranks fourth with a test set accuracy
+of 0,56. This constitutes evidence of the predictive power of US
+Presidential speeches over S\&P 500 movements and lends credibility to
+the hypothesis of this project.
 
 \hypertarget{date-centered-classification-analysis}{%
-\subsection{Date-centered classification
-analysis}\label{date-centered-classification-analysis}}
+\subsection{\texorpdfstring{Date-centered classification analysis
+\label{Date-centered classification}}{Date-centered classification analysis }}\label{date-centered-classification-analysis}}
 
-The means of both the full set of 1950-01-01 binary Y's and the test set
-of 1950-01-01 binary Y's are maintained at \textasciitilde{} 0,5. This
-implies that any accuracy above 0,5 beats chance.
+The means of both the full set of 1950 binary Y's and the test set of
+1950 binary Y's are maintained at \textasciitilde{} 0,5. This implies
+that any accuracy above 0,5 beats chance. The top ten models in the
+date-centered classification task achieved test set accuracies between
+0,57 and 0,59 and therefore all outperformed chance. All of these ten
+models were trained on the full range of data - i.e.~the 1950 subset.
+They were also all trained using time-series validation - the TS subset.
+Seven of the best models were trained on NLP-inclusive data (five DBOW
+and 2 DM inclusive sets) and all of the ten best models were trained on
+auto-regressive inclusive data.
 
-In the date-centered classification results analysis, the top ten models
-in terms of test set accuracies contain ten 1950 subsets, ten TS subsets
-and eight binary subsets. All of the top ten models utilized
-auto-regressive data, five positions included the DBOW vector set and
-two included the DM vector set. The range of the top ten models test set
-accuracies is 0,57 to 0,59. Thus the date-centered dataset initially
-outperforms the (duplicate dates removed) speech-centered dataset by 2
-percentage points at the bottom of the range and 1 percentage point at
-the top of the range in terms of test set classification accuracy.
-Because of this the models trained on the date-centered dataset were
-optimized for maximum performance. Log-regression is initially the best
-performing classifier in the TS section generally, taking the top two
-and the seventh positions. However, AutoDBOW outperforms Auto in the
-Binary NN and the Binary Gradient Boosting categories. Thus, these three
-models were selected for optimization.
+Notably, the date-centered dataset initially outperforms the (duplicate
+removed) speech-centered dataset by 2 percentage points at the bottom of
+the range and 1 percentage point at the top of the range in terms of
+test set classification accuracy. Because of this, the models trained on
+the date-centered dataset were optimized for maximum performance.
+Log-regression is initially the best performing classifier in the TS
+section generally, taking the top two and the seventh positions.
+However, the models trained on the AutoDBOW dataset outperform the
+models trained on the Auto only dataset in the Binary NN and the Binary
+Gradient Boosting categories. Thus, these three models were selected for
+optimization.
 
 \hypertarget{optimization-of-classification-models-for-ts-classification-of-date-centered-data}{%
 \subsubsection{Optimization of classification models for TS
@@ -2097,55 +2105,74 @@ boosting classifier was initially 77,5\% indicating that it may have
 been slightly overfitting the training data. For the NN, the training
 accuracy is 59\% which is similar to the test set accuracy and indicates
 a good fit for the data. Grid search was manually performed to optimize
-NN and Gradient Boosting for the binary 1950 AutoDBOW and Auto datasets.
+the NN and Gradient Boosting algorithms for the binary 1950 AutoDBOW and
+Auto datasets.
 
 After closer optimization of hyper-parameters it becomes clear that the
 AutoDBOW dataset outperforms the Auto dataset on test score both overall
 and across both the Stochastic Gradient Descent and Log Regression
-algorithms. The best performing algorithm for the AutoDBOW dataset was
-the LogReg\_4 algorithm (please see appendix B for hyperparameters)
-which achieved a test set accuracy of 0,601 while the best performing
-algorithm for the Auto dataset was the NN\_7 algorithm which achieved a
-test set accuracy of 0,599. This difference indicates that there is at
-least a slight benefit to including the DBOW dataset in predictive data
-and corroborates the evidence presented in section
+trained models. The best performing algorithm for the AutoDBOW dataset
+was the LogReg\_4 algorithm (please see appendix B.4 for
+hyperparameters) which achieved a test set accuracy of 0,601 while the
+best performing algorithm for the Auto dataset was the NN\_7 algorithm
+which achieved a test set accuracy of 0,599. This difference indicates
+that there is at least a slight benefit to including the DBOW dataset in
+predictive data and corroborates the evidence presented in section
 \ref{speech-centered}.
 
 \hypertarget{speech-centered-regression-analysis}{%
 \subsection{Speech-centered regression
 analysis}\label{speech-centered-regression-analysis}}
 
-The average Mean Absolute Error (MAE) recorded across all 384 regression
+All of the regression models trained on the speech-centered dataset
+outperformed the series mean as predictors of the Y-variable
+(logDif\_date\_resid) on the training, test and validation datasets. The
+cross-sectional cross validation training method (CS data-subset)
+outperformed the time-series cross validation method (TS data-subset).
+The models trained on the duplicates removed data and the duplicates
+inclusive data performed equally well. The gradient boosting trained
+models performed best on the duplicate inclusive data while
+neural-network trained models were the best performers in the duplicates
+removed data. Models trained on NLP inclusive data-subsets performed
+well across all the categories but did not outperform the exclusively
+auto-regressive data-subsets. Finally, models trained on the duplicate
+inclusive data-subset were dropped for risk of data contamination and
+models trained on only the NLP data-subset were tested. These still
+managed to outperform the series-mean as a predictor of the Y-variable
+and this was taken as further evidence of the predictive power of the
+NLP data.
+
+The average mean absolute error (MAE) recorded across all 384 regression
 models run was 0,87 for the training data, 0,95 for the test data and
 0,8 for the validation data. Comparing these with a standard deviation
 of 1,26 for the logDif\_date\_resid variable in the 1998 subset shows
 that the average absolute error across all the regressions run lies
 within one standard deviation of the dependent variable indicating that
 the regressions are better predictors of the series than the mean of the
-series. This holds across each of the three date subsets (1998, 2000,
-and 2010).
+series. This also holds across each of the three date subsets (1998,
+2000, and 2010).
 
 The top ten performing models in regression tasks were all trained on
 the cross-sectional 2010 dataset and achieved MAE's between 0,68 and
 0,7. Interestingly, there was an even split between datasets with
 duplicates removed and without. The best performer did not have
 duplicates removed whilst the second, third and fourth best performers
-did. Analysis of only data with duplicates not removed gave the top four
-places to gradient boosting models trained on the AutoMeta, All, Meta
-and Auto datasets (in that order). The MAEs for the top four performers
-ranged from 0,68 to 0,7. NLP inclusive datasets ranked in five of the
-top ten places. Analysis on the duplicates removed top ten performers
-shows the NN taking 8 of the top ten places -- including the top seven
-spots. NLP inclusive datasets ranked well taking the second, third,
-fourth, fifth and seventh spots but not beating the purely
-auto-regressive data.
+did. Analysis of only duplicate-inclusive data trained models gave the
+top four places to gradient boosting models trained on the AutoMeta,
+All, Meta and Auto datasets (in that order). The MAEs for the top four
+performers ranged from 0,68 to 0,7. NLP inclusive datasets ranked in
+five of the top ten places. Analysis on the duplicates removed top ten
+performers shows the NN taking 8 of the top ten places -- including the
+top seven spots. NLP inclusive dataset trained models ranked well taking
+the second, third, fourth, fifth and seventh spots but not beating the
+purely auto-regressive data trained models.
 
 It is difficult to draw a solid conjecture about the predictive power of
 the NLP data from these mixed results. However, data contamination in
-the duplicate inclusive dataset is likely and the results should
-probably be discarded. Given the fair performance of the NLP inclusive
-datasets in the duplicates removed dataset, at this point, it remains
-likely that the NLP data holds predictive power.
+the duplicate inclusive dataset is likely and the results should be
+discarded. Given the fair performance of the NLP inclusive datasets in
+the duplicates removed dataset, at this point, it remains likely that
+the NLP data holds predictive power.
 
 A final analysis of all the regression models trained on only 1998 NLP
 data from the speech-centered dataset shows that the top ten performing
@@ -2153,23 +2180,25 @@ models all achieved a MAE below 1,06. This is still below the standard
 deviation of 1,26 for the 1998 Y variable (logDif\_date\_resid) and thus
 indicates that regression models trained only on the NLP data outperform
 the mean of the series as a predictor. This again corroborates evidence
-that U.S. Presidential Speeches having predictive power over S\&P 500
+that U.S. presidential speeches having predictive power over S\&P 500
 movements.
 
 \hypertarget{date-centered-regression-analysis}{%
 \subsection{Date-centered regression
 analysis}\label{date-centered-regression-analysis}}
 
-The initial ten lowest test set MAE's across all the regression
-categories were in the 1950 and cross section categories. The standard
-deviation for the 1950 test set is 0.96. All ten of these MAEs clustered
-around 0,66 so the regressions are better predictors than the mean.
-Again the date-centered dataset has outperformed the speech-centered
-dataset. The best score was achieved for the DBOW dataset by the SGD
-algorithm. The subsets including NLP data were included in seven of the
-top ten performing models and three of them only contained NLP data.
-Notably, the AutoDM subset outperformed the Auto subset in the NN model
-- undeniably indicating the predictive power of the NLP data.
+In the date-centered regression analysis the models trained on the full
+dataset (the 1950 subset) using the cross-section cross validation
+method performed the best - achieving the lowest ten MAE's. These
+clustered around 0,66 while the standard deviation for the test set was
+0,96. Therefore these models are better predictors than the mean of the
+series. Notably, the date-centered dataset has again outperformed the
+speech-centered dataset. The best score was achieved by a model trained
+on a NLP-only data-subset (DBOW) by an SGD algorithm. NLP-inclusive data
+was used to train seven of the top ten performing models and three of
+them only used NLP data. Notably, the AutoDM (NLP-inclusive) subset
+outperformed the Auto (NLP-non-inclusive) subset in the NN model -
+undeniably indicating the predictive power of the NLP data.
 
 NN algorithms were responsible for six of the lowest ten MAEs and SGD
 models were responsible for a further 3. The DBOW dataset appeared
@@ -2177,22 +2206,22 @@ twice, the Auto dataset 3 times, the DM dataset once, AutoDBOW twice,
 AutoDM once and AutoBoth once. In total the Auto dataset appeared in 7
 of the top ten performers, the DBOW appeared in 5 and the DM dataset
 appeared 3 times. Given this and the predictive ability of the DBOW
-shown in the classification section above, DBOW and Auto data sets were
-compared across attempted optimizations of the NN and SGD algorithms.
-However, no significant improvement could be engineered and almost all
-models performed worse than the initial models. Given that the best
-performing dataset in terms of test MAE was the DBOW dataset, further
-evidence is presented that U.S. presidential Speeches hold predictive
-power over the S\&P 500.
+shown in section \ref{Date-centered classification}, DBOW and Auto data
+sets were compared across attempted optimizations of the NN and SGD
+algorithms. However, no significant improvement could be engineered and
+almost all models performed worse than the initial models. Given that
+the best performing dataset in terms of test MAE was the DBOW dataset,
+further evidence is presented that U.S. presidential speeches hold
+predictive power over the S\&P 500.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
 The core conclusion of the research presented here is that U.S
-Presidential Speeches do hold predictive power over price changes in the
+presidential speeches do hold predictive power over price changes in the
 S\&P 500 index. This is exhibited by the improvement of accuracy in
 predictive models gained from the inclusion of vectorized speech data.
-Further 2 more useful conclusions can be drawn from this research.
+Further, 2 more useful conclusions can be drawn from this research.
 First, an ARMA(2,0) GARCH(1,1) model is the best linear model describing
 the log difference of closing prices in the S\&P 500 and second, Doc2Vec
 outperforms Word2Vec, VADER and TextBlob as a text vectorization method
@@ -2209,8 +2238,8 @@ variables and/or the exploration of more sophisticated machine learning
 algorithms. Additional auto-regressive variables could have been
 included in the control dataset. In particular, the first lag of the
 residual of an ARMA (1,0) model and the prediction of an ARMA(2,0)
-GARCH(1,1) may have increased predictive power of the control data
-subset (\protect\hyperlink{ref-aras2021stacking}{Aras, 2021}). More
+GARCH(1,1) may have increased predictive power of the control
+data-subset (\protect\hyperlink{ref-aras2021stacking}{Aras, 2021}). More
 powerful NLP techniques, such as Bidirectional Encoder Representations
 from Transformers (BERT), could also lead to more comprehensive
 word-embeddings and better information transfer to the final ML
@@ -2230,12 +2259,10 @@ similar speech vectors and if similarities in speech correlated with
 similarities in policy decisions or voter behavior. Another example
 could be creating a timeline of speech vectors and relating modern
 influential speakers to time periods based on similarity in speech
-vectors.
-
-Further economic research could be done into the macroeconomic or
-macro-financial effects of certain types of speeches by simply relating
-the speech vectors to other macro-indicators such as long term bond
-yields or GDP figures.
+vectors. Further economic research could be done into the macroeconomic
+or macro-financial effects of certain types of speeches by simply
+relating the speech vectors to other macro-indicators, such as long term
+bond yields or GDP figures.
 
 \newpage
 
@@ -2569,11 +2596,10 @@ Where `cores' is determined in the same manner as in the Word2Vec
 description above and where vecSize is set to either 20 for the two 20
 variable sets and 200 for the two 200 variable sets.
 
-\hypertarget{appendix-b-machine-learning-model-specifications-and-hyper-parameters}{%
-\subsection*{Appendix B: Machine Learning Model Specifications and
-Hyper-Parameters}\label{appendix-b-machine-learning-model-specifications-and-hyper-parameters}}
-\addcontentsline{toc}{subsection}{Appendix B: Machine Learning Model
-Specifications and Hyper-Parameters}
+\hypertarget{appendix-b-machine-learning-model-specifications-and-hyper-parameters--}{%
+\subsection{\texorpdfstring{Appendix B: Machine Learning Model
+Specifications and Hyper-Parameters \{-\}
+\label{Appendix B}}{Appendix B: Machine Learning Model Specifications and Hyper-Parameters \{-\} }}\label{appendix-b-machine-learning-model-specifications-and-hyper-parameters--}}
 
 \hypertarget{b.1.-regression-algorithm-hyper-parameters}{%
 \subsubsection*{B.1. Regression Algorithm

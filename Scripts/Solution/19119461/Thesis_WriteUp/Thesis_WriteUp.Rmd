@@ -1,94 +1,63 @@
 ---
-# IMPORTANT: Change settings here, but DO NOT change the spacing.
-# Remove comments and add values where applicable.
-# The descriptions below should be self-explanatory
-
-#title: "Correlating Factors of U.S. Presidential Speeches with Stock Market Movements – a Machine Learning Approach"
-#subtitle: "This will appear as Right Header"
-
-documentclass: "elsarticle"
-
-# --------- Thesis title (Optional - set to FALSE by default).
-# You can move the details below around as you please.
-Thesis_FP: TRUE
-
-Entry1: "Correlating Factors of U.S. Presidential Speeches with Stock Market Movements: a Machine Learning Approach."
-Entry2: "\\textbf{Pablo Rees}^[__Acknowledgements:__  \\newline _I would like to thank the Stellenbosch University PSP foundation for sponsorship of my Masters Degree and this project by extension. I would also like to thank Dr Dawie van Lill for the provision his wealth of knowledge and resources in Machine and Deep Learning subject matter without which this project would have been impossible and finally the Stellenbosch Economics department as a whole for it's liberal approach to engagement with students on academic and administrative issues with special mention of Dr Gideon du Randt, Nico Katzke and  Carina Smit for support along the way._]" # textbf for bold
-Entry3: "Thesis presented in fulfilment of the requirements for the degree of Master of Economics in the Faculty of Economics at Stellenbosch University."
-#Uni_Logo: Stellenbosch_University_Logo.jpeg # Place a logo in the indicated location (from your root, e.g. defaults to ~/Tex/Logo.png) and uncomment this line. Leave uncommented for no image
-Logo_width: 0.2 # If using a logo - use this to set width (size) of image
-Entry4: "Supervisor: \\vfill Dr Dawie van Lill"
+documentclass: elsarticle
+Thesis_FP: yes
+Entry1: 'Correlating Factors of U.S. Presidential Speeches with Stock Market Movements -
+  a Machine Learning Approach.'
+Entry2: \textbf{Pablo Rees}^[__Acknowledgements:__  \newline _I would like to thank
+  the Stellenbosch University PSP foundation for sponsorship of my Masters Degree
+  and this project by extension. I would also like to thank Dr Dawie van Lill for
+  the provision his wealth of knowledge and resources in Machine and Deep Learning
+  subject matter without which this project would have been impossible and finally
+  the Stellenbosch Economics department as a whole for it's liberal approach to engagement
+  with students on academic and administrative issues with special mention of Dr Gideon
+  du Randt, Nico Katzke and  Carina Smit for support along the way._]
+Entry3: Thesis presented in fulfilment of the requirements for the degree of Master
+  of Economics in the Faculty of Economics at Stellenbosch University.
+Logo_width: 0.2
+Entry4: 'Supervisor: \vfill Dr Dawie van Lill'
 Entry5: December 2022
-
-# --------- Front Page
-# Comment: ----- Follow this pattern for up to 5 authors
-AddTitle: FALSE # Use FALSE when submitting to peer reviewed platform. This will remove author names.
-#Author1: "Pablo Rees^[__Contributions:__  \\newline _The authors would like to thank the Stellenbosch University PSP foundation for sponsorship of this project._]"  # First Author - note the thanks message displayed as an italic footnote of first page.
-#Ref1: "Stellenbosch University Department of Economics, Stellenbosch, South Africa" # First Author's Affiliation
-#Email1: "pablorees01\\@gmail.com" # First Author's Email address
-
-#Author2: "Dawie van Lill"
-#Email2: "dvanlill\\@sun.ac.za"
-#CommonAffiliation_12: TRUE # If Author 1 and 2 have a common affiliation. Works with _13, _23, etc.
-
-
-
-#CorrespAuthor_1: FALSE  # If corresponding author is author 3, e.g., use CorrespAuthor_3: TRUE
-
-# Comment out below to remove both. JEL Codes only given if keywords also given.
-keywords: "S&P 500 \\sep Machine Learning \\sep Natural Language Processing \\sep Presidential Speeches \\sep Time Series Econometrics" # Use \\sep to separate
-JELCodes: "G17 "
-
-# ----- Manage headers and footers:
-#BottomLFooter: $Title$
-#BottomCFooter:
-#TopLHeader: \leftmark # Adds section name at topleft. Remove comment to add it.
-BottomRFooter: "\\footnotesize Page \\thepage" # Add a '#' before this line to remove footer.
-addtoprule: TRUE
-addfootrule: TRUE               # Use if footers added. Add '#' to remove line.
-
-# --------- page margins:
-margin: 2.3 # Sides
-bottom: 2 # bottom
-top: 2.5 # Top
-HardSet_layout: TRUE # Hard-set the spacing of words in your document. This will stop LaTeX squashing text to fit on pages, e.g.
-# This is done by hard-setting the spacing dimensions. Set to FALSE if you want LaTeX to optimize this for your paper.
-
-# --------- Line numbers
-linenumbers: FALSE # Used when submitting to journal
-
-# ---------- References settings:
-# You can download cls format here: https://www.zotero.org/ - simply search for your institution. You can also edit and save cls formats here: https://editor.citationstyles.org/about/
-# Hit download, store it in Tex/ folder, and change reference below - easy.
-bibliography: Tex/ref.bib       # Do not edit: Keep this naming convention and location.
-csl: Tex/harvard-stellenbosch-university.csl # referencing format used.
-# By default, the bibliography only displays the cited references. If you want to change this, you can comment out one of the following:
-#nocite: '@*' # Add all items in bibliography, whether cited or not
-# nocite: |  # add specific references that aren't cited
-#  @grinold2000
-#  @Someoneelse2010
-
-# ---------- General:
-RemovePreprintSubmittedTo: TRUE  # Removes the 'preprint submitted to...' at bottom of titlepage
-Journal: "Journal of Finance"   # Journal that the paper will be submitting to, if RemovePreprintSubmittedTo is set to TRUE.
-toc: TRUE                       # Add a table of contents
-numbersections: TRUE             # Should sections (and thus figures and tables) be numbered?
-fontsize: 11pt                  # Set fontsize
-linestretch: 1                # Set distance between lines.
-link-citations: TRUE            # This creates dynamic links to the papers in reference list.
-
-### Adding additional latex packages:
-# header-includes:
-#    - \usepackage{colortbl} # Add additional packages here.
-
+AddTitle: no
+keywords: S&P 500 \sep Machine Learning \sep Natural Language Processing \sep Presidential
+  Speeches \sep Time Series Econometrics
+JELCodes: 'G17 '
+BottomRFooter: \footnotesize Page \thepage
+addtoprule: yes
+addfootrule: yes
+margin: 2.3
+bottom: 2
+top: 2.5
+HardSet_layout: yes
+linenumbers: no
+bibliography: Tex/ref.bib
+csl: "Tex/harvard-stellenbosch-university.csl"
+RemovePreprintSubmittedTo: yes
+Journal: Journal of Finance
+toc: yes
+numbersections: yes
+fontsize: 11pt
+linestretch: 1
+link-citations: yes
 output:
   pdf_document:
-    keep_tex: TRUE
+    keep_tex: yes
     template: Tex/TexDefault.txt
-    fig_width: 3.5 # Adjust default figure sizes. This can also be done in the chunks of the text.
+    fig_width: 3.5
     fig_height: 3.5
-abstract: |
-  The literature relating textual to stock market data is deep but research into the relationship between speeches given by presidents and stock markets is lacking. This paper begins to fill this gap by exploring the relationship between U.S. presidential speeches and daily price movements in the S&P 500 index. It was possible to explore this relationship by using natural language processing techniques, econometric time-series analysis and machine learning models. It was found that models including presidential speech data can achieve prediction accuracy of about 60% over S&P 500 index price movements. This is an increase of about 1 percentage point over the models that did not include the presidential speech data (without losing ground in either recall or precision). Thus it is concluded that presidential speeches hold predictive power over stock market movements and that this relationship can be used to improve the power of predictive models.
+  word_document: default
+  html_document:
+    df_print: paged
+abstract: "The literature relating textual to stock market data is deep but research
+  into the relationship between speeches given by presidents and stock markets is
+  lacking. This paper begins to fill this gap by exploring the relationship between
+  U.S. presidential speeches and daily price movements in the S&P 500 index. It was
+  possible to explore this relationship by using natural language processing techniques,
+  econometric time-series analysis and machine learning models. It was found that
+  models including presidential speech data can achieve prediction accuracy of about
+  60% over S&P 500 index price movements. This is an increase of about 1 percentage
+  point over the models that did not include the presidential speech data (without
+  losing ground in either recall or precision). Thus it is concluded that presidential
+  speeches hold predictive power over stock market movements and that this relationship
+  can be used to improve the power of predictive models.\n"
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.pos="H", fig.pos = 'H')
@@ -139,11 +108,11 @@ rm(freq,start)
 \newpage
 # Introduction \label{Introduction}
 
-The efficient market hypothesis states that the history of a market is an ineffective predictor of its future, nonetheless there are many iterations of attempts to predict markets based on their own histories and external factors [@famaEfficient]. Moore’s law states that computing power doubles every two years and although this is not strictly true, the lived experience is close [@mollick2006establishing]. This combined with the onset of massive amounts of publicly available data has given empirical research in the social sciences power that it has never been able to muster until recent years. Computer driven analysis of large amounts of text data is rapidly becoming mainstream and specifically, political text data is one external factor useful in predicting market futures[@maligkris2017political; @hayo2008communicating; @grimmer2013text; @soroka2015bad].
+The efficient market hypothesis states that the history of a market is an ineffective predictor of its future, nonetheless there are many iterations of attempts to predict markets based on their own histories and external factors [@famaEfficient]. Moore’s law states that computing power doubles every two years and although this is not strictly true, the lived experience is close [@mollick2006establishing]. This combined with the onset of massive amounts of publicly available data has given empirical research in the social sciences power that it has never been able to muster until recent years. Computer driven analysis of large amounts of text data is rapidly becoming mainstream and specifically, political text data is one external factor useful in predicting market futures [@maligkris2017political; @hayo2008communicating; @grimmer2013text; @soroka2015bad].
 
 @hayo2008communicating performed a generalized auto-regressive conditional heteroscedastic (GARCH) analysis of the relationship between Federal Open Market Committee (FOMC) speeches and the U.S. financial market. The analysis was quantitative on the market side and qualitative on the speech side and demonstrates that the sentiments of communications influence the effect of those communications on markets. Thus, analyzing sentiment is an important factor in an accurate appraisal of the relationship between speeches and markets. Using regression analysis @maligkris2017political demonstrate that there is a correlation between presidential candidates’ speeches and stock movements. Further, they indicate that speeches laden with economic information tend to boost stock returns while also reducing volatility while speeches with a negative tone have the opposite effect and the long run effect of speeches is dependent on market conditions. @baker2016measuring show that language processing can be used to predict economic events, and particularly economic uncertainty and economic policy uncertainty. They develop an Economic Policy Uncertainty Index based on the frequency of articles containing a trio of terms in 10 leading U.S. newspapers. The terms were selected over a period of 24 months during which more than 15 000 news articles were read by humans in an auditing process. The index proved to be quite accurate, spiking near the expected events, including wars, tight presidential elections, fiscal policy battles and terrorist activity. @sazedj2011hope highlight the relationship between the content of a presidential speech and stock market returns by regressing the event of a speech during Obama’s first 11 months as U.S. president on the daily excess returns of the Dow Jones, the S&P 500 and the NASDAQ indices. They found that the event of a speech had a generally insignificant effect on daily excesses. However, by regressing key terms contained in 43 speeches given during the first 11 months of Obama’s presidency it was found that the content of speeches can significantly affect daily excess returns nearly uniformly across all three indices. Notably, the NASDAQ’s correlation to the content of speeches was weaker – indicating that technology markets may be less susceptible to presidential rhetoric. 
 
-The aim of this project is to determine whether U.S Presidential speeches have predictive power over U.S. stock market movements. A positive result would be powerful and could add to the ability of traders to accurately predict stock market movements. The undertaking of this project assumes two important conjectures - both of which have been confirmed by the research reported above. First, that there is a correlation between the linguistic factors^[‘Linguistic factors’ in this sense is intended to mean any and all patterns that can be detected in spoken language including verbiage, lexicon, tone, register, sentence length, word combination etc.] of speech employed by U.S. presidents in their speeches and U.S. stock market movements; and second, that the prominence of speech factors can be quantified by using machine learning algorithms. Broadly, machine learning has been selected as the method of modelling and the S&P 500 index has been chosen as representative of the ‘stock market’. As far as I am aware, this research is novel.
+The aim of this project is to determine whether U.S presidential speeches have predictive power over U.S. stock market movements. A positive result would be powerful and could add to the ability of traders to accurately predict stock market movements. The undertaking of this project assumes two important conjectures - both of which have been confirmed by the research reported above. First, that there is a correlation between the linguistic factors^[‘Linguistic factors’ in this sense is intended to mean any and all patterns that can be detected in spoken language including verbiage, lexicon, tone, register, sentence length, word combination etc.] of speech employed by U.S. presidents in their speeches and U.S. stock market movements; and second, that the prominence of speech factors can be quantified by using machine learning algorithms. Broadly, machine learning has been selected as the method of modelling and the S&P 500 index has been chosen as representative of the ‘stock market’. As far as I am aware, this research is novel.
 
 In specific, this project shows that U.S. Presidential Speeches have predictive power over S&P 500 price fluctuations. In order to prove this, natural language processing (NLP), machine learning (ML) and time series analysis were used. The usage of these 3 methods allowed for the comparison of models based on purely financial data with models based on a combination of financial and language data. The result being that the best models based on a combination of financial and language data outperformed the best purely financial models by about 1 percentage point in terms of predictive accuracy at a daily resolution.
 
@@ -621,57 +590,55 @@ $$
 Clf_Types refers to the Time Series cross validation and Cross-section cross validation methods as described in the regression section. The options in this category are CS_Classifier and TS_Classifier. Clf_algos is very similar to the Reg_algos field described in the previous section. The algorithms available for classification are stochastic gradient descent, a 3 hidden layer neural network, logistic regression and gradient boosting. The hyper-parameters for each of these fields can be found in Appendix B.2. 
 
 # Results and discussion \label{results}
-The results of the models indicated that U.S. Presidential Speeches hold at least a small amount of predictive power over movements in the S&P 500 stock index. This conclusion was deduced from the fact that the best performing datasets in both the date-centered classification analysis and the date-centered regression analysis included vectorized speech data. It is also corroborated by the consistent appearance of speech subset inclusive data in the top ten performing models across both data design types, and both classification and regression tasks. 
+The results of the model tests indicated that U.S. Presidential Speeches hold at least a small amount of predictive power over movements in the S&P 500 stock index. This conclusion was deduced from the fact that the best performing datasets in both the date-centered classification analysis and the date-centered regression analysis included vectorized speech data. It is also corroborated by the consistent appearance of speech subset inclusive data in the best performing models across both data design types, and both classification and regression tasks. 
 
-The date-centered dataset outperformed the speech-centered dataset by about 2 percentage points (~0,58 vs ~0,6) on the test set accuracy score for binary classification analysis. Models using the date-centered dataset also achieved lower MAE’s than models trained and tested on the speech-centered dataset. Interestingly, an implication of the superior performance of the (smaller) date-centered dataset is that data with high quality has outperformed data with high quantity. The section below explains the results in more detail. 
+Models trained on the date-centered dataset outperformed models trained on the speech-centered dataset by about 2 percentage points (~0,58 vs ~0,6) on the test set accuracy score for binary classification analysis. Models using the date-centered dataset also achieved lower MAE’s than models trained and tested on the speech-centered dataset. Interestingly, an implication of the superior performance of the (smaller) date-centered dataset is that data with high quality has outperformed data with high quantity. The section below explains the results in more detail. 
 
 ## Speech-centered classification analysis \label{speech-centered}
 Analysing the best performing classification models, in terms of test set accuracy, across all categories of the speech-centered data reveals a very high likelihood of data contamination in the data containing duplicate dates. All ten of the top performers are on data containing duplicates and the accuracies range from 0,72 to 0,80. It is highly unlikely that these models have managed to achieve 80% accuracy in prediction of detrended S&P 500 on unseen data over a 52 year period. Thus results of classification models trained and tested on duplicate date containing data is discarded henceforth. 
 
-Of the duplicate removed results the top ten performers contain seven models trained and tested on the 2010 dataset – including the top four. Further, eight of the top ten models performed binary classification. Finally seven of the ten were trained on cross-sectional cross validation. Thus further analysis will take place within the binary, cross-sectional and 2010 categories. The test set accuracy ranges from 0,54 to 0,58. The mean of the target variable is ~ 0,5 and thus every model in the top ten models outperforms chance (recall that the target variable is binary). NLP data is included in six of the ten best models, while auto-regressive data is included in five and meta data is included in eight of them. Notably an NLP only (gradient boosting) model ranks fourth with a test set accuracy of 0,56. This constitutes evidence of the predictive power of US Presidential speeches over S&P 500 movements and lends credibility to the hypothesis of this project. 
+Analysis of the performance of the remaining (duplicates removed) data revealed that the best performing models were trained on the binary cross-sectional data from 2010 onward. Of the duplicate removed results the top ten performers contain seven models trained and tested on the 2010 dataset – including the top four. Further, eight of the top ten models performed binary classification. Finally seven of the ten were trained on cross-sectional cross validation. Thus further analysis took place within the binary, cross-sectional and 2010 categories. 
 
-## Date-centered classification analysis
-The means of both the full set of 1950-01-01 binary Y’s and the test set of 1950-01-01 binary Y’s are maintained at ~ 0,5. This implies that any accuracy above 0,5 beats chance. 
+Having reduced the data to just the cross-sectional binary data from 2010 onward - test set accuracy ranges from 0,54 to 0,58. The mean of the target variable is ~ 0,5 and thus every model in the top ten models outperforms chance (recall that the target variable is binary). Six of the ten best models were trained on data including NLP data, while only five of the best models were trained on auto-regressive inclusive data. Meta data was included in eight of them. Notably an NLP-only (gradient boosting) model ranks fourth with a test set accuracy of 0,56. This constitutes evidence of the predictive power of US Presidential speeches over S&P 500 movements and lends credibility to the hypothesis of this project. 
 
-In the date-centered classification results analysis, the top ten models in terms of test set accuracies contain ten 1950 subsets, ten TS subsets and eight binary subsets. All of the top ten models utilized auto-regressive data, five positions included the DBOW vector set and two included the DM vector set. The range of the top ten models test set accuracies is 0,57 to 0,59. Thus the date-centered dataset initially outperforms the (duplicate dates removed) speech-centered dataset by 2 percentage points at the bottom of the range and 1 percentage point at the top of the range in terms of test set classification accuracy. Because of this the models trained on the date-centered dataset were optimized for maximum performance. Log-regression is initially the best performing classifier in the TS section generally, taking the top two and the seventh positions. However, AutoDBOW outperforms Auto in the Binary NN and the Binary Gradient Boosting categories. Thus, these three models were selected for optimization.
+## Date-centered classification analysis \label{Date-centered classification}
+The means of both the full set of 1950 binary Y’s and the test set of 1950 binary Y’s are maintained at ~ 0,5. This implies that any accuracy above 0,5 beats chance. The top ten models in the date-centered classification task achieved test set accuracies between 0,57 and 0,59 and therefore all outperformed chance. All of these ten models were trained on the full range of data - i.e. the 1950 subset. They were also all trained using time-series validation - the TS subset. Seven of the best models were trained on NLP-inclusive data (five DBOW and 2 DM inclusive sets) and all of the ten best models were trained on auto-regressive inclusive data.
+
+Notably, the date-centered dataset initially outperforms the (duplicate removed) speech-centered dataset by 2 percentage points at the bottom of the range and 1 percentage point at the top of the range in terms of test set classification accuracy. Because of this, the models trained on the date-centered dataset were optimized for maximum performance. Log-regression is initially the best performing classifier in the TS section generally, taking the top two and the seventh positions. However, the models trained on the AutoDBOW dataset outperform the models trained on the Auto only dataset in the Binary NN and the Binary Gradient Boosting categories. Thus, these three models were selected for optimization.
 
 ### Optimization of classification models for TS classification of date-centered data
-The training set accuracy on the 1950 binary AutoDBOW for the gradient boosting classifier was initially 77,5% indicating that it may have been slightly overfitting the training data. For the NN, the training accuracy is 59% which is similar to the test set accuracy and indicates a good fit for the data. Grid search was manually performed to optimize NN and Gradient Boosting for the binary 1950 AutoDBOW and Auto datasets.
+The training set accuracy on the 1950 binary AutoDBOW for the gradient boosting classifier was initially 77,5% indicating that it may have been slightly overfitting the training data. For the NN, the training accuracy is 59% which is similar to the test set accuracy and indicates a good fit for the data. Grid search was manually performed to optimize the NN and Gradient Boosting algorithms for the binary 1950 AutoDBOW and Auto datasets.
 
-After closer optimization of hyper-parameters it becomes clear that the AutoDBOW dataset outperforms the Auto dataset on test score both overall and across both the Stochastic Gradient Descent and Log Regression algorithms. The best performing algorithm for the AutoDBOW dataset was the LogReg_4 algorithm (please see appendix B for hyperparameters) which achieved a test set accuracy of 0,601 while the best performing algorithm for the Auto dataset was the NN_7 algorithm which achieved a test set accuracy of 0,599. This difference indicates that there is at least a slight benefit to including the DBOW dataset in predictive data and corroborates the evidence presented in section \ref{speech-centered}. 
+After closer optimization of hyper-parameters it becomes clear that the AutoDBOW dataset outperforms the Auto dataset on test score both overall and across both the Stochastic Gradient Descent and Log Regression trained models. The best performing algorithm for the AutoDBOW dataset was the LogReg_4 algorithm (please see appendix B.4 for hyperparameters) which achieved a test set accuracy of 0,601 while the best performing algorithm for the Auto dataset was the NN_7 algorithm which achieved a test set accuracy of 0,599. This difference indicates that there is at least a slight benefit to including the DBOW dataset in predictive data and corroborates the evidence presented in section \ref{speech-centered}. 
 
 ## Speech-centered regression analysis
-The average Mean Absolute Error (MAE) recorded across all 384 regression models run was 0,87 for the training data, 0,95 for the test data and 0,8 for the validation data. Comparing these with a standard deviation of 1,26 for the logDif_date_resid variable in the 1998 subset shows that the average absolute error across all the regressions run lies within one standard deviation of the dependent variable indicating that the regressions are better predictors of the series than the mean of the series. This holds across each of the three date subsets (1998, 2000, and 2010). 
+All of the regression models trained on the speech-centered dataset outperformed the series mean as predictors of the Y-variable (logDif_date_resid) on the training, test and validation datasets. The cross-sectional cross validation training method (CS data-subset) outperformed the time-series cross validation method (TS data-subset). The models trained on the duplicates removed data and the duplicates inclusive data performed equally well. The gradient boosting trained models performed best on the duplicate inclusive data while neural-network trained models were the best performers in the duplicates removed data. Models trained on NLP  inclusive data-subsets performed well across all the categories but did not outperform the exclusively auto-regressive data-subsets. Finally, models trained on the duplicate inclusive data-subset were dropped for risk of data contamination and models trained on only the NLP data-subset were tested. These still managed to outperform the series-mean as a predictor of the Y-variable and this was taken as further evidence of the predictive power of the NLP data. 
 
-The top ten performing models in regression tasks were all trained on the cross-sectional 2010 dataset and achieved MAE’s between 0,68 and 0,7. Interestingly, there was an even split between datasets with duplicates removed and without. The best performer did not have duplicates removed whilst the second, third and fourth best performers did. Analysis of only data with duplicates not removed gave the top four places to gradient boosting models trained on the AutoMeta, All, Meta and Auto datasets (in that order). The MAEs for the top four performers ranged from 0,68 to 0,7. NLP inclusive datasets ranked in five of the top ten places. Analysis on the duplicates removed top ten performers shows the NN taking 8 of the top ten places – including the top seven spots. NLP inclusive datasets ranked well taking the second, third, fourth, fifth and seventh spots but not beating the purely auto-regressive data. 
+The average mean absolute error (MAE) recorded across all 384 regression models run was 0,87 for the training data, 0,95 for the test data and 0,8 for the validation data. Comparing these with a standard deviation of 1,26 for the logDif_date_resid variable in the 1998 subset shows that the average absolute error across all the regressions run lies within one standard deviation of the dependent variable indicating that the regressions are better predictors of the series than the mean of the series. This also holds across each of the three date subsets (1998, 2000, and 2010). 
 
-It is difficult to draw a solid conjecture about the predictive power of the NLP data from these mixed results. However, data contamination in the duplicate inclusive dataset is likely and the results should probably be discarded. Given the fair performance of the NLP inclusive datasets in the duplicates removed dataset, at this point, it remains likely that the NLP data holds predictive power. 
+The top ten performing models in regression tasks were all trained on the cross-sectional 2010 dataset and achieved MAE’s between 0,68 and 0,7. Interestingly, there was an even split between datasets with duplicates removed and without. The best performer did not have duplicates removed whilst the second, third and fourth best performers did. Analysis of only duplicate-inclusive data trained models gave the top four places to gradient boosting models trained on the AutoMeta, All, Meta and Auto datasets (in that order). The MAEs for the top four performers ranged from 0,68 to 0,7. NLP inclusive datasets ranked in five of the top ten places. Analysis on the duplicates removed top ten performers shows the NN taking 8 of the top ten places – including the top seven spots. NLP inclusive dataset trained models ranked well taking the second, third, fourth, fifth and seventh spots but not beating the purely auto-regressive data trained models. 
 
-A final analysis of all the regression models trained on only 1998 NLP data from the speech-centered dataset shows that the top ten performing models all achieved a MAE below 1,06. This is still below the standard deviation of 1,26 for the 1998 Y variable (logDif_date_resid) and thus indicates that regression models trained only on the NLP data outperform the mean of the series as a predictor. This again corroborates evidence that U.S. Presidential Speeches having predictive power over S&P 500 movements.
+It is difficult to draw a solid conjecture about the predictive power of the NLP data from these mixed results. However, data contamination in the duplicate inclusive dataset is likely and the results should be discarded. Given the fair performance of the NLP inclusive datasets in the duplicates removed dataset, at this point, it remains likely that the NLP data holds predictive power. 
+
+A final analysis of all the regression models trained on only 1998 NLP data from the speech-centered dataset shows that the top ten performing models all achieved a MAE below 1,06. This is still below the standard deviation of 1,26 for the 1998 Y variable (logDif_date_resid) and thus indicates that regression models trained only on the NLP data outperform the mean of the series as a predictor. This again corroborates evidence that U.S. presidential speeches having predictive power over S&P 500 movements.
 
 ## Date-centered regression analysis
-The initial ten lowest test set MAE’s across all the regression categories were in the 1950 and cross section categories. The standard deviation for the 1950 test set is 0.96. All ten of these MAEs clustered around 0,66 so the regressions are better predictors than the mean. Again the date-centered dataset has outperformed the speech-centered dataset. The best score was achieved for the DBOW dataset by the SGD algorithm. The subsets including NLP data were included in seven of the top ten performing models and three of them only contained NLP data. Notably, the AutoDM subset outperformed the Auto subset in the NN model - undeniably indicating the predictive power of the NLP data. 
+In the date-centered regression analysis the models trained on the full dataset (the 1950 subset) using the cross-section cross validation method performed the best - achieving the lowest ten MAE's. These clustered around 0,66 while the standard deviation for the test set was 0,96. Therefore these models are better predictors than the mean of the series. Notably, the date-centered dataset has again outperformed the speech-centered dataset. The best score was achieved by a model trained on a NLP-only data-subset (DBOW) by an SGD algorithm. NLP-inclusive data was used to train seven of the top ten performing models and three of them only used NLP data. Notably, the AutoDM (NLP-inclusive) subset outperformed the Auto (NLP-non-inclusive) subset in the NN model - undeniably indicating the predictive power of the NLP data. 
 
-NN algorithms were responsible for six of the lowest ten MAEs and SGD models were responsible for a further 3. The DBOW dataset appeared twice, the Auto dataset 3 times, the DM dataset once, AutoDBOW twice, AutoDM once and AutoBoth once. In total the Auto dataset appeared in 7 of the top ten performers, the DBOW appeared in 5 and the DM dataset appeared 3 times. Given this and the predictive ability of the DBOW shown in the classification section above, DBOW and Auto data sets were compared across attempted optimizations of the NN and SGD algorithms. However, no significant improvement could be engineered and almost all models performed worse than the initial models. Given that the best performing dataset in terms of test MAE was the DBOW dataset, further evidence is presented that U.S. presidential Speeches hold predictive power over the S&P 500.
+NN algorithms were responsible for six of the lowest ten MAEs and SGD models were responsible for a further 3. The DBOW dataset appeared twice, the Auto dataset 3 times, the DM dataset once, AutoDBOW twice, AutoDM once and AutoBoth once. In total the Auto dataset appeared in 7 of the top ten performers, the DBOW appeared in 5 and the DM dataset appeared 3 times. Given this and the predictive ability of the DBOW shown in section \ref{Date-centered classification}, DBOW and Auto data sets were compared across attempted optimizations of the NN and SGD algorithms. However, no significant improvement could be engineered and almost all models performed worse than the initial models. Given that the best performing dataset in terms of test MAE was the DBOW dataset, further evidence is presented that U.S. presidential speeches hold predictive power over the S&P 500.
 
 # Conclusion
-
-The core conclusion of the research presented here is that U.S Presidential Speeches do hold predictive power over price changes in the S&P 500 index. This is exhibited by the improvement of accuracy in predictive models gained from the inclusion of vectorized speech data. Further 2 more useful conclusions can be drawn from this research. First, an ARMA(2,0) GARCH(1,1) model is the best linear model describing the log difference of closing prices in the S&P 500 and second, Doc2Vec outperforms Word2Vec, VADER and TextBlob as a text vectorization method when relating U.S. Presidential Speeches to fluctuations in the S&P 500. This information should be useful to other researchers looking to explore the relationship between text data and stock market movements as well as traders who need to make informed decisions about the S&P 500. 
+The core conclusion of the research presented here is that U.S presidential speeches do hold predictive power over price changes in the S&P 500 index. This is exhibited by the improvement of accuracy in predictive models gained from the inclusion of vectorized speech data. Further, 2 more useful conclusions can be drawn from this research. First, an ARMA(2,0) GARCH(1,1) model is the best linear model describing the log difference of closing prices in the S&P 500 and second, Doc2Vec outperforms Word2Vec, VADER and TextBlob as a text vectorization method when relating U.S. Presidential Speeches to fluctuations in the S&P 500. This information should be useful to other researchers looking to explore the relationship between text data and stock market movements as well as traders who need to make informed decisions about the S&P 500. 
 
 # Further research avenues
+Improvements in this research could be achieved by the addition of extra variables and/or the exploration of more sophisticated machine learning algorithms. Additional auto-regressive variables could have been included in the control dataset. In particular, the first lag of the residual of an ARMA (1,0) model and the prediction of an ARMA(2,0) GARCH(1,1) may have increased predictive power of the control data-subset [@aras2021stacking]. More powerful NLP techniques, such as Bidirectional Encoder Representations from Transformers (BERT), could also lead to more comprehensive word-embeddings and better information transfer to the final ML algorithms and better prediction results by extension. Other improvements in the NLP component could come from using more sophisticated methods of parameter selection such as that suggested by @patel-bhattacharyya-2017-towards for embedding dimensions or the inclusion of more specific dictionaries such as the emotion specific one presented in @widmann_wich_2022.
 
-Improvements in this research could be achieved by the addition of extra variables and/or the exploration of more sophisticated machine learning algorithms. Additional auto-regressive variables could have been included in the control dataset. In particular, the first lag of the residual of an ARMA (1,0) model and the prediction of an ARMA(2,0) GARCH(1,1) may have increased predictive power of the control data subset [@aras2021stacking]. More powerful NLP techniques, such as Bidirectional Encoder Representations from Transformers (BERT), could also lead to more comprehensive word-embeddings and better information transfer to the final ML algorithms and better prediction results by extension. Other improvements in the NLP component could come from using more sophisticated methods of parameter selection such as that suggested by @patel-bhattacharyya-2017-towards for embedding dimensions or the inclusion of more specific dictionaries such as the emotion specific one presented in @widmann_wich_2022.
-
-A lot more research could be done in the political science and linguistic realms using the NLP component of the dataset. For example it could be interesting to determine which presidents produced the most similar speech vectors and if similarities in speech correlated with similarities in policy decisions or voter behavior. Another example could be creating a timeline of speech vectors and relating modern influential speakers to time periods based on similarity in speech vectors. 
-
-Further economic research could be done into the macroeconomic or macro-financial effects of certain types of speeches by simply relating the speech vectors to other macro-indicators such as long term bond yields or GDP figures. 
-
-<!-- Make title of bibliography here: -->
-<!-- \newpage -->
+A lot more research could be done in the political science and linguistic realms using the NLP component of the dataset. For example it could be interesting to determine which presidents produced the most similar speech vectors and if similarities in speech correlated with similarities in policy decisions or voter behavior. Another example could be creating a timeline of speech vectors and relating modern influential speakers to time periods based on similarity in speech vectors. Further economic research could be done into the macroeconomic or macro-financial effects of certain types of speeches by simply relating the speech vectors to other macro-indicators, such as long term bond yields or GDP figures. 
 
 \newpage
 
-# References {-}
+# References {-}  
+  
 
 <div id="refs"></div>
 
@@ -732,7 +699,7 @@ Doc2Vec– the Gensim Doc2Vec module was used to create 4 sets of Doc2Vec NLP va
 Where ‘cores’ is determined in the same manner as in the Word2Vec description above and where vecSize is set to either 20 for the two 20 variable sets and 200 for the two 200 variable sets. 
 
 
-## Appendix B: Machine Learning Model Specifications and Hyper-Parameters {-}
+## Appendix B: Machine Learning Model Specifications and Hyper-Parameters {-} \label{Appendix B}
 
 ### B.1. Regression Algorithm Hyper-Parameters {-}
 
