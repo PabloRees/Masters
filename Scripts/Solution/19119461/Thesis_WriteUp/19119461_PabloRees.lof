@@ -1,0 +1,18 @@
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Word2Vec Model \relax }}{14}{figure.caption.4}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Doc2Vec model - distributed memory architecture: dm = 1 \relax }}{16}{figure.caption.5}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Doc2Vec model - distributed bag-of-words architecture: dm = 0 \relax }}{17}{figure.caption.6}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces SandP 500 Closing Price Log Difference 1950 -- 2022 \relax }}{19}{figure.caption.7}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Standardized volume (red) and absolute logDiff (green) \relax }}{20}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Absolute logDiff and stdVol \relax }}{23}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces dateResid of StdVol (Red) and stdVol (Green) \relax }}{23}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces stdVolControlled and absolute LogDiff \relax }}{24}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Autocorrelation and partial-autocorrelation functions of absolute LogDiff \relax }}{25}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Autocorrelation and partial-autocorrelation functions of model 3 - ARMA(1,0) GARCH(1,1) - residuals \relax }}{26}{figure.caption.17}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Autocorrelation and partial-autocorrelation functions of model 4 - GARCH(1,1) - residuals \relax }}{26}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Autocorrelation and partial-autocorrelation functions of model 5 - EGARCH(1,1) - residuals \relax }}{27}{figure.caption.19}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Autocorrelation and partial-autocorrelation functions of model 6 - ARMA(1,0) ARCH(1,0) - residuals \relax }}{27}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Autocorrelation and partial-autocorrelation functions of model 7 - ARCH(1,0) - residuals \relax }}{28}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Autocorrelation and partial-autocorrelation functions of model 8 - ARMA(2,0) GARCH(1,1) - residuals \relax }}{28}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Elastic net: control set \relax }}{33}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Elastic net: meta set \relax }}{34}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Elastic net: test set \relax }}{35}{figure.caption.25}%
